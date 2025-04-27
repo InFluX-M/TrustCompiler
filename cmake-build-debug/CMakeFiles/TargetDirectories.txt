@@ -1,0 +1,3 @@
+C:/Users/feres/Desktop/TrustCompiler/cmake-build-debug/CMakeFiles/TrustCompiler.dir
+C:/Users/feres/Desktop/TrustCompiler/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/feres/Desktop/TrustCompiler/cmake-build-debug/CMakeFiles/rebuild_cache.dir

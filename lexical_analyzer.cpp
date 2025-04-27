@@ -29,7 +29,7 @@ class LexicalAnalyzer {
         std::ifstream in;
         std::ofstream out;
         std::vector<Token> tokens;
-        int num_erros = 0;
+        int num_errors = 0;
 
         Token is_space(int &index, const std::string &line, const int &line_number) {
             int len = (int)line.size();
