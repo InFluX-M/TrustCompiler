@@ -396,4 +396,55 @@ private:
         index = perv_index;
         return {Invalid, line_number};
     }
+
+    Token is_id(int &index, const std::string &line, const int &line_number) {
+        int len = (int) line.size();
+        int state = 0, perv_index = index;
+        std::string content;
+
+        while (index < len) {
+            if (state == 0) {
+                if (std::isalpha(line[index]) || line[index] == '_') {
+                    content += line[index];
+                    state = 1;
+                } else {
+                    state = 3;
+                }
+            } else if (state == 1) {
+                if (std::isalnum(line[index]) || line[index] == '_') {
+                    content += line[index];
+                    state = 1;
+                } else {
+                    state = 2;
+                    continue;
+                }
+            } else if (state == 2) {
+                int temp_index = 0;
+                Token keyword_token = is_keyword(temp_index, content, line_number);
+
+                if (keyword_token.get_type() != Invalid)
+                    return keyword_token;
+
+                return {T_Id, line_number, content};
+
+            } else if (state == 3) {
+                index = perv_index;
+                return {Invalid, line_number};
+            }
+            index++;
+        }
+
+        if (!content.empty()) {
+            int temp_index = 0;
+            Token keyword_token = is_keyword(temp_index, content, line_number);
+
+            if (keyword_token.get_type() != Invalid)
+                return keyword_token;
+
+            return {T_Id, line_number, content};
+        }
+
+        index = perv_index;
+        return {Invalid, line_number};
+    }
 };
