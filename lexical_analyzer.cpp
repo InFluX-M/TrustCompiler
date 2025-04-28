@@ -667,5 +667,4 @@ public:
     std::vector<Token> get_tokens() {
         return tokens;
     }
-
 };

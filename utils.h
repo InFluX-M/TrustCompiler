@@ -25,7 +25,7 @@ const std::string RED = COLORED_ERRORS ? "\033[0;31m" : "";
 const std::string GREEN = COLORED_ERRORS ? "\033[0;32m" : "";
 const std::string YELLOW = COLORED_ERRORS ? "\033[0;33m" : "";
 
-const enum token_type {
+enum token_type {
     T_Bool,
     T_Break,
     T_Continue,
