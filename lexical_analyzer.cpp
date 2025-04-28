@@ -34,6 +34,7 @@ private:
     int num_errors = 0;
 
     Token is_space(int &index, const std::string &line, const int &line_number) {
+        std::cout << GREEN << "Space start" << WHITE << std::endl;
         int len = (int) line.size();
         int state = 0, perv_index = index;
 
@@ -60,10 +61,12 @@ private:
             index++;
         }
 
+        std::cout << GREEN << "Space End" << WHITE << std::endl;
         return {T_Whitespace, line_number};
     }
 
     Token is_comment(int &index, const std::string &line, const int &line_number) {
+        std::cout << GREEN << "Comment start" << WHITE << std::endl;
         int len = (int) line.size();
         int state = 0, perv_index = index;
 
@@ -98,6 +101,8 @@ private:
         }
 
         index = perv_index;
+
+        std::cout << GREEN << "Comment End" << WHITE << std::endl;
         return {Invalid, line_number};
     }
 
@@ -144,6 +149,7 @@ private:
     */
 
     Token is_operator(int &index, const std::string &line, const int &line_number) {
+        std::cout << GREEN << "Ops start" << WHITE << std::endl;
         int len = (int) line.size();
         int state = 0, perv_index = index;
 
@@ -298,11 +304,13 @@ private:
         }
 
         index = perv_index;
+        std::cout << GREEN << "Ops end" << WHITE << std::endl;
         return {Invalid, line_number};
     }
 
 
     Token is_string(int &index, const std::string &line, const int &line_number) {
+        std::cout << GREEN << "String start" << WHITE << std::endl;
         int len = (int) line.size();
         int state = 0, perv_index = index;
         std::string content;
@@ -339,10 +347,14 @@ private:
         }
 
         index = perv_index;
+
+        std::cout << GREEN << "String End" << WHITE << std::endl;
         return {Invalid, line_number};
     }
 
+
     Token is_keyword(int &index, const std::string &line, const int &line_number) {
+        std::cout << GREEN << "Key start" << WHITE << std::endl;
         int len = (int) line.size();
         int state = 0, perv_index = index;
 
@@ -396,10 +408,14 @@ private:
         }
 
         index = perv_index;
+
+        std::cout << GREEN << "Key End" << WHITE << std::endl;
         return {Invalid, line_number};
     }
 
+
     Token is_id(int &index, const std::string &line, const int &line_number) {
+        std::cout << GREEN << "ID start" << WHITE << std::endl;
         int len = (int) line.size();
         int state = 0, perv_index = index;
         std::string content;
@@ -447,10 +463,14 @@ private:
         }
 
         index = perv_index;
+
+        std::cout << GREEN << "ID end" << WHITE << std::endl;
         return {Invalid, line_number};
     }
 
+
     Token is_decimal(int &index, const std::string &line, const int &line_number) {
+        std::cout << GREEN << "Decimal start" << WHITE << std::endl;
         int len = (int) line.size();
         int state = 0, perv_index = index;
         std::string content;
@@ -494,10 +514,15 @@ private:
         }
 
         index = perv_index;
+
+        std::cout << GREEN << "Declimal end" << WHITE << std::endl;
         return {Invalid, line_number};
     }
 
+
     Token is_hexadecimal(int &index, const std::string &line, const int &line_number) {
+
+        std::cout << GREEN << "Hex start" << WHITE << std::endl;
         int len = (int) line.size();
         int state = 0, perv_index = index;
 
@@ -543,6 +568,8 @@ private:
         }
 
         index = perv_index;
+
+        std::cout << GREEN << "Hex End" << WHITE << std::endl;
         return {Invalid, line_number};
     }
 
@@ -561,6 +588,7 @@ private:
         int len = (int) line.size();
 
         while (index < len) {
+            std::cout << index << WHITE << std::endl;
             Token token = is_space(index, line, line_number);
             if (token.get_type() != Invalid) {
                 add_token_if_needed(token);
