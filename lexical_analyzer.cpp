@@ -1,5 +1,7 @@
 #include "lexical_analyzer.h"
 
+#include <utility>
+
 char spaces[] = {ENDL, SPACE, TAB};
 
 std::string key_words[NUM_KEYWORDS] = {
@@ -542,6 +544,127 @@ private:
 
         index = perv_index;
         return {Invalid, line_number};
+    }
+
+    void add_token_if_needed(Token token) {
+        if ((TOKENIZE_WHITESPACE || token.get_type() != T_Whitespace) &&
+            (TOKENIZE_COMMENT || token.get_type() != T_Comment)) {
+            tokens.push_back(token);
+        }
+    }
+
+    void extract(std::string &line) {
+        static int line_number = 0;
+        line_number++;
+
+        int index = 0;
+        int len = (int) line.size();
+
+        while (index < len) {
+            Token token = is_space(index, line, line_number);
+            if (token.get_type() != Invalid) {
+                add_token_if_needed(token);
+                continue;
+            }
+
+            token = is_comment(index, line, line_number);
+            if (token.get_type() != Invalid) {
+                add_token_if_needed(token);
+                continue;
+            }
+
+            token = is_operator(index, line, line_number);
+            if (token.get_type() != Invalid) {
+                tokens.push_back(token);
+                continue;
+            }
+
+            token = is_keyword(index, line, line_number);
+            if (token.get_type() != Invalid) {
+                tokens.push_back(token);
+                continue;
+            }
+
+            token = is_hexadecimal(index, line, line_number);
+            if (token.get_type() != Invalid) {
+                tokens.push_back(token);
+                continue;
+            }
+
+            token = is_decimal(index, line, line_number);
+            if (token.get_type() != Invalid) {
+                tokens.push_back(token);
+                continue;
+            }
+
+            token = is_id(index, line, line_number);
+            if (token.get_type() != Invalid) {
+                tokens.push_back(token);
+                continue;
+            }
+
+            token = is_string(index, line, line_number);
+            if (token.get_type() != Invalid) {
+                tokens.push_back(token);
+                continue;
+            }
+
+            std::cerr << RED
+                      << "Lexical Error: invalid character '" << line[index]
+                      << "' at line: " << line_number << WHITE << std::endl;
+            num_errors++;
+            index++;
+        }
+    }
+
+    void read_tokens() {
+        in.open(in_path);
+        if (!in.is_open()) {
+            std::cerr << RED << "File Error: Cannot open input file '" << in_path << "'" << WHITE << std::endl;
+            exit(FILE_ERROR);
+        }
+
+        std::string line;
+        while (getline(in, line)) {
+            line.push_back(ENDL);
+            extract(line);
+        }
+        in.close();
+    }
+
+    void write_tokens() {
+        out.open(out_path);
+        if (!out.is_open()) {
+            std::cerr << RED << "File error: couldn't open output file" << WHITE << std::endl;
+            exit(FILE_ERROR);
+        }
+        for (const Token &token: tokens) {
+            out << token << '\n';
+        }
+        out.close();
+    }
+
+public:
+    LexicalAnalyzer(std::string input_file, std::string output_file) {
+        in_path = std::move(input_file);
+        out_path = std::move(output_file);
+    }
+
+    void tokenize() {
+        read_tokens();
+        if (num_errors == 0) {
+            std::cout << GREEN << "Tokenize complete" << WHITE << std::endl;
+        } else {
+            std::cout << YELLOW << "Tokenize complete" << WHITE << std::endl;
+        }
+    }
+
+    void write() {
+        write_tokens();
+    }
+
+    std::vector<Token> get_tokens() {
+        return tokens;
     }
 
 };
