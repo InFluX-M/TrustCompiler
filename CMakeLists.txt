@@ -8,4 +8,4 @@ include_directories(.)
 add_executable(TrustCompiler
     lexical_analyzer.cpp
     lexical_analyzer.h
-    utils.h)
+    utils.h main.cpp)

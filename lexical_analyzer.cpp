@@ -384,7 +384,7 @@ private:
             } else if (state == 12) {
                 return {T_Return, line_number, "return"};
             } else if (state == 13) {
-                return {T_Print, line_number, "print"};
+                return {T_Print, line_number, "println!"};
             } else if (state == 14) {
                 return {T_True, line_number, "true"};
             } else if (state == 15) {
