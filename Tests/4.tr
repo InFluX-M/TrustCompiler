@@ -1,0 +1,7 @@
+fn main() {
+    let greeting = "Hello, World!";
+    let multiline = "This is a multiline\nstring!";
+
+    println!(greeting);
+    println!(multiline);
+}

@@ -1,0 +1,13 @@
+fn main() {
+    let a = 5;
+    let b = 3;
+    let sum = a + b;
+    let product = a * b;
+    let division = a / b;
+    let mod_result = a % b;
+
+    println!(sum);
+    println!(product);
+    println!(division);
+    println!(mod_result);
+}

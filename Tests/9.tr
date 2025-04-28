@@ -1,0 +1,4 @@
+fn main() {
+    let 1variable = 10; // شناسه نامعتبر (شروع از عدد)
+    println!(1variable); // خطا باید رخ دهد
+}

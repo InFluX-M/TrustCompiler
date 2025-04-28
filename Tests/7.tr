@@ -1,0 +1,12 @@
+fn main() {
+    let x = 42;
+    let y = 3;
+    let sum = x + y;
+    let product = x * y;
+
+    if sum > product {
+        println!("sum is greater");
+    } else {
+        println!("product is greater");
+    }
+}

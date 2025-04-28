@@ -1,0 +1,7 @@
+fn main() {
+    let decimal = 123;
+    let hex = 0x7F;
+
+    println!(decimal);
+    println!(hex);
+}

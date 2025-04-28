@@ -1,0 +1,4 @@
+fn main() {
+    let text = 'This is a string'; // استفاده از ' به جای "
+    println!(text); // خطا باید رخ دهد
+}

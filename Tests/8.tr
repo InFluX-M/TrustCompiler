@@ -1,0 +1,6 @@
+fn main() {
+    let x = 5;
+    let invalid-variable = 10;  // شناسه نامعتبر
+    println!(x);
+    println!(invalid-variable); // اینجا باید خطا نشان داده شود
+}
