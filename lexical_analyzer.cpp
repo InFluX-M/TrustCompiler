@@ -447,4 +447,101 @@ private:
         index = perv_index;
         return {Invalid, line_number};
     }
+
+    Token is_decimal(int &index, const std::string &line, const int &line_number) {
+        int len = (int) line.size();
+        int state = 0, perv_index = index;
+        std::string content;
+
+        while (index < len) {
+            if (state == 0) {
+                if (line[index] == '-') {
+                    content += line[index];
+                    state = 1;
+                } else if (std::isdigit(line[index])) {
+                    content += line[index];
+                    state = 2;
+                } else {
+                    state = 4;
+                }
+            } else if (state == 1) {
+                if (std::isdigit(line[index])) {
+                    content += line[index];
+                    state = 2;
+                } else {
+                    state = 4;
+                }
+            } else if (state == 2) {
+                if (std::isdigit(line[index])) {
+                    content += line[index];
+                } else {
+                    state = 3;
+                    continue;
+                }
+            } else if (state == 3) {
+                return {T_Decimal, line_number, content};
+            } else if (state == 4) {
+                index = perv_index;
+                return {Invalid, line_number};
+            }
+            index++;
+        }
+
+        if (state == 2) {
+            return {T_Decimal, line_number, content};
+        }
+
+        index = perv_index;
+        return {Invalid, line_number};
+    }
+
+    Token is_hexadecimal(int &index, const std::string &line, const int &line_number) {
+        int len = (int) line.size();
+        int state = 0, perv_index = index;
+
+        std::string content;
+
+        while (index < len) {
+            if (state == 0) {
+                if (line[index] == '0') {
+                    state = 1;
+                    content += line[index];
+                } else {
+                    state = 5;
+                }
+            } else if (state == 1) {
+                if (std::tolower(line[index]) == 'x') {
+                    state = 2;
+                    content += line[index];
+                } else {
+                    state = 5;
+                }
+            } else if (state == 2) {
+                if (std::isxdigit(line[index])) {
+                    state = 3;
+                    content += line[index];
+                } else {
+                    state = 5;
+                }
+            } else if (state == 3) {
+                if (std::isxdigit(line[index])) {
+                    state = 3;
+                    content += line[index];
+                } else {
+                    state = 4;
+                    continue;
+                }
+            } else if (state == 4) {
+                return {T_Hexadecimal, line_number, content};
+            } else if (state == 5) {
+                index = perv_index;
+                return {Invalid, line_number};
+            }
+            index++;
+        }
+
+        index = perv_index;
+        return {Invalid, line_number};
+    }
+
 };
