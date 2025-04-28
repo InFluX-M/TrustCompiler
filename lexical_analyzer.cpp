@@ -635,11 +635,12 @@ private:
     void write_tokens() {
         out.open(out_path);
         if (!out.is_open()) {
-            std::cerr << RED << "File error: couldn't open output file" << WHITE << std::endl;
+            std::cerr << RED << "File Error: Cannot open output file '" << out_path << "'" << WHITE << std::endl;
             exit(FILE_ERROR);
         }
-        for (const Token &token: tokens) {
-            out << token << '\n';
+
+        for (const auto &token: tokens) {
+            out << token << std::endl;
         }
         out.close();
     }
