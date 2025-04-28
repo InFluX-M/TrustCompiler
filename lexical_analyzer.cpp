@@ -372,4 +372,51 @@ class LexicalAnalyzer {
         }
 
 
+        Token is_string(int &index, const std::string &line, const int &line_number) {
+            int len = (int)line.size();
+            int state = 0, perv_index = index;
+            std::string content = "";
+
+            while (index < len) {
+                if (state == 0) {
+                    if (line[index] == '"') {
+                        state = 1;
+                        content += line[index];
+                    }
+                    else {
+                        state = 4;
+                    }
+                }
+                else if (state == 1) {
+                    if (line[index] == '\\') {
+                        state = 2;
+                        content += line[index];
+                    }
+                    else if (line[index] == '"') {
+                        state = 3;
+                        content += line[index];
+                    } 
+                    else {
+                        state = 1;
+                        content += line[index];
+                    }
+                }
+                else if (state == 2) {
+                    state = 1;
+                    content += line[index];
+                }
+                else if (state == 3) {
+                    return Token(T_String, line_number, content);
+                }
+                else if (state == 4) {
+                    index = perv_index;
+                    return Token(Invalid, line_number);
+                }
+                index++;
+            }
+
+            index = perv_index;
+            return Token(Invalid, line_number);
+        }
+
 };
