@@ -348,7 +348,7 @@ private:
 
         while (index < len) {
             if (state == 0) {
-                state = 13;
+                state = 15;
                 for (int i = 0; i < NUM_KEYWORDS; i++) {
                     int sz = (int) key_words[i].size();
                     if (line.std::string::substr(index, sz) == key_words[i]) {
@@ -384,9 +384,9 @@ private:
             } else if (state == 11) {
                 return {T_Mut, line_number, "mut"};
             } else if (state == 12) {
-                return {T_Return, line_number, "return"};
-            } else if (state == 13) {
                 return {T_Print, line_number, "println!"};
+            } else if (state == 13) {
+                return {T_Return, line_number, "return"};
             } else if (state == 14) {
                 return {T_True, line_number, "true"};
             } else if (state == 15) {
