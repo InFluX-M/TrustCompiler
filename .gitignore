@@ -5,6 +5,7 @@
 *.lot
 *.gz
 
+/.vscode
 
 # Prerequisites
 *.d
