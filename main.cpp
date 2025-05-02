@@ -1,13 +1,13 @@
-#include "lexical_analyzer.cpp"
+#include "LexicalAnalyzer/lexical_analyzer.cpp"
 #include <iostream>
 
 int main() {
-    std::string input_file, output_file = "tokens.txt";
+    std::string input_file = "Test/", output_file = "Output/", file;
 
-    std::cout << "Enter the input file name: ";
-    std::cin >> input_file;
+    std::cout << "Enter the file name: ";
+    std::cin >> file;
 
-    LexicalAnalyzer lexer(input_file, output_file);
+    LexicalAnalyzer lexer(input_file + file, output_file + file + ".out");
 
     lexer.tokenize();
     lexer.write();
