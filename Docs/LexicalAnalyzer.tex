@@ -93,8 +93,113 @@
 
 
 \chapter{تحلیل‌گر لغوی}
+\section{توابع تحلیلگر لغوی}
 
-\section{}
+\subsection{تابع \lr{is\_keyword}}
+\label{subsec:is_keyword}
+
+\subsubsection*{هدف:}
+این تابع بررسی می‌کند که آیا دنباله‌ای از کاراکترها در خط جاری با یکی از کلمات کلیدی زبان Trust مطابقت دارد یا خیر.
+
+\subsubsection*{ورودی‌ها:}
+\begin{itemize}
+\item \lr{index:} اشاره‌گر به موقعیت فعلی در خط
+\item \lr{line:} رشته حاوی کد منبع
+\item \lr{line\_number:} شماره خط فعلی برای گزارش خطاها
+\end{itemize}
+
+\subsubsection*{خروجی:}
+\begin{itemize}
+\item توکن مربوط به کلمه کلیدی در صورت تطابق
+\item توکن \lr{Invalid} در صورت عدم تطابق
+\end{itemize}
+
+\subsubsection*{الگوریتم:}
+\begin{enumerate}
+\item بررسی لیست کلمات کلیدی از پیش تعریف شده
+\item مقایسه زیررشته شروع شده از \lr{index} با هر کلمه کلیدی
+\item بررسی عدم وجود حروف/ارقام بعد از کلمه کلیدی (برای جلوگیری از شناسایی نادرست شناسه)
+\item بازگرداندن توکن مربوطه در صورت تطابق کامل
+\end{enumerate}
+
+\subsubsection*{نکات مهم:}
+\begin{itemize}
+\item حساس به حروف کوچک و بزرگ
+\item کلمات کلیدی باید به صورت کامل و مجزا ظاهر شوند
+\item لیست کلمات کلیدی شامل: \lr{bool, break, continue, else, false, fn, i32, if, let, loop, mut, println!, return, true}
+\end{itemize}
+
+\subsection{تابع \lr{is\_id}}
+\label{subsec:is_id}
+
+\subsubsection*{هدف:}
+تشخیص شناسه‌های معتبر طبق قوانین زبان Trust
+
+\subsubsection*{ورودی‌ها:} مشابه بخش \ref{subsec:is_keyword}
+
+\subsubsection*{خروجی:}
+\begin{itemize}
+\item توکن \lr{T\_Id} برای شناسه‌های معتبر
+\item توکن \lr{Invalid} برای موارد نامعتبر
+\end{itemize}
+
+\subsubsection*{الگوریتم:}
+\begin{enumerate}
+\item بررسی شروع شناسه با حرف یا زیرخط (\_)
+\item بررسی ادامه شناسه با حروف، اعداد یا زیرخط
+\item مقایسه با کلمات کلیدی برای جلوگیری از تداخل
+\item بازگرداندن توکن مناسب بر اساس نتایج
+\end{enumerate}
+
+\subsubsection*{نکات مهم:}
+\begin{itemize}
+\item شناسه‌ها نمی‌توانند با اعداد شروع شوند
+\item طول شناسه محدودیتی ندارد
+\item حساس به حروف کوچک و بزرگ
+\end{itemize}
+
+\subsection{تابع \lr{is\_decimal}}
+\label{subsec:is_decimal}
+
+\subsubsection*{هدف:}
+تشخیص اعداد صحیح دهدهی (مثبت/منفی)
+
+\subsubsection*{الگوریتم:}
+\begin{enumerate}
+\item بررسی وجود علامت منفی اختیاری
+\item بررسی دنباله‌ای از ارقام 0-9
+\item بازگرداندن توکن \lr{T\_Decimal} برای اعداد معتبر
+\end{enumerate}
+
+\subsubsection*{نکات:}
+\begin{itemize}
+\item حداقل یک رقم الزامی است
+\item اجازه استفاده از صفر پیشرو وجود دارد
+\item محدوده عددی بررسی نمی‌شود
+\end{itemize}
+
+\subsection{تابع \lr{is\_hexadecimal}}
+\label{subsec:is_hexadecimal}
+
+\subsubsection*{هدف:}
+تشخیص اعداد هگزادسیمال با فرمت \lr{0x...}
+
+\subsubsection*{الگوریتم:}
+\begin{enumerate}
+\item بررسی پیشوند \lr{0x} یا \lr{0X}
+\item بررسی حداقل یک رقم هگزادسیمال (0-9, a-f, A-F)
+\item بازگرداندن توکن \lr{T\_Hexadecimal} برای اعداد معتبر
+\end{enumerate}
+
+\subsubsection*{نکات:}
+\begin{itemize}
+\item حروف بزرگ و کوچک در ارقام تفاوتی ندارند
+\item عدم پشتیبانی از اعداد منفی
+\item کاراکترهای غیر هگزادسیمال باعث پایان عدد می‌شوند
+\end{itemize}
+
+\section{نتیجه‌گیری}
+این توابع پایه‌ای اساسی برای تجزیه lexical کد منبع فراهم می‌کنند. هر تابع با استفاده از ماشین حالت محدود (Finite State Machine) پیاده‌سازی شده و قادر به تشخیص الگوهای پیچیده با کارایی بالا می‌باشد. تعامل صحیح بین این توابع تضمین می‌کند که تمامی اجزای برنامه ورودی به درستی شناسایی و طبقه‌بندی می‌شوند.
 
 
 
