@@ -6,6 +6,6 @@ set(CMAKE_CXX_STANDARD 20)
 include_directories(.)
 
 add_executable(TrustCompiler
-    lexical_analyzer.cpp
-    lexical_analyzer.h
+    LexicalAnalyzer/lexical_analyzer.cpp
+    LexicalAnalyzer/lexical_analyzer.h
     utils.h main.cpp)
