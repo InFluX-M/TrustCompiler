@@ -1,0 +1,101 @@
+\documentclass[12pt, a4paper]{report}
+\usepackage{hyperref}
+\usepackage[top=3cm,right=3cm,bottom=3cm,left=2.5cm]{geometry}
+\usepackage{caption}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{xepersian}
+\settextfont{XB Zar}
+\linespread{1.2}
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+
+
+\pagestyle{fancy}
+% Set up fancyhdr to place page number at the top left
+\pagestyle{fancy}
+\fancyhf{} % Clear all header/footer fields
+\fancyhead[L]{\thepage} % Page number on the top left
+
+% Define custom style for chapter page (no header or footer)
+\fancypagestyle{plain}{
+	\fancyhf{} % Clear headers and footers
+	\renewcommand{\headrulewidth}{0pt} % Remove header rule
+}
+
+
+% Changing TOC addressing format (from period separation to dash seperation)
+\renewcommand{\thesection}{\thechapter-\arabic{section}-}
+\renewcommand{\thesubsection}{\thechapter-\arabic{section}-\arabic{subsection}-}
+\renewcommand{\thesubsubsection}{\thechapter-\arabic{section}-\arabic{subsection}-\arabic{subsubsection}-}
+
+\renewcommand{\thetable}{(\thechapter-\arabic{table})}
+
+% Redefine how captions are written 
+\renewcommand{\thefigure}{(\thechapter-\arabic{figure})}
+
+% Set caption font size to 11pt
+\captionsetup{font=small, labelsep=space} % 'small' is equivalent to 11pt in most classes
+
+% Make sure Persian and Latin text have their respective font sizes
+\settextfont{XB Zar} % Persian font
+\setlatintextfont{Times New Roman} % Latin font
+
+% Automatically switch between Persian and Latin fonts based on character type
+\XeTeXinterchartokenstate=1
+\newXeTeXintercharclass\persianchars
+\newXeTeXintercharclass\latinchars
+
+% Automatically switch fonts when switching between Persian and Latin characters
+\XeTeXinterchartoks \latinchars \persianchars = {\begingroup\persianfont\endgroup}
+\XeTeXinterchartoks \persianchars \latinchars = {\begingroup\latinfont\endgroup}
+
+
+
+\title{گزارش کارآموزی}
+\author{متین اعظمی}
+
+\begin{document}
+%\maketitle
+\begin{titlepage}
+	\centering
+	% University logo
+	\includegraphics[width=0.15\textwidth]{images/logo.png}
+	
+	% University and Faculty name
+	{\Large دانشگاه اصفهان}\par
+	{\Large دانشکده مهندسی کامپیوتر}\par\vspace{2cm}
+	
+	% Report title
+	\textbf
+	{\Huge گزارش پروژه کامپایلر}\par\vspace{1.5cm}
+	
+	% Intern details
+	\large
+	\textbf{نام و نام خانوادگی اعضا:}\par{زهرا معصومی / متین اعظمی}\par\vspace{0.5cm}  
+	\textbf{شماره دانشجویی:}\par{۴۰۰۳۶۲۳۰۰۳ / ۳۰۰۳۶۲۳۱۳۳۴}\par\vspace{0.5cm}
+	\textbf{استاد کارآموزی:}\par{دکتر شفیعی}\par\vspace{0.5cm}
+		
+	\par\vspace{2cm}
+	
+	
+\end{titlepage}
+
+\tableofcontents
+
+\listoftables
+
+\listoffigures
+
+
+\chapter{تحلیل‌گر لغوی}
+
+\section{}
+
+
+
+\end{document}
