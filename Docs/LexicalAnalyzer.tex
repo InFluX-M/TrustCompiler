@@ -9,9 +9,11 @@
 \usepackage{fancyhdr}
 \usepackage{titlesec}
 \usepackage{tikz}
+\usepackage{syntax}
+\usepackage{amsmath}
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{4}
-
+\usetikzlibrary{arrows,positioning}
 
 \pagestyle{fancy}
 % Set up fancyhdr to place page number at the top left
@@ -81,17 +83,89 @@
 
 \tableofcontents
 
-\listoftables
-
-\listoffigures
-
 
 \chapter{Lexical Analyzer}
 
 \section{Introduction}
 
+The lexical analyzer is the first phase of the compiler that processes the source code. It reads the input characters and groups them into meaningful sequences called tokens using formal grammar rules. This chapter describes the key functions of our lexical analyzer implementation for the Trust language compiler, including their formal grammar definitions.
+
+The extract function in a lexical analyzer is responsible for processing each line of source code and extracting tokens from it. It does so by iterating through each character of the line and using various helper functions (like is_space, is_comment, is_operator, etc.) to identify different types of tokens such as whitespace, comments, operators, keywords, numbers, strings, and identifiers.
+
+Breakdown of the Function:
+Line Number Tracking:
+
+The function starts by incrementing the line_number variable every time it processes a new line.
+
+Tokenization Process:
+
+The function uses a loop to process each character of the input line.
+
+It checks each character to determine what type of token it represents by calling several helper functions, such as:
+
+is_space: Checks for spaces or whitespace.
+
+is_comment: Checks for comments.
+
+is_operator: Checks for operators (+, -, *, etc.).
+
+is_keyword: Checks for keywords (e.g., if, while, int).
+
+is_hexadecimal: Checks for hexadecimal numbers.
+
+is_decimal: Checks for decimal numbers.
+
+is_id: Checks for identifiers (variable names, function names).
+
+is_string: Checks for string literals.
+
+After each check, if a valid token is found (i.e., the get_type() method does not return Invalid), the token is added to a collection (e.g., tokens).
+
+If no valid token is found, an Invalid token is generated for the character, indicating an error, and the num_errors counter is incremented.
+
+Explanation of the Importance of Order in Token Extraction:
+The order of token extraction is important because certain types of tokens might overlap or resemble other types of tokens. Specifically:
+
+Keyword vs. Identifier:
+
+Keywords (such as int, if, while) and identifiers (like variable names) may look similar, but they have different meanings.
+
+For example, int is a keyword, while integer is an identifier. If we first check for keywords, we ensure that reserved words are treated correctly as keywords rather than as identifiers.
+
+In the order in extract(), the function checks for keywords before identifiers. This means if a word matches both a keyword and an identifier (like int), it will be categorized as a keyword first.
+
+Why it's important: If we checked identifiers first, we could mistakenly treat keywords as just regular identifiers, which would cause issues in interpreting the code.
+
+Comment vs. Other Tokens:
+
+Comments (e.g., // comment) should be ignored during tokenization, as they are not part of the executable code. By checking for comments early in the process (before other tokens), we ensure that they are excluded from further tokenization.
+
+If we processed comments after identifying other tokens, we might accidentally treat comment text as part of the code, which would be incorrect.
+
+Whitespace and Other Tokens:
+
+Whitespace is often used for separation between tokens, but it’s not a token that we need to process further. Checking for whitespace early in the process allows us to skip over unnecessary spaces, keeping the token stream clean and efficient.
+
+If we processed whitespace later, we might end up with unnecessary whitespace tokens or miss tokens that should be grouped together.
+
+Escaped Characters in Strings:
+
+String literals can contain escape sequences (like \" or \\). Checking for strings and escape sequences properly ensures that strings are parsed correctly without treating the escape sequences as individual tokens.
+
+Why the Order Matters:
+Efficiency: Checking for the most specific tokens first (e.g., keywords, comments) helps the lexer efficiently identify and discard irrelevant characters or words early on. This reduces unnecessary processing later.
+
+Correct Token Classification: If the lexer were to check for a more general token (like an identifier) before a specific one (like a keyword), it could misclassify code. For example, if would be classified as an identifier if we checked for identifiers first, rather than recognizing it as a keyword.
+
+Preventing Conflicts: By checking for comments and spaces early, we prevent the analyzer from mistakenly treating non-code content as part of the program logic.
+
+
+
 \section{White Spaces}
 
+
+
+\subsection{Automata}
 
 \begin{center}
 \begin{tikzpicture}[scale=0.2]
@@ -120,8 +194,16 @@
 \end{tikzpicture}
 \end{center}
 
+\subsection{Detailed Explanation}
+
+The is_space function in a lexical analyzer checks whether a part of the source code consists of whitespace characters like spaces, tabs, or newlines. It scans the input line character by character using a state machine approach. If it encounters whitespace, it transitions through states, eventually returning a token indicating that whitespace has been found. If the characters are not whitespace, it flags them as invalid. This process is crucial in a lexical analyzer for properly separating tokens in the source code.
+
 
 \section{Comments}
+
+
+
+\subsection{Automata}
 
 \begin{center}
 \begin{tikzpicture}[scale=0.2]
@@ -157,20 +239,127 @@
 \end{tikzpicture}
 \end{center}
 
+\subsection{Detailed Explanation}
+
+The is_comment function in a lexical analyzer is responsible for detecting comments in a line of code, typically for single-line comments. It checks if a part of the source code starts with a comment indicator (//), and if so, captures the content of the comment until the end of the line or an invalid sequence is encountered. The function uses a state machine approach to handle different stages of comment detection: it starts by checking for the initial comment markers (//), then captures the content inside the comment, and finally returns a token representing the comment. If an invalid sequence is encountered (e.g., characters not following the expected comment format), the function returns an "invalid" token. This is an essential part of the lexical analysis process for ignoring comments while parsing the code.
+
 
 \section{Operators}
 
-\subsection{Arithmetic Operations}
+\subsection{Automata}
 
-\subsection{Punctuation Marks}
+\includegraphics[width=0.9\textwidth]{images/ops.png}
 
-\section{Numeric Values}
+\subsection{Detailed Explanation}
 
-\subsection{HexaDecimal}
+The \texttt{is\_operator} function in a lexical analyzer is responsible for detecting and categorizing operators and punctuation marks in a line of code. This function uses a state machine approach to handle the detection of various operators, including arithmetic operators (e.g., \( + \), \( - \), \( * \)), relational operators (e.g., \( == \), \( < \), \( \geq \)), logical operators (e.g., \( \&\& \), \( || \)), and other symbols (e.g., parentheses, semicolons, and commas). The function scans the line character by character, transitioning between states as it encounters known operator symbols. If it identifies a valid operator or symbol, it returns a corresponding token (such as \texttt{T\_AOp\_AD} for addition, \texttt{T\_ROp\_E} for equality check, or \texttt{T\_Semicolon} for semicolon). If an unrecognized character is encountered, the function returns an ``Invalid'' token, signaling an error. This function plays a critical role in the lexical analysis phase of a compiler, where operators and punctuation are identified and classified for further processing.
 
-\subsection{Decimal}
+
+
+\section{HexaDecimal}
+
+
+\subsection{Automata}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.2]
+\tikzstyle{every node}+=[inner sep=0pt]
+\draw [black] (4.8,-6.9) circle (2);
+\draw (4.8,-6.9) node {$0$};
+\draw [black] (15.2,-6.9) circle (2);
+\draw (15.2,-6.9) node {$1$};
+\draw [black] (26.7,-6.9) circle (2);
+\draw (26.7,-6.9) node {$2$};
+\draw [black] (4.8,-19.2) circle (2);
+\draw (4.8,-19.2) node {$5$};
+\draw [black] (43.5,-6.9) circle (2);
+\draw (43.5,-6.9) node {$3$};
+\draw [black] (54.9,-6.9) circle (2);
+\draw (54.9,-6.9) node {$4$};
+\draw [black] (54.9,-6.9) circle (1.4);
+\draw [black] (6.8,-6.9) -- (13.2,-6.9);
+\fill [black] (13.2,-6.9) -- (12.4,-6.4) -- (12.4,-7.4);
+\draw (10,-6.4) node [above] {$0$};
+\draw [black] (4.8,-8.9) -- (4.8,-17.2);
+\fill [black] (4.8,-17.2) -- (5.3,-16.4) -- (4.3,-16.4);
+\draw (4.3,-13.05) node [left] {$other$};
+\draw [black] (17.2,-6.9) -- (24.7,-6.9);
+\fill [black] (24.7,-6.9) -- (23.9,-6.4) -- (23.9,-7.4);
+\draw (20.95,-7.4) node [below] {$x$};
+\draw [black] (28.7,-6.9) -- (41.5,-6.9);
+\fill [black] (41.5,-6.9) -- (40.7,-6.4) -- (40.7,-7.4);
+\draw (35.1,-7.4) node [below] {$[0-9a-fA-F]$};
+\draw [black] (42.618,-5.114) arc (234:-54:1.5);
+\draw (43.5,-1.9) node [above] {$[0-9a-fA-F]$};
+\fill [black] (44.38,-5.11) -- (45.26,-4.76) -- (44.45,-4.17);
+\draw [black] (45.5,-6.9) -- (52.9,-6.9);
+\fill [black] (52.9,-6.9) -- (52.1,-6.4) -- (52.1,-7.4);
+\draw (49.2,-7.4) node [below] {$other$};
+\draw [black] (13.91,-8.43) -- (6.09,-17.67);
+\fill [black] (6.09,-17.67) -- (6.99,-17.38) -- (6.23,-16.74);
+\draw (9.45,-11.61) node [left] {$other$};
+\draw [black] (24.96,-7.88) -- (6.54,-18.22);
+\fill [black] (6.54,-18.22) -- (7.49,-18.26) -- (7,-17.39);
+\draw (13.2,-12.55) node [above] {$other$};
+\end{tikzpicture}
+\end{center}
+
+\subsection{Detailed Explanation}
+The \texttt{is\_hexadecimal} function implements a five-state DFA for strict hexadecimal number validation. State 0 requires a leading '0', transitioning to state 1 which demands either 'x' or 'X'. State 2 then requires at least one hexadecimal digit (0-9, a-f, A-F), with state 3 consuming subsequent hexadecimal digits. The final state (state 4) validates that proper hexadecimal digits follow the prefix before returning a \texttt{T\_Hexadecimal} token.
+
+This implementation enforces the language specification that hexadecimal literals must have at least one digit after the prefix. The function uses \texttt{isxdigit()} for proper character classification and preserves the original casing of hexadecimal digits in the token content. Invalid sequences like "0x" without subsequent digits are properly rejected with \texttt{Invalid} tokens.
+
+\section{Decimal}
+
+
+\subsection{Automata}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.2]
+\tikzstyle{every node}+=[inner sep=0pt]
+\draw [black] (4.8,-9.4) circle (2);
+\draw (4.8,-9.4) node {$0$};
+\draw [black] (17.4,-9.4) circle (2);
+\draw (17.4,-9.4) node {$1$};
+\draw [black] (31,-9.4) circle (2);
+\draw (31,-9.4) node {$2$};
+\draw [black] (4.8,-21.7) circle (2);
+\draw (4.8,-21.7) node {$4$};
+\draw [black] (43,-9.4) circle (2);
+\draw (43,-9.4) node {$3$};
+\draw [black] (43,-9.4) circle (1.4);
+\draw [black] (6.8,-9.4) -- (15.4,-9.4);
+\fill [black] (15.4,-9.4) -- (14.6,-8.9) -- (14.6,-9.9);
+\draw (11.1,-8.9) node [above] {$-$};
+\draw [black] (4.8,-11.4) -- (4.8,-19.7);
+\fill [black] (4.8,-19.7) -- (5.3,-18.9) -- (4.3,-18.9);
+\draw (4.3,-15.55) node [left] {$other$};
+\draw [black] (33,-9.4) -- (41,-9.4);
+\fill [black] (41,-9.4) -- (40.2,-8.9) -- (40.2,-9.9);
+\draw (37,-9.9) node [below] {$other$};
+\draw [black] (6.012,-7.811) arc (139.02995:40.97005:15.745);
+\fill [black] (29.79,-7.81) -- (29.64,-6.88) -- (28.89,-7.53);
+\draw (17.9,-1.89) node [above] {$[0-9]$};
+\draw [black] (19.4,-9.4) -- (29,-9.4);
+\fill [black] (29,-9.4) -- (28.2,-8.9) -- (28.2,-9.9);
+\draw (24.2,-9.9) node [below] {$[0-9]$};
+\draw [black] (15.97,-10.8) -- (6.23,-20.3);
+\fill [black] (6.23,-20.3) -- (7.15,-20.1) -- (6.45,-19.39);
+\draw (8.52,-15.07) node [above] {$other$};
+\draw [black] (32.196,-10.993) arc (64.61966:-223.38034:1.5);
+\draw (33.12,-14.55) node [below] {$[0-9]$};
+\fill [black] (30.46,-11.32) -- (29.67,-11.83) -- (30.57,-12.26);
+\end{tikzpicture}
+\end{center}
+
+\subsection{Detailed Explanation}
+The \texttt{is\_decimal} function implements a four-state DFA for recognizing both positive and negative decimal integers. State 0 handles the optional minus sign, transitioning to state 1 if present. State 2 requires at least one digit (0-9) and continues consuming digits until a non-digit character is encountered. The final state (state 3) validates that at least one digit was collected before returning a \texttt{T\_Decimal} token.
+
+This implementation properly handles edge cases like standalone minus signs (invalid) and maximum number length constraints. The function also preserves the original string representation of the number (including leading zeros) in the token content for accurate source representation. Number validation occurs without conversion to numeric values, maintaining precision during lexical analysis.
 
 \section{Keywords}
+
+\subsection{Automata}
 
 \begin{center}
 \begin{tikzpicture}[scale=0.2]
@@ -269,7 +458,15 @@
 \end{tikzpicture}
 \end{center}
 
+\subsection{Detailed Explanation}
+The \texttt{is\_keyword} function implements a deterministic finite automaton (DFA) that recognizes the 14 reserved keywords of the Trust language. Each keyword is treated as a fixed literal pattern that must match exactly, with case sensitivity. The function first checks for the longest possible keyword match ("println!") before proceeding to shorter ones to ensure correct tokenization. After finding a potential match, it verifies that the match isn't part of a larger identifier by checking the following character isn't a letter, digit, or underscore. This strict validation prevents keywords from being misidentified within identifiers while maintaining language semantics.
+
+The implementation uses a state machine that transitions through each character of potential keywords, with failure paths that efficiently fall back to identifier recognition when no keyword matches. This approach provides O(n) time complexity where n is the length of the longest keyword, making it highly efficient for lexical analysis.
+
+
 \section{Strings}
+
+\subsection{Automata}
 
 \begin{center}
 \begin{tikzpicture}[scale=0.2]
@@ -306,8 +503,47 @@
 \end{tikzpicture}
 \end{center}
 
+\subsection{Detailed Explanation}
+
+The is_string function in a lexical analyzer is designed to detect and process string literals in the source code. It scans a line character by character, looking for strings enclosed in double quotes ("). The function handles different scenarios, such as escape sequences (\") and the correct closing of the string literal. Using a state machine, it transitions through various states: it starts by detecting the opening quote, then handles escape characters, and finally detects the closing quote to complete the string. If the string is valid, it returns a token of type T_String containing the string content. If an invalid string is encountered (e.g., the string is incomplete or malformed), it returns an Invalid token. This function is a key part of the lexical analysis process, ensuring strings are correctly identified and tokenized for further processing.
+
 
 \section{IDs}
+
+
+\subsection{Automata}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.2]
+\tikzstyle{every node}+=[inner sep=0pt]
+\draw [black] (4.8,-6.9) circle (2);
+\draw (4.8,-6.9) node {$0$};
+\draw [black] (20.6,-6.9) circle (2);
+\draw (20.6,-6.9) node {$1$};
+\draw [black] (37.4,-6.9) circle (2);
+\draw (37.4,-6.9) node {$2$};
+\draw [black] (37.4,-6.9) circle (1.4);
+\draw [black] (4.8,-19.2) circle (2);
+\draw (4.8,-19.2) node {$3$};
+\draw [black] (6.8,-6.9) -- (18.6,-6.9);
+\fill [black] (18.6,-6.9) -- (17.8,-6.4) -- (17.8,-7.4);
+\draw (12.7,-6.4) node [above] {$letter$};
+\draw [black] (4.8,-8.9) -- (4.8,-17.2);
+\fill [black] (4.8,-17.2) -- (5.3,-16.4) -- (4.3,-16.4);
+\draw (4.3,-13.05) node [left] {$other$};
+\draw [black] (22.6,-6.9) -- (35.4,-6.9);
+\fill [black] (35.4,-6.9) -- (34.6,-6.4) -- (34.6,-7.4);
+\draw (29,-7.4) node [below] {$other$};
+\draw [black] (19.718,-5.114) arc (234:-54:1.5);
+\draw (20.6,-1.9) node [above] {$letter,digit$};
+\fill [black] (21.48,-5.11) -- (22.36,-4.76) -- (21.55,-4.17);
+\end{tikzpicture}
+\end{center}
+
+\subsection{Detailed Explanation}
+The \texttt{is\_id} function implements the identifier recognition grammar through a three-state DFA. The initial state requires the first character to be either an underscore or letter (state 1). Subsequent characters transition to state 2 where letters, digits, or underscores are accepted. The function continues consuming characters until encountering a non-matching character, at which point it verifies the collected identifier doesn't match any keyword (using \texttt{is\_keyword}) before returning a \texttt{T\_Id} token.
+
+This implementation carefully handles Unicode characters by using \texttt{isalpha()} and \texttt{isalnum()} functions for proper character classification. The function also maintains position information to support precise error reporting when invalid identifiers are encountered. The lookahead verification ensures identifiers don't conflict with language keywords while allowing maximum flexibility in naming conventions.
 
 
 \end{document}
