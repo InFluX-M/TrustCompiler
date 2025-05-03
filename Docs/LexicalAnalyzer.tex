@@ -305,7 +305,7 @@ The \texttt{is\_operator} function in a lexical analyzer is responsible for dete
 \end{center}
 
 \subsection{Detailed Explanation}
-The \texttt{is\_hexadecimal} function implements a five-state DFA for strict hexadecimal number validation. State 0 requires a leading '0', transitioning to state 1 which demands either 'x' or 'X'. State 2 then requires at least one hexadecimal digit (0-9, a-f, A-F), with state 3 consuming subsequent hexadecimal digits. The final state (state 4) validates that proper hexadecimal digits follow the prefix before returning a \texttt{T\_Hexadecimal} token.
+The \texttt{is\_hexadecimal} function implements a six-state DFA for strict hexadecimal number validation. State 0 requires a leading '0', transitioning to state 1 which demands either 'x' or 'X'. State 2 then requires at least one hexadecimal digit (0-9, a-f, A-F), with state 3 consuming subsequent hexadecimal digits. The final state (state 4) validates that proper hexadecimal digits follow the prefix before returning a \texttt{T\_Hexadecimal} token.
 
 This implementation enforces the language specification that hexadecimal literals must have at least one digit after the prefix. The function uses \texttt{isxdigit()} for proper character classification and preserves the original casing of hexadecimal digits in the token content. Invalid sequences like "0x" without subsequent digits are properly rejected with \texttt{Invalid} tokens.
 
@@ -353,7 +353,7 @@ This implementation enforces the language specification that hexadecimal literal
 \end{center}
 
 \subsection{Detailed Explanation}
-The \texttt{is\_decimal} function implements a four-state DFA for recognizing both positive and negative decimal integers. State 0 handles the optional minus sign, transitioning to state 1 if present. State 2 requires at least one digit (0-9) and continues consuming digits until a non-digit character is encountered. The final state (state 3) validates that at least one digit was collected before returning a \texttt{T\_Decimal} token.
+The \texttt{is\_decimal} function implements a five-state DFA for recognizing both positive and negative decimal integers. State 0 handles the optional minus sign, transitioning to state 1 if present. State 2 requires at least one digit (0-9) and continues consuming digits until a non-digit character is encountered. The final state (state 3) validates that at least one digit was collected before returning a \texttt{T\_Decimal} token.
 
 This implementation properly handles edge cases like standalone minus signs (invalid) and maximum number length constraints. The function also preserves the original string representation of the number (including leading zeros) in the token content for accurate source representation. Number validation occurs without conversion to numeric values, maintaining precision during lexical analysis.
 
@@ -527,7 +527,7 @@ The is_string function in a lexical analyzer is designed to detect and process s
 \draw (4.8,-19.2) node {$3$};
 \draw [black] (6.8,-6.9) -- (18.6,-6.9);
 \fill [black] (18.6,-6.9) -- (17.8,-6.4) -- (17.8,-7.4);
-\draw (12.7,-6.4) node [above] {$letter$};
+\draw (12.7,-6.4) node [above] {$_letter$};
 \draw [black] (4.8,-8.9) -- (4.8,-17.2);
 \fill [black] (4.8,-17.2) -- (5.3,-16.4) -- (4.3,-16.4);
 \draw (4.3,-13.05) node [left] {$other$};
@@ -535,13 +535,13 @@ The is_string function in a lexical analyzer is designed to detect and process s
 \fill [black] (35.4,-6.9) -- (34.6,-6.4) -- (34.6,-7.4);
 \draw (29,-7.4) node [below] {$other$};
 \draw [black] (19.718,-5.114) arc (234:-54:1.5);
-\draw (20.6,-1.9) node [above] {$letter,digit$};
+\draw (20.6,-1.9) node [above] {$_letter,digit$};
 \fill [black] (21.48,-5.11) -- (22.36,-4.76) -- (21.55,-4.17);
 \end{tikzpicture}
 \end{center}
 
 \subsection{Detailed Explanation}
-The \texttt{is\_id} function implements the identifier recognition grammar through a three-state DFA. The initial state requires the first character to be either an underscore or letter (state 1). Subsequent characters transition to state 2 where letters, digits, or underscores are accepted. The function continues consuming characters until encountering a non-matching character, at which point it verifies the collected identifier doesn't match any keyword (using \texttt{is\_keyword}) before returning a \texttt{T\_Id} token.
+The \texttt{is\_id} function implements the identifier recognition grammar through a four-state DFA. The initial state requires the first character to be either an underscore or letter (state 1). Subsequent characters transition to state 2 where letters, digits, or underscores are accepted. The function continues consuming characters until encountering a non-matching character, at which point it verifies the collected identifier doesn't match any keyword (using \texttt{is\_keyword}) before returning a \texttt{T\_Id} token.
 
 This implementation carefully handles Unicode characters by using \texttt{isalpha()} and \texttt{isalnum()} functions for proper character classification. The function also maintains position information to support precise error reporting when invalid identifiers are encountered. The lookahead verification ensures identifiers don't conflict with language keywords while allowing maximum flexibility in naming conventions.
 
