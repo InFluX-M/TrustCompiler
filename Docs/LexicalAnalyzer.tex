@@ -128,13 +128,13 @@ The order of token extraction is important because certain types of tokens might
 
 Keyword vs. Identifier:
 
-Keywords (such as int, if, while) and identifiers (like variable names) may look similar, but they have different meanings.
+Keywords (such as i32, if, loop) and identifiers (like variable names) may look similar, but they have different meanings.
 
-For example, int is a keyword, while integer is an identifier. If we first check for keywords, we ensure that reserved words are treated correctly as keywords rather than as identifiers.
+For example, i32 is a keyword, while integer is an identifier. If we first check for keywords, we ensure that reserved words are treated correctly as keywords rather than as identifiers.
 
 In the order in extract(), the function checks for keywords before identifiers. This means if a word matches both a keyword and an identifier (like int), it will be categorized as a keyword first.
 
-Why it's important: If we checked identifiers first, we could mistakenly treat keywords as just regular identifiers, which would cause issues in interpreting the code.
+Why it's important: If we checked identifiers first, we could mistakenly treat keywords as just regular identifiers, which would cause issues in interpreting the code. Identifier names should not be the same as any keyword.
 
 Comment vs. Other Tokens:
 
