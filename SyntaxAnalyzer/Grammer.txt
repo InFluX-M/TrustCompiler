@@ -1,145 +1,49 @@
-<program> ::= <func_ls>
-
-<func_ls> ::= <func> <func_ls>
-            | <stmt_ls>
-
-<func>    ::= T_Fn T_Id T_ⅬP <func_args> T_RP <func_type> T_ⅬⅭ <stmt_ls> <func_ret> T_RⅭ
-
-<func_args> ::= <arg> <func_args_tail> 
-              | ε
-
-<func_args_tail>  ::= T_Comma <arg> <func_args_tail> 
-
-<arg> ::= T_Id <arg_type>
-
-<arg_type> ::= T_Ⅽoⅼon <type> 
-             | ε
-
-func_type ::= T_Arrow <type>
-            | ε
-
-<func_ret> ::= T_Return <exp>
-             | ε
-
-<stmt_ls> ::= <stmt> <stmt_ls>
-            | ε
-
-<stmt> ::= <var_declaration> T_Semicolon
-         | T_Id <stmt_after_id> T_Semicolon
-         | <if_stmt>  // Added if_stmt as a statement type
-
-
-<if_stmt>       ::= T_If <exp> T_LBrace <stmt_ls> T_RBrace <else_part_opt>
-
-<else_part_opt> ::= T_Else <else_alternative>
-
-                  | ε // For if without an else
-
-<else_alternative> ::= <if_stmt> 
-                     | T_LBrace <stmt_ls> T_RBrace // Handles "else { ... }"
-
-
-<stmt_after_id>   ::= T_Assign <exp>
-                    | T_LB T_Decimal T_RB T_Assign <exp>
-
-
-<var_declaration> ::= T_Let <mut_opt> <pattern> <type_opt> <assign_opt>
-
-<mut_opt>         ::= T_Mut
-                    | ε
-
-<pattern>         ::= T_Id
-                    | T_LP <id_ls> T_RP
-
-<id_ls>           ::= T_Id <id_ls_tail>
-
-<id_ls_tail>      ::= T_Comma T_Id <id_ls_tail>
-                    | ε
-
-<type_opt>        ::= T_Colon <type>
-                    | ε
-
-<assign_opt>      ::= T_Assign <exp>
-                    | ε
-
-<type>            ::= T_Int
-                    | T_Bool
-                    | T_LP <type_ls> T_RP
-                    | T_LB <type> T_Semicolon T_Decimal T_RB
-
-<type_ls>         ::= <type> <type_ls_tail>
-
-<type_ls_tail>    ::= T_Comma <type> <type_ls_tail>
-                    | ε
-
-<exp>             ::= <log_exp>
-
-<log_exp>         ::= <rel_exp> <log_exp_tail>
-
-<log_exp_tail>    ::= T_LOp_OR <rel_exp> <log_exp_tail>
-                    | ε
-
-<rel_exp>         ::= <eq_exp> <rel_exp_tail>
-
-<rel_exp_tail>    ::= T_LOp_AND <eq_exp> <rel_exp_tail>
-                    | ε
-
-<eq_exp>          ::= <cmp_exp> <eq_exp_tail>
-
-<eq_exp_tail>     ::= T_ROp_E <cmp_exp> <eq_exp_tail>
-                    | T_ROp_NE <cmp_exp> <eq_exp_tail>
-                    | ε
-
-<cmp_exp>         ::= <arith_exp> <cmp_exp_suf>
-
-<cmp_exp_suf>     ::= <cmp_op> <arith_exp>
-                    | ε
-
-<cmp_op>          ::= T_ROp_L
-                    | T_ROp_LE
-                    | T_ROp_G
-                    | T_ROp_GE
-
-<arith_exp>       ::= <arith_term> <arith_exp_tail>
-
-<arith_exp_tail>  ::= T_AOp_Trust <arith_term> <arith_exp_tail>
-                    | T_AOp_MN <arith_term> <arith_exp_tail>
-                    | ε
-
-<arith_term>      ::= <arith_factor> <arith_term_tail>
-
-<arith_term_tail> ::= T_AOp_ML <arith_factor> <arith_term_tail>
-                    | T_AOp_DV <arith_factor> <arith_term_tail>
-                    | T_AOp_RM <arith_factor> <arith_term_tail>
-                    | ε
-
-<arith_factor>    ::= T_Hexadecimal
-                    | T_Decimal
-                    | T_String
-                    | T_True
-                    | T_False
-                    | T_Id <fac_id_opt>
-                    | T_LP <fac_lparen>
-                    | T_LB <exp_ls_arr> T_RB  // Array literal
-
-<fac_id_opt>      ::= T_LP <exp_ls_call> T_RP  // Function call
-                    | T_LB <exp> T_RB         // Array element access
-                    | ε                       // Simple variable
-
-<fac_lparen>      ::= <exp> <lpar_exp_suf>
-
-<lpar_exp_suf>    ::= T_RP                      // Parenthesized expression
-                    | T_Comma <exp_ls_tail> T_RP  // Tuple
-
-<exp_ls_call>     ::= <exp_ls>
-                    | ε
-
-<exp_ls_arr>      ::= <exp_ls>
-                    | ε
-
-<exp_ls>          ::= <exp> <exp_ls_tail>
-
-<exp_ls_tail>     ::= T_Comma <exp> <exp_ls_tail>
-                    | ε
+<program> -> <func_ls>
+<func_ls> -> <func> <func_ls> @ <stmt_ls>
+<func> -> T_Fn T_Id T_ⅬP <func_args> T_RP <func_type> T_ⅬⅭ <stmt_ls> <func_ret> T_RⅭ
+<func_args> -> <arg> <func_args_tail> @ ε
+<func_args_tail>  -> T_Comma <arg> <func_args_tail> 
+<arg> -> T_Id <arg_type>
+<arg_type> -> T_Ⅽoⅼon <type>  @ ε
+func_type -> T_Arrow <type> @ ε
+<func_ret> -> T_Return <exp> @ ε
+<stmt_ls> -> <stmt> <stmt_ls> @ ε
+<stmt> -> <var_declaration> T_Semicolon @ T_Id <stmt_after_id> T_Semicolon @ <if_stmt>
+<if_stmt> -> T_If <exp> T_LBrace <stmt_ls> T_RBrace <else_part_opt>
+<else_part_opt> -> T_Else <else_alternative> @ ε
+<else_alternative> -> <if_stmt>  @ T_LBrace <stmt_ls> T_RBrace
+<stmt_after_id> -> T_Assign <exp> @ T_LB T_Decimal T_RB T_Assign <exp>
+<var_declaration> -> T_Let <mut_opt> <pattern> <type_opt> <assign_opt>
+<mut_opt> -> T_Mut @ ε
+<pattern> -> T_Id @ T_LP <id_ls> T_RP
+<id_ls> -> T_Id <id_ls_tail>
+<id_ls_tail> -> T_Comma T_Id <id_ls_tail> @ ε
+<type_opt> -> T_Colon <type> @ ε
+<assign_opt> -> T_Assign <exp> @ ε
+<type> -> T_Int @ T_Bool @ T_LP <type_ls> T_RP @ T_LB <type> T_Semicolon T_Decimal T_RB
+<type_ls> -> <type> <type_ls_tail>
+<type_ls_tail> -> T_Comma <type> <type_ls_tail> @ ε
+<exp> -> <log_exp>
+<log_exp> -> <rel_exp> <log_exp_tail>
+<log_exp_tail> -> T_LOp_OR <rel_exp> <log_exp_tail> @ ε
+<rel_exp> -> <eq_exp> <rel_exp_tail>
+<rel_exp_tail> -> T_LOp_AND <eq_exp> <rel_exp_tail> @ ε
+<eq_exp> -> <cmp_exp> <eq_exp_tail>
+<eq_exp_tail> -> T_ROp_E <cmp_exp> <eq_exp_tail> @ T_ROp_NE <cmp_exp> <eq_exp_tail> @ ε
+<cmp_exp> -> <arith_exp> <cmp_exp_suf>
+<cmp_exp_suf> -> <cmp_op> <arith_exp> @ ε
+<cmp_op> -> T_ROp_L @ T_ROp_LE @ T_ROp_G @ T_ROp_GE
+<arith_exp> -> <arith_term> <arith_exp_tail>
+<arith_exp_tail> -> T_AOp_Trust <arith_term> <arith_exp_tail> @ T_AOp_MN <arith_term> <arith_exp_tail> @ ε
+<arith_term> -> <arith_factor> <arith_term_tail>
+<arith_term_tail> -> T_AOp_ML <arith_factor> <arith_term_tail> @ T_AOp_DV <arith_factor> <arith_term_tail> @ T_AOp_RM <arith_factor> <arith_term_tail> @ ε
+<arith_factor> -> T_Hexadecimal @ T_Decimal @ T_String @ T_True @ T_False @ T_Id <fac_id_opt> @ T_LP <fac_lparen> @ T_LB <exp_ls_arr> T_RB
+<fac_id_opt> -> T_LP <exp_ls_call> T_RP @ T_LB <exp> T_RB @ ε
+<fac_lparen> -> <exp> <lpar_exp_suf>
+<lpar_exp_suf> -> T_RP @ T_Comma <exp_ls_tail> T_RP
+<exp_ls_call> -> <exp_ls> @ ε
+<exp_ls_arr> -> <exp_ls> @ ε
+<exp_ls> -> <exp> <exp_ls_tail>
+<exp_ls_tail> -> T_Comma <exp> <exp_ls_tail> @ ε
 
 
