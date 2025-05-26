@@ -1,5 +1,5 @@
 #include "LexicalAnalyzer/lexical_analyzer.h"
-#include "SyntaxAnalyzer/syntax_analyzer.cpp"
+#include "SyntaxAnalyzer/syntax_analyzer.h"
 #include <iostream>
 
 int main() {
@@ -17,7 +17,7 @@ int main() {
 
     SyntaxAnalyzer syn_analyzer(lexer.get_tokens(), output_file + file + ".syntax");
 
-//    syn_analyzer.make_tree(update_grammar);
+    syn_analyzer.make_tree(false);
     syn_analyzer.write();
 
     std::cout << "Syntax analysis completed successfully!" << std::endl;

@@ -1,3 +1,6 @@
+#ifndef UTILS_H
+#define UTILS_H
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -407,3 +410,5 @@ public:
         _print_tree(root, has_par);
     }
 };
+
+#endif // UTILS_H
