@@ -55,10 +55,7 @@ std::ostream &operator<<(std::ostream &out, Rule &rule) {
 SyntaxAnalyzer::SyntaxAnalyzer(std::vector<Token> _tokens, std::string output_file) {
     tokens = std::move(_tokens);
     out_address = std::move(output_file);
-    num_errors = 0;
-}
-
-SyntaxAnalyzer::SyntaxAnalyzer() {
+    update_grammar();
     num_errors = 0;
 }
 
@@ -262,54 +259,54 @@ void SyntaxAnalyzer::print_follow(const Symbol &var) {
 }
 
 void SyntaxAnalyzer::set_matches() {
-    match[T_Bool] = "bool";
-    match[T_Break] = "break";
-    match[T_Continue] = "continue";
-    match[T_Else] = "else";
-    match[T_False] = "false";
-    match[T_Fn] = "fn";
-    match[T_Int] = "i32";
-    match[T_If] = "if";
-    match[T_Let] = "let";
-    match[T_Loop] = "loop";
-    match[T_Mut] = "mut";
-    match[T_Print] = "println!";
-    match[T_Return] = "return";
-    match[T_True] = "true";
+    match[T_Bool] = "T_Bool";
+    match[T_Break] = "T_Break";
+    match[T_Continue] = "T_Continue";
+    match[T_Else] = "T_Else";
+    match[T_False] = "T_False";
+    match[T_Fn] = "T_Fn";
+    match[T_Int] = "T_Int";
+    match[T_If] = "T_If";
+    match[T_Let] = "T_Let";
+    match[T_Loop] = "T_Loop";
+    match[T_Mut] = "T_Mut";
+    match[T_Print] = "T_Print!";
+    match[T_Return] = "T_Return";
+    match[T_True] = "T_True";
 
-    match[T_AOp_AD] = "+";
-    match[T_AOp_MN] = "-";
-    match[T_AOp_ML] = "*";
-    match[T_AOp_DV] = "/";
-    match[T_AOp_RM] = "%";
+    match[T_AOp_AD] = "T_AOp_AD";
+    match[T_AOp_MN] = "T_AOp_MN";
+    match[T_AOp_ML] = "T_AOp_ML";
+    match[T_AOp_DV] = "T_AOp_DV";
+    match[T_AOp_RM] = "T_AOp_RM";
 
-    match[T_ROp_L] = "<";
-    match[T_ROp_G] = ">";
-    match[T_ROp_LE] = "<=";
-    match[T_ROp_GE] = ">=";
-    match[T_ROp_NE] = "!=";
-    match[T_ROp_E] = "==";
+    match[T_ROp_L] = "T_ROp_L";
+    match[T_ROp_G] = "T_ROp_G";
+    match[T_ROp_LE] = "T_ROp_LE";
+    match[T_ROp_GE] = "T_ROp_GE";
+    match[T_ROp_NE] = "T_ROp_NE";
+    match[T_ROp_E] = "T_ROp_E";
 
-    match[T_LOp_AND] = "&&";
-    match[T_LOp_OR] = "||";
-    match[T_LOp_NOT] = "!";
+    match[T_LOp_AND] = "T_LOp_AND";
+    match[T_LOp_OR] = "T_LOp_OR";
+    match[T_LOp_NOT] = "T_LOp_NOT";
 
-    match[T_Assign] = "=";
-    match[T_LP] = "(";
-    match[T_RP] = ")";
-    match[T_LC] = "{";
-    match[T_RC] = "}";
-    match[T_LB] = "[";
-    match[T_RB] = "]";
-    match[T_Semicolon] = ";";
-    match[T_Comma] = ",";
-    match[T_Colon] = ":";
-    match[T_Arrow] = "->";
+    match[T_Assign] = "T_Assign";
+    match[T_LP] = "T_LP";
+    match[T_RP] = "T_RP";
+    match[T_LC] = "T_LC";
+    match[T_RC] = "T_RC";
+    match[T_LB] = "T_LB";
+    match[T_RB] = "T_RB";
+    match[T_Semicolon] = "T_Semicolon";
+    match[T_Comma] = "T_Comma";
+    match[T_Colon] = "T_Colon]";
+    match[T_Arrow] = "T_Arrow";
 
-    match[T_Id] = "id";
-    match[T_Decimal] = "decimal";
-    match[T_Hexadecimal] = "hexadecimal";
-    match[T_String] = "string";
+    match[T_Id] = "T_Id";
+    match[T_Decimal] = "T_Decimal";
+    match[T_Hexadecimal] = "T_Hexadecimal";
+    match[T_String] = "T_String";
 
     match[Invalid] = "invalid";
     match[Eof] = "$";

@@ -1,0 +1,1064 @@
+# <arg> ;
+SYNCH
+# <arg> T_Comma
+SYNCH
+# <arg> T_Id
+<arg> -> T_Id <arg_type> 
+# <arg> T_RP
+SYNCH
+# <arg> }
+SYNCH
+# <arg_type> ;
+SYNCH
+# <arg_type> T_Comma
+<arg_type> -> eps 
+# <arg_type> T_RP
+<arg_type> -> eps 
+# <arg_type> T_Ⅽoⅼon
+<arg_type> -> T_Ⅽoⅼon <type> 
+# <arg_type> }
+SYNCH
+# <arith_exp> ;
+SYNCH
+# <arith_exp> T_Comma
+SYNCH
+# <arith_exp> T_Decimal
+<arith_exp> -> <arith_term> <arith_exp_tail> 
+# <arith_exp> T_False
+<arith_exp> -> <arith_term> <arith_exp_tail> 
+# <arith_exp> T_Hexadecimal
+<arith_exp> -> <arith_term> <arith_exp_tail> 
+# <arith_exp> T_Id
+<arith_exp> -> <arith_term> <arith_exp_tail> 
+# <arith_exp> T_LB
+<arith_exp> -> <arith_term> <arith_exp_tail> 
+# <arith_exp> T_LBrace
+SYNCH
+# <arith_exp> T_LOp_AND
+SYNCH
+# <arith_exp> T_LOp_OR
+SYNCH
+# <arith_exp> T_LP
+<arith_exp> -> <arith_term> <arith_exp_tail> 
+# <arith_exp> T_RB
+SYNCH
+# <arith_exp> T_ROp_E
+SYNCH
+# <arith_exp> T_ROp_G
+SYNCH
+# <arith_exp> T_ROp_GE
+SYNCH
+# <arith_exp> T_ROp_L
+SYNCH
+# <arith_exp> T_ROp_LE
+SYNCH
+# <arith_exp> T_ROp_NE
+SYNCH
+# <arith_exp> T_RP
+SYNCH
+# <arith_exp> T_RⅭ
+SYNCH
+# <arith_exp> T_Semicolon
+SYNCH
+# <arith_exp> T_String
+<arith_exp> -> <arith_term> <arith_exp_tail> 
+# <arith_exp> T_True
+<arith_exp> -> <arith_term> <arith_exp_tail> 
+# <arith_exp> }
+SYNCH
+# <arith_exp_tail> ;
+SYNCH
+# <arith_exp_tail> T_AOp_MN
+<arith_exp_tail> -> T_AOp_MN <arith_term> <arith_exp_tail> 
+# <arith_exp_tail> T_AOp_Trust
+<arith_exp_tail> -> T_AOp_Trust <arith_term> <arith_exp_tail> 
+# <arith_exp_tail> T_Comma
+<arith_exp_tail> -> eps 
+# <arith_exp_tail> T_LBrace
+<arith_exp_tail> -> eps 
+# <arith_exp_tail> T_LOp_AND
+<arith_exp_tail> -> eps 
+# <arith_exp_tail> T_LOp_OR
+<arith_exp_tail> -> eps 
+# <arith_exp_tail> T_RB
+<arith_exp_tail> -> eps 
+# <arith_exp_tail> T_ROp_E
+<arith_exp_tail> -> eps 
+# <arith_exp_tail> T_ROp_G
+<arith_exp_tail> -> eps 
+# <arith_exp_tail> T_ROp_GE
+<arith_exp_tail> -> eps 
+# <arith_exp_tail> T_ROp_L
+<arith_exp_tail> -> eps 
+# <arith_exp_tail> T_ROp_LE
+<arith_exp_tail> -> eps 
+# <arith_exp_tail> T_ROp_NE
+<arith_exp_tail> -> eps 
+# <arith_exp_tail> T_RP
+<arith_exp_tail> -> eps 
+# <arith_exp_tail> T_RⅭ
+<arith_exp_tail> -> eps 
+# <arith_exp_tail> T_Semicolon
+<arith_exp_tail> -> eps 
+# <arith_exp_tail> }
+SYNCH
+# <arith_factor> ;
+SYNCH
+# <arith_factor> T_AOp_DV
+SYNCH
+# <arith_factor> T_AOp_ML
+SYNCH
+# <arith_factor> T_AOp_MN
+SYNCH
+# <arith_factor> T_AOp_RM
+SYNCH
+# <arith_factor> T_AOp_Trust
+SYNCH
+# <arith_factor> T_Comma
+SYNCH
+# <arith_factor> T_Decimal
+<arith_factor> -> T_Decimal 
+# <arith_factor> T_False
+<arith_factor> -> T_False 
+# <arith_factor> T_Hexadecimal
+<arith_factor> -> T_Hexadecimal 
+# <arith_factor> T_Id
+<arith_factor> -> T_Id <fac_id_opt> 
+# <arith_factor> T_LB
+<arith_factor> -> T_LB <exp_ls_arr> T_RB 
+# <arith_factor> T_LBrace
+SYNCH
+# <arith_factor> T_LOp_AND
+SYNCH
+# <arith_factor> T_LOp_OR
+SYNCH
+# <arith_factor> T_LP
+<arith_factor> -> T_LP <fac_lparen> 
+# <arith_factor> T_RB
+SYNCH
+# <arith_factor> T_ROp_E
+SYNCH
+# <arith_factor> T_ROp_G
+SYNCH
+# <arith_factor> T_ROp_GE
+SYNCH
+# <arith_factor> T_ROp_L
+SYNCH
+# <arith_factor> T_ROp_LE
+SYNCH
+# <arith_factor> T_ROp_NE
+SYNCH
+# <arith_factor> T_RP
+SYNCH
+# <arith_factor> T_RⅭ
+SYNCH
+# <arith_factor> T_Semicolon
+SYNCH
+# <arith_factor> T_String
+<arith_factor> -> T_String 
+# <arith_factor> T_True
+<arith_factor> -> T_True 
+# <arith_factor> }
+SYNCH
+# <arith_term> ;
+SYNCH
+# <arith_term> T_AOp_MN
+SYNCH
+# <arith_term> T_AOp_Trust
+SYNCH
+# <arith_term> T_Comma
+SYNCH
+# <arith_term> T_Decimal
+<arith_term> -> <arith_factor> <arith_term_tail> 
+# <arith_term> T_False
+<arith_term> -> <arith_factor> <arith_term_tail> 
+# <arith_term> T_Hexadecimal
+<arith_term> -> <arith_factor> <arith_term_tail> 
+# <arith_term> T_Id
+<arith_term> -> <arith_factor> <arith_term_tail> 
+# <arith_term> T_LB
+<arith_term> -> <arith_factor> <arith_term_tail> 
+# <arith_term> T_LBrace
+SYNCH
+# <arith_term> T_LOp_AND
+SYNCH
+# <arith_term> T_LOp_OR
+SYNCH
+# <arith_term> T_LP
+<arith_term> -> <arith_factor> <arith_term_tail> 
+# <arith_term> T_RB
+SYNCH
+# <arith_term> T_ROp_E
+SYNCH
+# <arith_term> T_ROp_G
+SYNCH
+# <arith_term> T_ROp_GE
+SYNCH
+# <arith_term> T_ROp_L
+SYNCH
+# <arith_term> T_ROp_LE
+SYNCH
+# <arith_term> T_ROp_NE
+SYNCH
+# <arith_term> T_RP
+SYNCH
+# <arith_term> T_RⅭ
+SYNCH
+# <arith_term> T_Semicolon
+SYNCH
+# <arith_term> T_String
+<arith_term> -> <arith_factor> <arith_term_tail> 
+# <arith_term> T_True
+<arith_term> -> <arith_factor> <arith_term_tail> 
+# <arith_term> }
+SYNCH
+# <arith_term_tail> ;
+SYNCH
+# <arith_term_tail> T_AOp_DV
+<arith_term_tail> -> T_AOp_DV <arith_factor> <arith_term_tail> 
+# <arith_term_tail> T_AOp_ML
+<arith_term_tail> -> T_AOp_ML <arith_factor> <arith_term_tail> 
+# <arith_term_tail> T_AOp_MN
+<arith_term_tail> -> eps 
+# <arith_term_tail> T_AOp_RM
+<arith_term_tail> -> T_AOp_RM <arith_factor> <arith_term_tail> 
+# <arith_term_tail> T_AOp_Trust
+<arith_term_tail> -> eps 
+# <arith_term_tail> T_Comma
+<arith_term_tail> -> eps 
+# <arith_term_tail> T_LBrace
+<arith_term_tail> -> eps 
+# <arith_term_tail> T_LOp_AND
+<arith_term_tail> -> eps 
+# <arith_term_tail> T_LOp_OR
+<arith_term_tail> -> eps 
+# <arith_term_tail> T_RB
+<arith_term_tail> -> eps 
+# <arith_term_tail> T_ROp_E
+<arith_term_tail> -> eps 
+# <arith_term_tail> T_ROp_G
+<arith_term_tail> -> eps 
+# <arith_term_tail> T_ROp_GE
+<arith_term_tail> -> eps 
+# <arith_term_tail> T_ROp_L
+<arith_term_tail> -> eps 
+# <arith_term_tail> T_ROp_LE
+<arith_term_tail> -> eps 
+# <arith_term_tail> T_ROp_NE
+<arith_term_tail> -> eps 
+# <arith_term_tail> T_RP
+<arith_term_tail> -> eps 
+# <arith_term_tail> T_RⅭ
+<arith_term_tail> -> eps 
+# <arith_term_tail> T_Semicolon
+<arith_term_tail> -> eps 
+# <arith_term_tail> }
+SYNCH
+# <assign_opt> ;
+SYNCH
+# <assign_opt> T_Assign
+<assign_opt> -> T_Assign <exp> 
+# <assign_opt> T_Semicolon
+<assign_opt> -> eps 
+# <assign_opt> }
+SYNCH
+# <cmp_exp> ;
+SYNCH
+# <cmp_exp> T_Comma
+SYNCH
+# <cmp_exp> T_Decimal
+<cmp_exp> -> <arith_exp> <cmp_exp_suf> 
+# <cmp_exp> T_False
+<cmp_exp> -> <arith_exp> <cmp_exp_suf> 
+# <cmp_exp> T_Hexadecimal
+<cmp_exp> -> <arith_exp> <cmp_exp_suf> 
+# <cmp_exp> T_Id
+<cmp_exp> -> <arith_exp> <cmp_exp_suf> 
+# <cmp_exp> T_LB
+<cmp_exp> -> <arith_exp> <cmp_exp_suf> 
+# <cmp_exp> T_LBrace
+SYNCH
+# <cmp_exp> T_LOp_AND
+SYNCH
+# <cmp_exp> T_LOp_OR
+SYNCH
+# <cmp_exp> T_LP
+<cmp_exp> -> <arith_exp> <cmp_exp_suf> 
+# <cmp_exp> T_RB
+SYNCH
+# <cmp_exp> T_ROp_E
+SYNCH
+# <cmp_exp> T_ROp_NE
+SYNCH
+# <cmp_exp> T_RP
+SYNCH
+# <cmp_exp> T_RⅭ
+SYNCH
+# <cmp_exp> T_Semicolon
+SYNCH
+# <cmp_exp> T_String
+<cmp_exp> -> <arith_exp> <cmp_exp_suf> 
+# <cmp_exp> T_True
+<cmp_exp> -> <arith_exp> <cmp_exp_suf> 
+# <cmp_exp> }
+SYNCH
+# <cmp_exp_suf> ;
+SYNCH
+# <cmp_exp_suf> T_Comma
+<cmp_exp_suf> -> eps 
+# <cmp_exp_suf> T_LBrace
+<cmp_exp_suf> -> eps 
+# <cmp_exp_suf> T_LOp_AND
+<cmp_exp_suf> -> eps 
+# <cmp_exp_suf> T_LOp_OR
+<cmp_exp_suf> -> eps 
+# <cmp_exp_suf> T_RB
+<cmp_exp_suf> -> eps 
+# <cmp_exp_suf> T_ROp_E
+<cmp_exp_suf> -> eps 
+# <cmp_exp_suf> T_ROp_G
+<cmp_exp_suf> -> <cmp_op> <arith_exp> 
+# <cmp_exp_suf> T_ROp_GE
+<cmp_exp_suf> -> <cmp_op> <arith_exp> 
+# <cmp_exp_suf> T_ROp_L
+<cmp_exp_suf> -> <cmp_op> <arith_exp> 
+# <cmp_exp_suf> T_ROp_LE
+<cmp_exp_suf> -> <cmp_op> <arith_exp> 
+# <cmp_exp_suf> T_ROp_NE
+<cmp_exp_suf> -> eps 
+# <cmp_exp_suf> T_RP
+<cmp_exp_suf> -> eps 
+# <cmp_exp_suf> T_RⅭ
+<cmp_exp_suf> -> eps 
+# <cmp_exp_suf> T_Semicolon
+<cmp_exp_suf> -> eps 
+# <cmp_exp_suf> }
+SYNCH
+# <cmp_op> ;
+SYNCH
+# <cmp_op> T_Decimal
+SYNCH
+# <cmp_op> T_False
+SYNCH
+# <cmp_op> T_Hexadecimal
+SYNCH
+# <cmp_op> T_Id
+SYNCH
+# <cmp_op> T_LB
+SYNCH
+# <cmp_op> T_LP
+SYNCH
+# <cmp_op> T_ROp_G
+<cmp_op> -> T_ROp_G 
+# <cmp_op> T_ROp_GE
+<cmp_op> -> T_ROp_GE 
+# <cmp_op> T_ROp_L
+<cmp_op> -> T_ROp_L 
+# <cmp_op> T_ROp_LE
+<cmp_op> -> T_ROp_LE 
+# <cmp_op> T_String
+SYNCH
+# <cmp_op> T_True
+SYNCH
+# <cmp_op> }
+SYNCH
+# <else_alternative> $
+SYNCH
+# <else_alternative> ;
+SYNCH
+# <else_alternative> T_Id
+SYNCH
+# <else_alternative> T_If
+<else_alternative> -> <if_stmt> 
+# <else_alternative> T_LBrace
+<else_alternative> -> T_LBrace <stmt_ls> T_RBrace 
+# <else_alternative> T_Let
+SYNCH
+# <else_alternative> T_RBrace
+SYNCH
+# <else_alternative> T_Return
+SYNCH
+# <else_alternative> T_RⅭ
+SYNCH
+# <else_alternative> }
+SYNCH
+# <else_part_opt> $
+<else_part_opt> -> eps 
+# <else_part_opt> ;
+SYNCH
+# <else_part_opt> T_Else
+<else_part_opt> -> T_Else <else_alternative> 
+# <else_part_opt> T_Id
+<else_part_opt> -> eps 
+# <else_part_opt> T_If
+<else_part_opt> -> eps 
+# <else_part_opt> T_Let
+<else_part_opt> -> eps 
+# <else_part_opt> T_RBrace
+<else_part_opt> -> eps 
+# <else_part_opt> T_Return
+<else_part_opt> -> eps 
+# <else_part_opt> T_RⅭ
+<else_part_opt> -> eps 
+# <else_part_opt> }
+SYNCH
+# <eq_exp> ;
+SYNCH
+# <eq_exp> T_Comma
+SYNCH
+# <eq_exp> T_Decimal
+<eq_exp> -> <cmp_exp> <eq_exp_tail> 
+# <eq_exp> T_False
+<eq_exp> -> <cmp_exp> <eq_exp_tail> 
+# <eq_exp> T_Hexadecimal
+<eq_exp> -> <cmp_exp> <eq_exp_tail> 
+# <eq_exp> T_Id
+<eq_exp> -> <cmp_exp> <eq_exp_tail> 
+# <eq_exp> T_LB
+<eq_exp> -> <cmp_exp> <eq_exp_tail> 
+# <eq_exp> T_LBrace
+SYNCH
+# <eq_exp> T_LOp_AND
+SYNCH
+# <eq_exp> T_LOp_OR
+SYNCH
+# <eq_exp> T_LP
+<eq_exp> -> <cmp_exp> <eq_exp_tail> 
+# <eq_exp> T_RB
+SYNCH
+# <eq_exp> T_RP
+SYNCH
+# <eq_exp> T_RⅭ
+SYNCH
+# <eq_exp> T_Semicolon
+SYNCH
+# <eq_exp> T_String
+<eq_exp> -> <cmp_exp> <eq_exp_tail> 
+# <eq_exp> T_True
+<eq_exp> -> <cmp_exp> <eq_exp_tail> 
+# <eq_exp> }
+SYNCH
+# <eq_exp_tail> ;
+SYNCH
+# <eq_exp_tail> T_Comma
+<eq_exp_tail> -> eps 
+# <eq_exp_tail> T_LBrace
+<eq_exp_tail> -> eps 
+# <eq_exp_tail> T_LOp_AND
+<eq_exp_tail> -> eps 
+# <eq_exp_tail> T_LOp_OR
+<eq_exp_tail> -> eps 
+# <eq_exp_tail> T_RB
+<eq_exp_tail> -> eps 
+# <eq_exp_tail> T_ROp_E
+<eq_exp_tail> -> T_ROp_E <cmp_exp> <eq_exp_tail> 
+# <eq_exp_tail> T_ROp_NE
+<eq_exp_tail> -> T_ROp_NE <cmp_exp> <eq_exp_tail> 
+# <eq_exp_tail> T_RP
+<eq_exp_tail> -> eps 
+# <eq_exp_tail> T_RⅭ
+<eq_exp_tail> -> eps 
+# <eq_exp_tail> T_Semicolon
+<eq_exp_tail> -> eps 
+# <eq_exp_tail> }
+SYNCH
+# <exp> ;
+SYNCH
+# <exp> T_Comma
+SYNCH
+# <exp> T_Decimal
+<exp> -> <log_exp> 
+# <exp> T_False
+<exp> -> <log_exp> 
+# <exp> T_Hexadecimal
+<exp> -> <log_exp> 
+# <exp> T_Id
+<exp> -> <log_exp> 
+# <exp> T_LB
+<exp> -> <log_exp> 
+# <exp> T_LBrace
+SYNCH
+# <exp> T_LP
+<exp> -> <log_exp> 
+# <exp> T_RB
+SYNCH
+# <exp> T_RP
+SYNCH
+# <exp> T_RⅭ
+SYNCH
+# <exp> T_Semicolon
+SYNCH
+# <exp> T_String
+<exp> -> <log_exp> 
+# <exp> T_True
+<exp> -> <log_exp> 
+# <exp> }
+SYNCH
+# <exp_ls> ;
+SYNCH
+# <exp_ls> T_Decimal
+<exp_ls> -> <exp> <exp_ls_tail> 
+# <exp_ls> T_False
+<exp_ls> -> <exp> <exp_ls_tail> 
+# <exp_ls> T_Hexadecimal
+<exp_ls> -> <exp> <exp_ls_tail> 
+# <exp_ls> T_Id
+<exp_ls> -> <exp> <exp_ls_tail> 
+# <exp_ls> T_LB
+<exp_ls> -> <exp> <exp_ls_tail> 
+# <exp_ls> T_LP
+<exp_ls> -> <exp> <exp_ls_tail> 
+# <exp_ls> T_RB
+SYNCH
+# <exp_ls> T_RP
+SYNCH
+# <exp_ls> T_String
+<exp_ls> -> <exp> <exp_ls_tail> 
+# <exp_ls> T_True
+<exp_ls> -> <exp> <exp_ls_tail> 
+# <exp_ls> }
+SYNCH
+# <exp_ls_arr> ;
+SYNCH
+# <exp_ls_arr> T_Decimal
+<exp_ls_arr> -> <exp_ls> 
+# <exp_ls_arr> T_False
+<exp_ls_arr> -> <exp_ls> 
+# <exp_ls_arr> T_Hexadecimal
+<exp_ls_arr> -> <exp_ls> 
+# <exp_ls_arr> T_Id
+<exp_ls_arr> -> <exp_ls> 
+# <exp_ls_arr> T_LB
+<exp_ls_arr> -> <exp_ls> 
+# <exp_ls_arr> T_LP
+<exp_ls_arr> -> <exp_ls> 
+# <exp_ls_arr> T_RB
+<exp_ls_arr> -> eps 
+# <exp_ls_arr> T_String
+<exp_ls_arr> -> <exp_ls> 
+# <exp_ls_arr> T_True
+<exp_ls_arr> -> <exp_ls> 
+# <exp_ls_arr> }
+SYNCH
+# <exp_ls_call> ;
+SYNCH
+# <exp_ls_call> T_Decimal
+<exp_ls_call> -> <exp_ls> 
+# <exp_ls_call> T_False
+<exp_ls_call> -> <exp_ls> 
+# <exp_ls_call> T_Hexadecimal
+<exp_ls_call> -> <exp_ls> 
+# <exp_ls_call> T_Id
+<exp_ls_call> -> <exp_ls> 
+# <exp_ls_call> T_LB
+<exp_ls_call> -> <exp_ls> 
+# <exp_ls_call> T_LP
+<exp_ls_call> -> <exp_ls> 
+# <exp_ls_call> T_RP
+<exp_ls_call> -> eps 
+# <exp_ls_call> T_String
+<exp_ls_call> -> <exp_ls> 
+# <exp_ls_call> T_True
+<exp_ls_call> -> <exp_ls> 
+# <exp_ls_call> }
+SYNCH
+# <exp_ls_tail> ;
+SYNCH
+# <exp_ls_tail> T_Comma
+<exp_ls_tail> -> T_Comma <exp> <exp_ls_tail> 
+# <exp_ls_tail> T_RB
+<exp_ls_tail> -> eps 
+# <exp_ls_tail> T_RP
+<exp_ls_tail> -> eps 
+# <exp_ls_tail> }
+SYNCH
+# <fac_id_opt> ;
+SYNCH
+# <fac_id_opt> T_AOp_DV
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_AOp_ML
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_AOp_MN
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_AOp_RM
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_AOp_Trust
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_Comma
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_LB
+<fac_id_opt> -> T_LB <exp> T_RB 
+# <fac_id_opt> T_LBrace
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_LOp_AND
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_LOp_OR
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_LP
+<fac_id_opt> -> T_LP <exp_ls_call> T_RP 
+# <fac_id_opt> T_RB
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_ROp_E
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_ROp_G
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_ROp_GE
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_ROp_L
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_ROp_LE
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_ROp_NE
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_RP
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_RⅭ
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_Semicolon
+<fac_id_opt> -> eps 
+# <fac_id_opt> }
+SYNCH
+# <fac_lparen> ;
+SYNCH
+# <fac_lparen> T_AOp_DV
+SYNCH
+# <fac_lparen> T_AOp_ML
+SYNCH
+# <fac_lparen> T_AOp_MN
+SYNCH
+# <fac_lparen> T_AOp_RM
+SYNCH
+# <fac_lparen> T_AOp_Trust
+SYNCH
+# <fac_lparen> T_Comma
+SYNCH
+# <fac_lparen> T_Decimal
+<fac_lparen> -> <exp> <lpar_exp_suf> 
+# <fac_lparen> T_False
+<fac_lparen> -> <exp> <lpar_exp_suf> 
+# <fac_lparen> T_Hexadecimal
+<fac_lparen> -> <exp> <lpar_exp_suf> 
+# <fac_lparen> T_Id
+<fac_lparen> -> <exp> <lpar_exp_suf> 
+# <fac_lparen> T_LB
+<fac_lparen> -> <exp> <lpar_exp_suf> 
+# <fac_lparen> T_LBrace
+SYNCH
+# <fac_lparen> T_LOp_AND
+SYNCH
+# <fac_lparen> T_LOp_OR
+SYNCH
+# <fac_lparen> T_LP
+<fac_lparen> -> <exp> <lpar_exp_suf> 
+# <fac_lparen> T_RB
+SYNCH
+# <fac_lparen> T_ROp_E
+SYNCH
+# <fac_lparen> T_ROp_G
+SYNCH
+# <fac_lparen> T_ROp_GE
+SYNCH
+# <fac_lparen> T_ROp_L
+SYNCH
+# <fac_lparen> T_ROp_LE
+SYNCH
+# <fac_lparen> T_ROp_NE
+SYNCH
+# <fac_lparen> T_RP
+SYNCH
+# <fac_lparen> T_RⅭ
+SYNCH
+# <fac_lparen> T_Semicolon
+SYNCH
+# <fac_lparen> T_String
+<fac_lparen> -> <exp> <lpar_exp_suf> 
+# <fac_lparen> T_True
+<fac_lparen> -> <exp> <lpar_exp_suf> 
+# <fac_lparen> }
+SYNCH
+# <func> $
+SYNCH
+# <func> ;
+SYNCH
+# <func> T_Fn
+<func> -> T_Fn T_Id T_ⅬP <func_args> T_RP <func_type> T_ⅬⅭ <stmt_ls> <func_ret> T_RⅭ 
+# <func> T_Id
+SYNCH
+# <func> T_If
+SYNCH
+# <func> T_Let
+SYNCH
+# <func> }
+SYNCH
+# <func_args> ;
+SYNCH
+# <func_args> T_Id
+<func_args> -> <arg> <func_args_tail> 
+# <func_args> T_RP
+<func_args> -> eps 
+# <func_args> }
+SYNCH
+# <func_args_tail> ;
+SYNCH
+# <func_args_tail> T_Comma
+<func_args_tail> -> T_Comma <arg> <func_args_tail> 
+# <func_args_tail> T_RP
+<func_args_tail> -> eps 
+# <func_args_tail> }
+SYNCH
+# <func_ls> $
+<func_ls> -> <stmt_ls> 
+# <func_ls> ;
+SYNCH
+# <func_ls> T_Fn
+<func_ls> -> <func> <func_ls> 
+# <func_ls> T_Id
+<func_ls> -> <stmt_ls> 
+# <func_ls> T_If
+<func_ls> -> <stmt_ls> 
+# <func_ls> T_Let
+<func_ls> -> <stmt_ls> 
+# <func_ls> }
+SYNCH
+# <func_ret> ;
+SYNCH
+# <func_ret> T_Return
+<func_ret> -> T_Return <exp> 
+# <func_ret> T_RⅭ
+<func_ret> -> eps 
+# <func_ret> }
+SYNCH
+# <func_type> ;
+SYNCH
+# <func_type> T_Arrow
+<func_type> -> T_Arrow <type> 
+# <func_type> T_ⅬⅭ
+<func_type> -> eps 
+# <func_type> }
+SYNCH
+# <id_ls> ;
+SYNCH
+# <id_ls> T_Id
+<id_ls> -> T_Id <id_ls_tail> 
+# <id_ls> T_RP
+SYNCH
+# <id_ls> }
+SYNCH
+# <id_ls_tail> ;
+SYNCH
+# <id_ls_tail> T_Comma
+<id_ls_tail> -> T_Comma T_Id <id_ls_tail> 
+# <id_ls_tail> T_RP
+<id_ls_tail> -> eps 
+# <id_ls_tail> }
+SYNCH
+# <if_stmt> $
+SYNCH
+# <if_stmt> ;
+SYNCH
+# <if_stmt> T_Id
+SYNCH
+# <if_stmt> T_If
+<if_stmt> -> T_If <exp> T_LBrace <stmt_ls> T_RBrace <else_part_opt> 
+# <if_stmt> T_Let
+SYNCH
+# <if_stmt> T_RBrace
+SYNCH
+# <if_stmt> T_Return
+SYNCH
+# <if_stmt> T_RⅭ
+SYNCH
+# <if_stmt> }
+SYNCH
+# <log_exp> ;
+SYNCH
+# <log_exp> T_Comma
+SYNCH
+# <log_exp> T_Decimal
+<log_exp> -> <rel_exp> <log_exp_tail> 
+# <log_exp> T_False
+<log_exp> -> <rel_exp> <log_exp_tail> 
+# <log_exp> T_Hexadecimal
+<log_exp> -> <rel_exp> <log_exp_tail> 
+# <log_exp> T_Id
+<log_exp> -> <rel_exp> <log_exp_tail> 
+# <log_exp> T_LB
+<log_exp> -> <rel_exp> <log_exp_tail> 
+# <log_exp> T_LBrace
+SYNCH
+# <log_exp> T_LP
+<log_exp> -> <rel_exp> <log_exp_tail> 
+# <log_exp> T_RB
+SYNCH
+# <log_exp> T_RP
+SYNCH
+# <log_exp> T_RⅭ
+SYNCH
+# <log_exp> T_Semicolon
+SYNCH
+# <log_exp> T_String
+<log_exp> -> <rel_exp> <log_exp_tail> 
+# <log_exp> T_True
+<log_exp> -> <rel_exp> <log_exp_tail> 
+# <log_exp> }
+SYNCH
+# <log_exp_tail> ;
+SYNCH
+# <log_exp_tail> T_Comma
+<log_exp_tail> -> eps 
+# <log_exp_tail> T_LBrace
+<log_exp_tail> -> eps 
+# <log_exp_tail> T_LOp_OR
+<log_exp_tail> -> T_LOp_OR <rel_exp> <log_exp_tail> 
+# <log_exp_tail> T_RB
+<log_exp_tail> -> eps 
+# <log_exp_tail> T_RP
+<log_exp_tail> -> eps 
+# <log_exp_tail> T_RⅭ
+<log_exp_tail> -> eps 
+# <log_exp_tail> T_Semicolon
+<log_exp_tail> -> eps 
+# <log_exp_tail> }
+SYNCH
+# <lpar_exp_suf> ;
+SYNCH
+# <lpar_exp_suf> T_AOp_DV
+SYNCH
+# <lpar_exp_suf> T_AOp_ML
+SYNCH
+# <lpar_exp_suf> T_AOp_MN
+SYNCH
+# <lpar_exp_suf> T_AOp_RM
+SYNCH
+# <lpar_exp_suf> T_AOp_Trust
+SYNCH
+# <lpar_exp_suf> T_Comma
+<lpar_exp_suf> -> T_Comma <exp_ls_tail> T_RP 
+# <lpar_exp_suf> T_LBrace
+SYNCH
+# <lpar_exp_suf> T_LOp_AND
+SYNCH
+# <lpar_exp_suf> T_LOp_OR
+SYNCH
+# <lpar_exp_suf> T_RB
+SYNCH
+# <lpar_exp_suf> T_ROp_E
+SYNCH
+# <lpar_exp_suf> T_ROp_G
+SYNCH
+# <lpar_exp_suf> T_ROp_GE
+SYNCH
+# <lpar_exp_suf> T_ROp_L
+SYNCH
+# <lpar_exp_suf> T_ROp_LE
+SYNCH
+# <lpar_exp_suf> T_ROp_NE
+SYNCH
+# <lpar_exp_suf> T_RP
+<lpar_exp_suf> -> T_RP 
+# <lpar_exp_suf> T_RⅭ
+SYNCH
+# <lpar_exp_suf> T_Semicolon
+SYNCH
+# <lpar_exp_suf> }
+SYNCH
+# <mut_opt> ;
+SYNCH
+# <mut_opt> T_Id
+<mut_opt> -> eps 
+# <mut_opt> T_LP
+<mut_opt> -> eps 
+# <mut_opt> T_Mut
+<mut_opt> -> T_Mut 
+# <mut_opt> }
+SYNCH
+# <pattern> ;
+SYNCH
+# <pattern> T_Assign
+SYNCH
+# <pattern> T_Colon
+SYNCH
+# <pattern> T_Id
+<pattern> -> T_Id 
+# <pattern> T_LP
+<pattern> -> T_LP <id_ls> T_RP 
+# <pattern> T_Semicolon
+SYNCH
+# <pattern> }
+SYNCH
+# <program> $
+<program> -> <func_ls> 
+# <program> ;
+SYNCH
+# <program> T_Fn
+<program> -> <func_ls> 
+# <program> T_Id
+<program> -> <func_ls> 
+# <program> T_If
+<program> -> <func_ls> 
+# <program> T_Let
+<program> -> <func_ls> 
+# <program> }
+SYNCH
+# <rel_exp> ;
+SYNCH
+# <rel_exp> T_Comma
+SYNCH
+# <rel_exp> T_Decimal
+<rel_exp> -> <eq_exp> <rel_exp_tail> 
+# <rel_exp> T_False
+<rel_exp> -> <eq_exp> <rel_exp_tail> 
+# <rel_exp> T_Hexadecimal
+<rel_exp> -> <eq_exp> <rel_exp_tail> 
+# <rel_exp> T_Id
+<rel_exp> -> <eq_exp> <rel_exp_tail> 
+# <rel_exp> T_LB
+<rel_exp> -> <eq_exp> <rel_exp_tail> 
+# <rel_exp> T_LBrace
+SYNCH
+# <rel_exp> T_LOp_OR
+SYNCH
+# <rel_exp> T_LP
+<rel_exp> -> <eq_exp> <rel_exp_tail> 
+# <rel_exp> T_RB
+SYNCH
+# <rel_exp> T_RP
+SYNCH
+# <rel_exp> T_RⅭ
+SYNCH
+# <rel_exp> T_Semicolon
+SYNCH
+# <rel_exp> T_String
+<rel_exp> -> <eq_exp> <rel_exp_tail> 
+# <rel_exp> T_True
+<rel_exp> -> <eq_exp> <rel_exp_tail> 
+# <rel_exp> }
+SYNCH
+# <rel_exp_tail> ;
+SYNCH
+# <rel_exp_tail> T_Comma
+<rel_exp_tail> -> eps 
+# <rel_exp_tail> T_LBrace
+<rel_exp_tail> -> eps 
+# <rel_exp_tail> T_LOp_AND
+<rel_exp_tail> -> T_LOp_AND <eq_exp> <rel_exp_tail> 
+# <rel_exp_tail> T_LOp_OR
+<rel_exp_tail> -> eps 
+# <rel_exp_tail> T_RB
+<rel_exp_tail> -> eps 
+# <rel_exp_tail> T_RP
+<rel_exp_tail> -> eps 
+# <rel_exp_tail> T_RⅭ
+<rel_exp_tail> -> eps 
+# <rel_exp_tail> T_Semicolon
+<rel_exp_tail> -> eps 
+# <rel_exp_tail> }
+SYNCH
+# <stmt> $
+SYNCH
+# <stmt> ;
+SYNCH
+# <stmt> T_Id
+<stmt> -> T_Id <stmt_after_id> T_Semicolon 
+# <stmt> T_If
+<stmt> -> <if_stmt> 
+# <stmt> T_Let
+<stmt> -> <var_declaration> T_Semicolon 
+# <stmt> T_RBrace
+SYNCH
+# <stmt> T_Return
+SYNCH
+# <stmt> T_RⅭ
+SYNCH
+# <stmt> }
+SYNCH
+# <stmt_after_id> ;
+SYNCH
+# <stmt_after_id> T_Assign
+<stmt_after_id> -> T_Assign <exp> 
+# <stmt_after_id> T_LB
+<stmt_after_id> -> T_LB T_Decimal T_RB T_Assign <exp> 
+# <stmt_after_id> T_Semicolon
+SYNCH
+# <stmt_after_id> }
+SYNCH
+# <stmt_ls> $
+<stmt_ls> -> eps 
+# <stmt_ls> ;
+SYNCH
+# <stmt_ls> T_Id
+<stmt_ls> -> <stmt> <stmt_ls> 
+# <stmt_ls> T_If
+<stmt_ls> -> <stmt> <stmt_ls> 
+# <stmt_ls> T_Let
+<stmt_ls> -> <stmt> <stmt_ls> 
+# <stmt_ls> T_RBrace
+<stmt_ls> -> eps 
+# <stmt_ls> T_Return
+<stmt_ls> -> eps 
+# <stmt_ls> T_RⅭ
+<stmt_ls> -> eps 
+# <stmt_ls> }
+SYNCH
+# <type> ;
+SYNCH
+# <type> T_Assign
+SYNCH
+# <type> T_Bool
+<type> -> T_Bool 
+# <type> T_Comma
+SYNCH
+# <type> T_Int
+<type> -> T_Int 
+# <type> T_LB
+<type> -> T_LB <type> T_Semicolon T_Decimal T_RB 
+# <type> T_LP
+<type> -> T_LP <type_ls> T_RP 
+# <type> T_RP
+SYNCH
+# <type> T_Semicolon
+SYNCH
+# <type> T_ⅬⅭ
+SYNCH
+# <type> }
+SYNCH
+# <type_ls> ;
+SYNCH
+# <type_ls> T_Bool
+<type_ls> -> <type> <type_ls_tail> 
+# <type_ls> T_Int
+<type_ls> -> <type> <type_ls_tail> 
+# <type_ls> T_LB
+<type_ls> -> <type> <type_ls_tail> 
+# <type_ls> T_LP
+<type_ls> -> <type> <type_ls_tail> 
+# <type_ls> T_RP
+SYNCH
+# <type_ls> }
+SYNCH
+# <type_ls_tail> ;
+SYNCH
+# <type_ls_tail> T_Comma
+<type_ls_tail> -> T_Comma <type> <type_ls_tail> 
+# <type_ls_tail> T_RP
+<type_ls_tail> -> eps 
+# <type_ls_tail> }
+SYNCH
+# <type_opt> ;
+SYNCH
+# <type_opt> T_Assign
+<type_opt> -> eps 
+# <type_opt> T_Colon
+<type_opt> -> T_Colon <type> 
+# <type_opt> T_Semicolon
+<type_opt> -> eps 
+# <type_opt> }
+SYNCH
+# <var_declaration> ;
+SYNCH
+# <var_declaration> T_Let
+<var_declaration> -> T_Let <mut_opt> <pattern> <type_opt> <assign_opt> 
+# <var_declaration> T_Semicolon
+SYNCH
+# <var_declaration> }
+SYNCH

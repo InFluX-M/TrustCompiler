@@ -7,8 +7,8 @@
 #include <fstream>
 
 #define NUM_KEYWORDS 14
-#define TOKENIZE_WHITESPACE true
-#define TOKENIZE_COMMENT true
+#define TOKENIZE_WHITESPACE false
+#define TOKENIZE_COMMENT false
 
 extern char spaces[];
 extern std::string key_words[NUM_KEYWORDS];
