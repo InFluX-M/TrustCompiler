@@ -49,7 +49,7 @@ public:
     std::map<std::pair<Symbol, Symbol>, Rule> table;
     std::map<token_type, std::string> match;
     Tree<Symbol> tree;
-    bool has_par[200];
+    bool has_par[200]{};
     int num_errors;
 
     SyntaxAnalyzer(std::vector<Token> _tokens, std::string output_file);
@@ -92,7 +92,7 @@ public:
 
     void write();
 
-    Tree<Symbol> get_tree();
+    Tree<Symbol> get_tree() const;
 };
 
 #endif // SYNTAX_ANALYZER_H

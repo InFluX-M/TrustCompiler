@@ -101,18 +101,18 @@ void SyntaxAnalyzer::extract(std::string line) {
         rule.set_head(head);
         rule.set_type(VALID);
         std::vector<std::string> rule_parts = split(rules_str[i]);
-        for (int j = 0; j < (int) rule_parts.size(); j++) {
+        for (auto & rule_part : rule_parts) {
             Symbol tmp;
-            if (rule_parts[j] == "ε") {
+            if (rule_part == "ε") {
                 tmp.set_name("eps");
                 tmp.set_type(TERMINAL);
                 terminals.insert(tmp);
-            } else if (rule_parts[j][0] == '<') {
-                tmp.set_name(rule_parts[j].substr(1, rule_parts[j].size() - 2));
+            } else if (rule_part[0] == '<') {
+                tmp.set_name(rule_part.substr(1, rule_part.size() - 2));
                 tmp.set_type(VARIABLE);
                 variables.insert(tmp);
             } else {
-                tmp.set_name(rule_parts[j]);
+                tmp.set_name(rule_part);
                 tmp.set_type(TERMINAL);
                 terminals.insert(tmp);
             }
@@ -142,11 +142,11 @@ void SyntaxAnalyzer::calc_first(const Symbol &var) {
     for (auto &rule: self_rules[var]) {
         bool exist_eps = false;
         for (auto &part_body: rule.get_body()) {
-            if (first_done[part_body] == false) {
+            if (!first_done[part_body]) {
                 calc_first(part_body);
             }
             exist_eps = false;
-            for (auto first: firsts[part_body]) {
+            for (const auto& first: firsts[part_body]) {
                 if (first == eps) {
                     exist_eps = true;
                 } else {
@@ -592,6 +592,6 @@ void SyntaxAnalyzer::write() {
     out.close();
 }
 
-Tree<Symbol> SyntaxAnalyzer::get_tree() {
+Tree<Symbol> SyntaxAnalyzer::get_tree() const {
     return tree;
 }
