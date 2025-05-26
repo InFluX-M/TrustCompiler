@@ -132,7 +132,7 @@ void SyntaxAnalyzer::calc_firsts() {
     }
 }
 
-void SyntaxAnalyzer::calc_first(Symbol var) {
+void SyntaxAnalyzer::calc_first(const Symbol &var) {
     if (var.get_type() == TERMINAL) {
         firsts[var].insert(var);
         first_done[var] = true;
@@ -165,15 +165,15 @@ void SyntaxAnalyzer::calc_first(Symbol var) {
 }
 
 void SyntaxAnalyzer::print_firsts() {
-    for (auto term: terminals) {
+    for (const auto &term: terminals) {
         print_first(term);
     }
-    for (auto var: variables) {
+    for (const auto &var: variables) {
         print_first(var);
     }
 }
 
-void SyntaxAnalyzer::print_first(Symbol var) {
+void SyntaxAnalyzer::print_first(const Symbol &var) {
     std::cout << "First[" + var.get_name() + "]:";
     for (auto first: firsts[var]) {
         std::cout << " " << first;
@@ -182,7 +182,7 @@ void SyntaxAnalyzer::print_first(Symbol var) {
 }
 
 void SyntaxAnalyzer::calc_follows() {
-    for (auto var: variables) {
+    for (const auto &var: variables) {
         if (var.get_name() == START_VAR) {
             follows[var].insert(Symbol("$", TERMINAL));
         }
@@ -201,7 +201,7 @@ void SyntaxAnalyzer::calc_follow(const Symbol &var) {
                 bool all_eps = true;
                 for (int j = i + 1; j < body_len; j++) {
                     bool has_eps = false;
-                    for (auto first: firsts[body[j]]) {
+                    for (const auto &first: firsts[body[j]]) {
                         if (first == eps) {
                             has_eps = true;
                         } else {
@@ -214,7 +214,7 @@ void SyntaxAnalyzer::calc_follow(const Symbol &var) {
                     }
                 }
                 if (all_eps && rule.get_head() != var) {
-                    for (auto follow: follows[rule.get_head()]) {
+                    for (const auto &follow: follows[rule.get_head()]) {
                         follows[var].insert(follow);
                     }
                     graph[rule.get_head()].insert(var);
@@ -234,7 +234,7 @@ void SyntaxAnalyzer::relaxation() {
         Symbol var = *set.begin();
         set.erase(set.begin());
 
-        for (auto v: graph[var]) {
+        for (const auto &v: graph[var]) {
             int old_size = (int) follows[v].size();
             for (const auto &follow: follows[var]) {
                 follows[v].insert(follow);

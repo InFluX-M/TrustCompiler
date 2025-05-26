@@ -3,8 +3,8 @@
 
 #include "../utils.h"
 
-#define GRAMMAR_PATH "../grammar.txt"
-#define TABLE_PATH "../table.txt"
+#define GRAMMAR_PATH "Test/Grammar.txt"
+#define TABLE_PATH "Output/table.txt"
 #define START_VAR "program"
 
 enum rule_type {
@@ -60,11 +60,11 @@ public:
 
     void calc_firsts();
 
-    void calc_first(Symbol var);
+    void calc_first(const Symbol& var);
 
     void print_firsts();
 
-    void print_first(Symbol var);
+    void print_first(const Symbol& var);
 
     void calc_follows();
 

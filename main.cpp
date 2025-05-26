@@ -17,11 +17,10 @@ int main() {
 
     SyntaxAnalyzer syn_analyzer(lexer.get_tokens(), output_file + file + ".syntax");
 
-    syn_analyzer.make_tree(false);
+    syn_analyzer.make_tree(true);
     syn_analyzer.write();
 
     std::cout << "Syntax analysis completed successfully!" << std::endl;
-
 
     return SUCCESS;
 }
