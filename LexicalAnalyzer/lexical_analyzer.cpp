@@ -197,7 +197,8 @@ Token LexicalAnalyzer::is_operator(int &index, const std::string &line, const in
         } else if (state == 1) {
             return {T_AOp_AD, line_number, "+"};
         } else if (state == 2) {
-            return {T_AOp_MN, line_number, "-"};
+            // return {T_AOp_MN, line_number, "-"};
+            state = 31;
         } else if (state == 3) {
             return {T_AOp_ML, line_number, "*"};
         } else if (state == 4) {
@@ -283,7 +284,7 @@ Token LexicalAnalyzer::is_operator(int &index, const std::string &line, const in
         } else if (state == 30) {
             return {T_Colon, line_number, ":"};
         } else if (state == 31) {
-            if (line[index] == '>') {
+            if (line[index - 1] == '>') {
                 state = 32;
             } else {
                 index = perv_index + 1;
