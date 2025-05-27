@@ -102,7 +102,7 @@ Token LexicalAnalyzer::is_comment(int &index, const std::string &line, const int
 }
 
 /*
-    T_AOp_AD +    1
+    T_AOp_Trust +    1
     T_AOp_MN -    2
     T_AOp_ML *    3
     T_AOp_DV /    4
@@ -195,7 +195,7 @@ Token LexicalAnalyzer::is_operator(int &index, const std::string &line, const in
                 state = 33;
             }
         } else if (state == 1) {
-            return {T_AOp_AD, line_number, "+"};
+            return {T_AOp_Trust, line_number, "+"};
         } else if (state == 2) {
             // return {T_AOp_MN, line_number, "-"};
             state = 31;

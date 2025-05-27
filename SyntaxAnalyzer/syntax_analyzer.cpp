@@ -274,7 +274,7 @@ void SyntaxAnalyzer::set_matches() {
     match[T_Return] = "T_Return";
     match[T_True] = "T_True";
 
-    match[T_AOp_AD] = "T_AOp_AD";
+    match[T_AOp_Trust] = "T_AOp_Trust";
     match[T_AOp_MN] = "T_AOp_MN";
     match[T_AOp_ML] = "T_AOp_ML";
     match[T_AOp_DV] = "T_AOp_DV";

@@ -45,7 +45,7 @@ enum token_type {
     T_Print,
     T_True,
 
-    T_AOp_AD,
+    T_AOp_Trust,
     T_AOp_MN,
     T_AOp_ML,
     T_AOp_DV,
@@ -106,7 +106,7 @@ const std::string type_to_string[] = {
         "T_Print",
         "T_True",
 
-        "T_AOp_AD",
+        "T_AOp_Trust",
         "T_AOp_MN",
         "T_AOp_ML",
         "T_AOp_DV",
