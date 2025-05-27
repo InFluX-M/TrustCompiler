@@ -41,7 +41,8 @@
 <arith_factor> -> T_Hexadecimal @ T_Decimal @ T_String @ T_True @ T_False @ T_Id <fac_id_opt> @ T_LP <fac_lparen> @ T_LB <exp_ls_arr> T_RB @ T_LOp_NOT <arith_factor>
 <fac_id_opt> -> T_LP <exp_ls_call> T_RP @ T_LB <exp> T_RB @ ε
 <fac_lparen> -> <exp> <lpar_exp_suf>
-<lpar_exp_suf> -> T_RP @ T_Comma <exp_ls_tail> T_RP
+<lpar_exp_suf> -> T_RP @ <exp_ls_after_first_item>
+<exp_ls_after_first_item> -> T_Comma <exp_ls> T_RP
 <exp_ls_call> -> <exp_ls> @ ε
 <exp_ls_arr> -> <exp_ls> @ ε
 <exp_ls> -> <arg_item> <exp_ls_tail> @ ε
