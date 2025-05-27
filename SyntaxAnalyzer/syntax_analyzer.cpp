@@ -270,7 +270,7 @@ void SyntaxAnalyzer::set_matches() {
     match[T_Let] = "T_Let";
     match[T_Loop] = "T_Loop";
     match[T_Mut] = "T_Mut";
-    match[T_Print] = "T_Print!";
+    match[T_Print] = "T_Print";
     match[T_Return] = "T_Return";
     match[T_True] = "T_True";
 

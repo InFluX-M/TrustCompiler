@@ -6,9 +6,9 @@
 <arg> -> T_Id <arg_type>
 <arg_type> -> T_Colon <type>  @ ε
 func_type -> T_Arrow <type> @ ε
-<func_ret> -> T_Return <exp> @ ε
+<func_ret> -> T_Return <exp> T_Semicolon @ ε
 <stmt_ls> -> <stmt> <stmt_ls> @ ε
-<stmt> -> <var_declaration> T_Semicolon @ T_Id <stmt_after_id> T_Semicolon @ <if_stmt>
+<stmt> -> <var_declaration> T_Semicolon @ T_Id <stmt_after_id> T_Semicolon @ <if_stmt> @ T_Print T_LP <exp_ls> T_RP T_Semicolon
 <if_stmt> -> T_If <exp> T_LC <stmt_ls> T_RC <else_part_opt>
 <else_part_opt> -> T_Else <else_alternative> @ ε
 <else_alternative> -> <if_stmt>  @ T_LC <stmt_ls> T_RC
