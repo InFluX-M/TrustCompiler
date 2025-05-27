@@ -1,0 +1,23 @@
+// This program tests loop statements with break and continue.
+fn main() {
+    let mut i: i32 = 0;
+    loop {
+        i = i + 1;
+        if i == 5 {
+            break; // Exit loop when i is 5 [cite: 55]
+        }
+    }
+
+    let mut sum: i32 = 0;
+    let mut j: i32 = 0;
+    loop {
+        j = j + 1;
+        if j % 2 == 0 {
+            continue; // Skip even numbers [cite: 55]
+        }
+        sum = sum + j;
+        if j > 10 {
+            break;
+        }
+    }
+}

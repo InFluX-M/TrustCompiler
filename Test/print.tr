@@ -1,0 +1,13 @@
+// This program tests various forms of the println! macro.
+fn main() {
+    let name: i32 = 123;
+    let age: i32 = 30;
+    let city: i32 = 5; // Placeholder for string content
+
+    println!("Trust is good");
+    println!("My name is {} and my age is {}.", name, age);
+    println!("I live in {} and my name is {}.", city, name);
+    println!("Value: {} and another: {}.", 10 * 5, age + 2);
+    println!("Formatted: {0} and again: {0} and {1}.", name, age);
+    println!("Named args: {name_val} and {age_val}.", name_val = name, age_val = age);
+}

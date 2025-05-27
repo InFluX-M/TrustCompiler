@@ -1,0 +1,25 @@
+// This program tests if and else if conditional statements.
+fn main() {
+    let x: i32 = 10;
+    let y: i32 = 5;
+    let b: bool = false;
+
+    if x == 10 {
+        y = 6;
+        x = 7;
+    }
+
+    if y <= 2 && x > 7 || b != false {
+        x = 4 + y;
+    } else {
+        x = 3 * y;
+    }
+
+    if x >= 5 && y < 7 && !b {
+        b = true;
+    } else if x == 3 {
+        x = 100;
+    } else {
+        b = false;
+    }
+}

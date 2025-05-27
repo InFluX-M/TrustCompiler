@@ -1,0 +1,39 @@
+// This program combines various features to test overall parser flow.
+fn calculate_max(num1: i32, num2: i32) -> i32 {
+    if num1 > num2 {
+        return num1;
+    } else {
+        return num2;
+    }
+}
+
+fn process_array(arr: [i32; 5]) {
+    let mut sum_even: i32 = 0;
+    let mut i: i32 = 0;
+    loop {
+        if i >= 5 {
+            break;
+        }
+        if arr[i] % 2 == 0 {
+            sum_even = sum_even + arr[i];
+        }
+        i = i + 1;
+    }
+    println!("Sum of even numbers in array: {}.", sum_even);
+}
+
+fn main() {
+    let val1: i32 = 15;
+    let val2: i32 = 25;
+    let max_val = calculate_max(val1, val2);
+    println!("The maximum value is: {}.", max_val);
+
+    let my_nums: [i32; 5] = [1, 2, 3, 4, 5];
+    process_array(my_nums);
+
+    if max_val > 20 && !false {
+        println!("Max value is greater than 20!");
+    } else {
+        println!("Max value is 20 or less.");
+    }
+}

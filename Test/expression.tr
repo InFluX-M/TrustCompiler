@@ -1,0 +1,20 @@
+// This program tests various complex expressions involving operators.
+fn main() {
+    let mut a: i32 = 10;
+    let b: i32 = 20;
+    let c: i32 = 5;
+    let d: i32 = 2;
+    let x: bool = true;
+    let y: bool = false;
+
+    let result_arith = a + b * c - d / c % d; // Arithmetic operators [cite: 26]
+    let result_relational = (a < b) && (b >= c) || (a != d); // Relational and logical operators [cite: 27, 29]
+    let result_unary = -a + +b; // Unary operators [cite: 26]
+
+    if (x || !y) && (a > b || c <= d) {
+        a = (b + c) * d;
+    }
+
+    let complex_expr = (a + b) * (c - d) / (a % c);
+    let bool_expr = !((x && y) || (a == b));
+}

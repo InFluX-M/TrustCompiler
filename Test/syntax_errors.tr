@@ -1,0 +1,32 @@
+// This program contains intentional syntax errors to test error detection and recovery.
+
+// Missing semicolon
+let a = 10
+let b: i32 = 20;
+
+// Mismatched parenthesis in function call
+fn dummy_func(x: i32) -> i32 {
+    return x + 1;
+}
+let result = dummy_func(5;
+
+// Missing closing curly brace for if block
+if true {
+    println!("Inside if");
+
+// Missing closing curly brace for loop block
+loop {
+    let mut i = 0;
+    i = i + 1;
+    if i == 1 { break; }
+
+// Invalid operator
+let z = 5 $ 3;
+
+// Missing type annotation for parameter
+fn another_func(val) -> i32 {
+    return val * 2;
+}
+
+// Keyword used as ID
+let if = 10;

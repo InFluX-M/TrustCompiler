@@ -1,0 +1,25 @@
+// This program tests function definitions, parameters, return types, and calls.
+fn multiply(x: i32, y: i32) -> i32 {
+    let z = x * y;
+    return z;
+}
+
+fn add(a: i32, b: i32) -> i32 {
+    return a + b;
+}
+
+fn create_array() -> [i32; 3] {
+    let arr = [1, 2, 3];
+    return arr;
+}
+
+fn print_message() {
+    println!("Hello from a function!");
+}
+
+fn main() {
+    let result1 = multiply(3, 4);
+    let result2 = add(result1, 10);
+    let my_array = create_array();
+    print_message();
+}

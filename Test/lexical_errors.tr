@@ -1,0 +1,5 @@
+// This program contains intentional lexical errors.
+let invalid@id = 10; // Invalid character in identifier
+let hex = 0xG;       // Invalid hex digit
+let str = "unclosed string; // Unclosed string literal
+let op = +;          // Incomplete operator (if your grammar allows single '+' as part of another op)

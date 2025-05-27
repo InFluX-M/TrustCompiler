@@ -532,8 +532,8 @@ void SyntaxAnalyzer::make_tree(bool update) {
                 // This implies the expected terminal was "skipped".
             }
         } else {
-            auto it = table.find({top_var, term}); // Find the rule in the parsing table
-            if (it != table.end()) { // Rule found
+            auto it = table.find({top_var, term});
+            if (it != table.end()) {
                 Rule rule = it->second;
                 if (rule.get_type() == VALID) {
                     top_node->get_data().set_line_number(line_number);
@@ -565,7 +565,7 @@ void SyntaxAnalyzer::make_tree(bool update) {
                             term = Symbol(match[tokens[index].get_type()], TERMINAL);
                         }
                     }
-                    stack.push(top_node); // Re-push the non-terminal, hoping the next token allows a match
+                    stack.push(top_node);
                 } else if (rule.get_type() == EMPTY) {
                     std::cerr << RED << "Syntax Error: Empty cell/Unexpected token, line: " << line_number << WHITE
                               << std::endl;
@@ -587,7 +587,7 @@ void SyntaxAnalyzer::make_tree(bool update) {
                 std::cerr << "---------------------------------------------------------------" << std::endl;
                 num_errors++;
                 index++;
-                stack.push(top_node); // Re-push the non-terminal, hoping the next token will lead to a valid parse.
+                stack.push(top_node);
             }
         }
     }
