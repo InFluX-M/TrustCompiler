@@ -8,14 +8,14 @@ int main() {
     std::cout << "Enter the file name: ";
     std::cin >> file;
 
-    LexicalAnalyzer lexer(input_file + file, output_file + file + ".out");
+    LexicalAnalyzer lexer(input_file + file, output_file + file + ".lex");
 
     lexer.tokenize();
     lexer.write();
 
     std::cout << "Lexical analysis completed successfully!" << std::endl;
 
-    SyntaxAnalyzer syn_analyzer(lexer.get_tokens(), output_file + file + ".syntax");
+    SyntaxAnalyzer syn_analyzer(lexer.get_tokens(), output_file + file + ".syn");
 
     syn_analyzer.make_tree(true);
     syn_analyzer.write();
