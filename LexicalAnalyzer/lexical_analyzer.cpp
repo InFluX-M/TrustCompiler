@@ -286,7 +286,8 @@ Token LexicalAnalyzer::is_operator(int &index, const std::string &line, const in
             if (line[index] == '>') {
                 state = 32;
             } else {
-                state = 33;
+                index = perv_index + 1;
+                return {T_AOp_MN, line_number, "-"};
             }
         } else if (state == 32) {
             return {T_Arrow, line_number, "->"};
