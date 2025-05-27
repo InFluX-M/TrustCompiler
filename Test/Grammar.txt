@@ -1,8 +1,8 @@
 <program> -> <func_ls>
 <func_ls> -> <func> <func_ls> @ <stmt_ls>
-<func> -> T_Fn T_Id T_ⅬP <func_args> T_RP <func_type> T_ⅬⅭ <stmt_ls> <func_ret> T_RⅭ
+<func> -> T_Fn T_Id T_LP <func_args> T_RP <func_type> T_LC <stmt_ls> <func_ret> T_RC
 <func_args> -> <arg> <func_args_tail> @ ε
-<func_args_tail>  -> T_Comma <arg> <func_args_tail> @ ε
+<func_args_tail> -> T_Comma <arg> <func_args_tail> @ ε
 <arg> -> T_Id <arg_type>
 <arg_type> -> T_Colon <type>  @ ε
 func_type -> T_Arrow <type> @ ε

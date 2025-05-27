@@ -300,7 +300,7 @@ void SyntaxAnalyzer::set_matches() {
     match[T_RB] = "T_RB";
     match[T_Semicolon] = "T_Semicolon";
     match[T_Comma] = "T_Comma";
-    match[T_Colon] = "T_Colon]";
+    match[T_Colon] = "T_Colon";
     match[T_Arrow] = "T_Arrow";
 
     match[T_Id] = "T_Id";
