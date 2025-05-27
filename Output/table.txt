@@ -10,12 +10,12 @@ SYNCH
 SYNCH
 # <arg_type> ;
 SYNCH
+# <arg_type> T_Colon
+<arg_type> -> T_Colon <type> 
 # <arg_type> T_Comma
 <arg_type> -> eps 
 # <arg_type> T_RP
 <arg_type> -> eps 
-# <arg_type> T_Ⅽoⅼon
-<arg_type> -> T_Ⅽoⅼon <type> 
 # <arg_type> }
 SYNCH
 # <arith_exp> ;
@@ -32,10 +32,12 @@ SYNCH
 <arith_exp> -> <arith_term> <arith_exp_tail> 
 # <arith_exp> T_LB
 <arith_exp> -> <arith_term> <arith_exp_tail> 
-# <arith_exp> T_LBrace
+# <arith_exp> T_LC
 SYNCH
 # <arith_exp> T_LOp_AND
 SYNCH
+# <arith_exp> T_LOp_NOT
+<arith_exp> -> <arith_term> <arith_exp_tail> 
 # <arith_exp> T_LOp_OR
 SYNCH
 # <arith_exp> T_LP
@@ -56,8 +58,6 @@ SYNCH
 SYNCH
 # <arith_exp> T_RP
 SYNCH
-# <arith_exp> T_RⅭ
-SYNCH
 # <arith_exp> T_Semicolon
 SYNCH
 # <arith_exp> T_String
@@ -74,7 +74,7 @@ SYNCH
 <arith_exp_tail> -> T_AOp_Trust <arith_term> <arith_exp_tail> 
 # <arith_exp_tail> T_Comma
 <arith_exp_tail> -> eps 
-# <arith_exp_tail> T_LBrace
+# <arith_exp_tail> T_LC
 <arith_exp_tail> -> eps 
 # <arith_exp_tail> T_LOp_AND
 <arith_exp_tail> -> eps 
@@ -95,8 +95,6 @@ SYNCH
 # <arith_exp_tail> T_ROp_NE
 <arith_exp_tail> -> eps 
 # <arith_exp_tail> T_RP
-<arith_exp_tail> -> eps 
-# <arith_exp_tail> T_RⅭ
 <arith_exp_tail> -> eps 
 # <arith_exp_tail> T_Semicolon
 <arith_exp_tail> -> eps 
@@ -126,10 +124,12 @@ SYNCH
 <arith_factor> -> T_Id <fac_id_opt> 
 # <arith_factor> T_LB
 <arith_factor> -> T_LB <exp_ls_arr> T_RB 
-# <arith_factor> T_LBrace
+# <arith_factor> T_LC
 SYNCH
 # <arith_factor> T_LOp_AND
 SYNCH
+# <arith_factor> T_LOp_NOT
+<arith_factor> -> T_LOp_NOT <arith_factor> 
 # <arith_factor> T_LOp_OR
 SYNCH
 # <arith_factor> T_LP
@@ -149,8 +149,6 @@ SYNCH
 # <arith_factor> T_ROp_NE
 SYNCH
 # <arith_factor> T_RP
-SYNCH
-# <arith_factor> T_RⅭ
 SYNCH
 # <arith_factor> T_Semicolon
 SYNCH
@@ -178,10 +176,12 @@ SYNCH
 <arith_term> -> <arith_factor> <arith_term_tail> 
 # <arith_term> T_LB
 <arith_term> -> <arith_factor> <arith_term_tail> 
-# <arith_term> T_LBrace
+# <arith_term> T_LC
 SYNCH
 # <arith_term> T_LOp_AND
 SYNCH
+# <arith_term> T_LOp_NOT
+<arith_term> -> <arith_factor> <arith_term_tail> 
 # <arith_term> T_LOp_OR
 SYNCH
 # <arith_term> T_LP
@@ -201,8 +201,6 @@ SYNCH
 # <arith_term> T_ROp_NE
 SYNCH
 # <arith_term> T_RP
-SYNCH
-# <arith_term> T_RⅭ
 SYNCH
 # <arith_term> T_Semicolon
 SYNCH
@@ -226,7 +224,7 @@ SYNCH
 <arith_term_tail> -> eps 
 # <arith_term_tail> T_Comma
 <arith_term_tail> -> eps 
-# <arith_term_tail> T_LBrace
+# <arith_term_tail> T_LC
 <arith_term_tail> -> eps 
 # <arith_term_tail> T_LOp_AND
 <arith_term_tail> -> eps 
@@ -247,8 +245,6 @@ SYNCH
 # <arith_term_tail> T_ROp_NE
 <arith_term_tail> -> eps 
 # <arith_term_tail> T_RP
-<arith_term_tail> -> eps 
-# <arith_term_tail> T_RⅭ
 <arith_term_tail> -> eps 
 # <arith_term_tail> T_Semicolon
 <arith_term_tail> -> eps 
@@ -276,10 +272,12 @@ SYNCH
 <cmp_exp> -> <arith_exp> <cmp_exp_suf> 
 # <cmp_exp> T_LB
 <cmp_exp> -> <arith_exp> <cmp_exp_suf> 
-# <cmp_exp> T_LBrace
+# <cmp_exp> T_LC
 SYNCH
 # <cmp_exp> T_LOp_AND
 SYNCH
+# <cmp_exp> T_LOp_NOT
+<cmp_exp> -> <arith_exp> <cmp_exp_suf> 
 # <cmp_exp> T_LOp_OR
 SYNCH
 # <cmp_exp> T_LP
@@ -291,8 +289,6 @@ SYNCH
 # <cmp_exp> T_ROp_NE
 SYNCH
 # <cmp_exp> T_RP
-SYNCH
-# <cmp_exp> T_RⅭ
 SYNCH
 # <cmp_exp> T_Semicolon
 SYNCH
@@ -306,7 +302,7 @@ SYNCH
 SYNCH
 # <cmp_exp_suf> T_Comma
 <cmp_exp_suf> -> eps 
-# <cmp_exp_suf> T_LBrace
+# <cmp_exp_suf> T_LC
 <cmp_exp_suf> -> eps 
 # <cmp_exp_suf> T_LOp_AND
 <cmp_exp_suf> -> eps 
@@ -328,8 +324,6 @@ SYNCH
 <cmp_exp_suf> -> eps 
 # <cmp_exp_suf> T_RP
 <cmp_exp_suf> -> eps 
-# <cmp_exp_suf> T_RⅭ
-<cmp_exp_suf> -> eps 
 # <cmp_exp_suf> T_Semicolon
 <cmp_exp_suf> -> eps 
 # <cmp_exp_suf> }
@@ -345,6 +339,8 @@ SYNCH
 # <cmp_op> T_Id
 SYNCH
 # <cmp_op> T_LB
+SYNCH
+# <cmp_op> T_LOp_NOT
 SYNCH
 # <cmp_op> T_LP
 SYNCH
@@ -370,15 +366,15 @@ SYNCH
 SYNCH
 # <else_alternative> T_If
 <else_alternative> -> <if_stmt> 
-# <else_alternative> T_LBrace
-<else_alternative> -> T_LBrace <stmt_ls> T_RBrace 
+# <else_alternative> T_LC
+<else_alternative> -> T_LC <stmt_ls> T_RC 
 # <else_alternative> T_Let
 SYNCH
-# <else_alternative> T_RBrace
+# <else_alternative> T_Print
+SYNCH
+# <else_alternative> T_RC
 SYNCH
 # <else_alternative> T_Return
-SYNCH
-# <else_alternative> T_RⅭ
 SYNCH
 # <else_alternative> }
 SYNCH
@@ -394,11 +390,11 @@ SYNCH
 <else_part_opt> -> eps 
 # <else_part_opt> T_Let
 <else_part_opt> -> eps 
-# <else_part_opt> T_RBrace
+# <else_part_opt> T_Print
+<else_part_opt> -> eps 
+# <else_part_opt> T_RC
 <else_part_opt> -> eps 
 # <else_part_opt> T_Return
-<else_part_opt> -> eps 
-# <else_part_opt> T_RⅭ
 <else_part_opt> -> eps 
 # <else_part_opt> }
 SYNCH
@@ -416,10 +412,12 @@ SYNCH
 <eq_exp> -> <cmp_exp> <eq_exp_tail> 
 # <eq_exp> T_LB
 <eq_exp> -> <cmp_exp> <eq_exp_tail> 
-# <eq_exp> T_LBrace
+# <eq_exp> T_LC
 SYNCH
 # <eq_exp> T_LOp_AND
 SYNCH
+# <eq_exp> T_LOp_NOT
+<eq_exp> -> <cmp_exp> <eq_exp_tail> 
 # <eq_exp> T_LOp_OR
 SYNCH
 # <eq_exp> T_LP
@@ -427,8 +425,6 @@ SYNCH
 # <eq_exp> T_RB
 SYNCH
 # <eq_exp> T_RP
-SYNCH
-# <eq_exp> T_RⅭ
 SYNCH
 # <eq_exp> T_Semicolon
 SYNCH
@@ -442,7 +438,7 @@ SYNCH
 SYNCH
 # <eq_exp_tail> T_Comma
 <eq_exp_tail> -> eps 
-# <eq_exp_tail> T_LBrace
+# <eq_exp_tail> T_LC
 <eq_exp_tail> -> eps 
 # <eq_exp_tail> T_LOp_AND
 <eq_exp_tail> -> eps 
@@ -455,8 +451,6 @@ SYNCH
 # <eq_exp_tail> T_ROp_NE
 <eq_exp_tail> -> T_ROp_NE <cmp_exp> <eq_exp_tail> 
 # <eq_exp_tail> T_RP
-<eq_exp_tail> -> eps 
-# <eq_exp_tail> T_RⅭ
 <eq_exp_tail> -> eps 
 # <eq_exp_tail> T_Semicolon
 <eq_exp_tail> -> eps 
@@ -476,15 +470,15 @@ SYNCH
 <exp> -> <log_exp> 
 # <exp> T_LB
 <exp> -> <log_exp> 
-# <exp> T_LBrace
+# <exp> T_LC
 SYNCH
+# <exp> T_LOp_NOT
+<exp> -> <log_exp> 
 # <exp> T_LP
 <exp> -> <log_exp> 
 # <exp> T_RB
 SYNCH
 # <exp> T_RP
-SYNCH
-# <exp> T_RⅭ
 SYNCH
 # <exp> T_Semicolon
 SYNCH
@@ -505,6 +499,8 @@ SYNCH
 # <exp_ls> T_Id
 <exp_ls> -> <exp> <exp_ls_tail> 
 # <exp_ls> T_LB
+<exp_ls> -> <exp> <exp_ls_tail> 
+# <exp_ls> T_LOp_NOT
 <exp_ls> -> <exp> <exp_ls_tail> 
 # <exp_ls> T_LP
 <exp_ls> -> <exp> <exp_ls_tail> 
@@ -530,6 +526,8 @@ SYNCH
 <exp_ls_arr> -> <exp_ls> 
 # <exp_ls_arr> T_LB
 <exp_ls_arr> -> <exp_ls> 
+# <exp_ls_arr> T_LOp_NOT
+<exp_ls_arr> -> <exp_ls> 
 # <exp_ls_arr> T_LP
 <exp_ls_arr> -> <exp_ls> 
 # <exp_ls_arr> T_RB
@@ -551,6 +549,8 @@ SYNCH
 # <exp_ls_call> T_Id
 <exp_ls_call> -> <exp_ls> 
 # <exp_ls_call> T_LB
+<exp_ls_call> -> <exp_ls> 
+# <exp_ls_call> T_LOp_NOT
 <exp_ls_call> -> <exp_ls> 
 # <exp_ls_call> T_LP
 <exp_ls_call> -> <exp_ls> 
@@ -588,7 +588,7 @@ SYNCH
 <fac_id_opt> -> eps 
 # <fac_id_opt> T_LB
 <fac_id_opt> -> T_LB <exp> T_RB 
-# <fac_id_opt> T_LBrace
+# <fac_id_opt> T_LC
 <fac_id_opt> -> eps 
 # <fac_id_opt> T_LOp_AND
 <fac_id_opt> -> eps 
@@ -611,8 +611,6 @@ SYNCH
 # <fac_id_opt> T_ROp_NE
 <fac_id_opt> -> eps 
 # <fac_id_opt> T_RP
-<fac_id_opt> -> eps 
-# <fac_id_opt> T_RⅭ
 <fac_id_opt> -> eps 
 # <fac_id_opt> T_Semicolon
 <fac_id_opt> -> eps 
@@ -642,10 +640,12 @@ SYNCH
 <fac_lparen> -> <exp> <lpar_exp_suf> 
 # <fac_lparen> T_LB
 <fac_lparen> -> <exp> <lpar_exp_suf> 
-# <fac_lparen> T_LBrace
+# <fac_lparen> T_LC
 SYNCH
 # <fac_lparen> T_LOp_AND
 SYNCH
+# <fac_lparen> T_LOp_NOT
+<fac_lparen> -> <exp> <lpar_exp_suf> 
 # <fac_lparen> T_LOp_OR
 SYNCH
 # <fac_lparen> T_LP
@@ -666,8 +666,6 @@ SYNCH
 SYNCH
 # <fac_lparen> T_RP
 SYNCH
-# <fac_lparen> T_RⅭ
-SYNCH
 # <fac_lparen> T_Semicolon
 SYNCH
 # <fac_lparen> T_String
@@ -681,12 +679,14 @@ SYNCH
 # <func> ;
 SYNCH
 # <func> T_Fn
-<func> -> T_Fn T_Id T_ⅬP <func_args> T_RP <func_type> T_ⅬⅭ <stmt_ls> <func_ret> T_RⅭ 
+<func> -> T_Fn T_Id T_LP <func_args> T_RP <func_type> T_LC <stmt_ls> <func_ret> T_RC 
 # <func> T_Id
 SYNCH
 # <func> T_If
 SYNCH
 # <func> T_Let
+SYNCH
+# <func> T_Print
 SYNCH
 # <func> }
 SYNCH
@@ -718,21 +718,23 @@ SYNCH
 <func_ls> -> <stmt_ls> 
 # <func_ls> T_Let
 <func_ls> -> <stmt_ls> 
+# <func_ls> T_Print
+<func_ls> -> <stmt_ls> 
 # <func_ls> }
 SYNCH
 # <func_ret> ;
 SYNCH
-# <func_ret> T_Return
-<func_ret> -> T_Return <exp> 
-# <func_ret> T_RⅭ
+# <func_ret> T_RC
 <func_ret> -> eps 
+# <func_ret> T_Return
+<func_ret> -> T_Return <exp> T_Semicolon 
 # <func_ret> }
 SYNCH
 # <func_type> ;
 SYNCH
 # <func_type> T_Arrow
 <func_type> -> T_Arrow <type> 
-# <func_type> T_ⅬⅭ
+# <func_type> T_LC
 <func_type> -> eps 
 # <func_type> }
 SYNCH
@@ -759,14 +761,14 @@ SYNCH
 # <if_stmt> T_Id
 SYNCH
 # <if_stmt> T_If
-<if_stmt> -> T_If <exp> T_LBrace <stmt_ls> T_RBrace <else_part_opt> 
+<if_stmt> -> T_If <exp> T_LC <stmt_ls> T_RC <else_part_opt> 
 # <if_stmt> T_Let
 SYNCH
-# <if_stmt> T_RBrace
+# <if_stmt> T_Print
+SYNCH
+# <if_stmt> T_RC
 SYNCH
 # <if_stmt> T_Return
-SYNCH
-# <if_stmt> T_RⅭ
 SYNCH
 # <if_stmt> }
 SYNCH
@@ -784,15 +786,15 @@ SYNCH
 <log_exp> -> <rel_exp> <log_exp_tail> 
 # <log_exp> T_LB
 <log_exp> -> <rel_exp> <log_exp_tail> 
-# <log_exp> T_LBrace
+# <log_exp> T_LC
 SYNCH
+# <log_exp> T_LOp_NOT
+<log_exp> -> <rel_exp> <log_exp_tail> 
 # <log_exp> T_LP
 <log_exp> -> <rel_exp> <log_exp_tail> 
 # <log_exp> T_RB
 SYNCH
 # <log_exp> T_RP
-SYNCH
-# <log_exp> T_RⅭ
 SYNCH
 # <log_exp> T_Semicolon
 SYNCH
@@ -806,15 +808,13 @@ SYNCH
 SYNCH
 # <log_exp_tail> T_Comma
 <log_exp_tail> -> eps 
-# <log_exp_tail> T_LBrace
+# <log_exp_tail> T_LC
 <log_exp_tail> -> eps 
 # <log_exp_tail> T_LOp_OR
 <log_exp_tail> -> T_LOp_OR <rel_exp> <log_exp_tail> 
 # <log_exp_tail> T_RB
 <log_exp_tail> -> eps 
 # <log_exp_tail> T_RP
-<log_exp_tail> -> eps 
-# <log_exp_tail> T_RⅭ
 <log_exp_tail> -> eps 
 # <log_exp_tail> T_Semicolon
 <log_exp_tail> -> eps 
@@ -834,7 +834,7 @@ SYNCH
 SYNCH
 # <lpar_exp_suf> T_Comma
 <lpar_exp_suf> -> T_Comma <exp_ls_tail> T_RP 
-# <lpar_exp_suf> T_LBrace
+# <lpar_exp_suf> T_LC
 SYNCH
 # <lpar_exp_suf> T_LOp_AND
 SYNCH
@@ -856,8 +856,6 @@ SYNCH
 SYNCH
 # <lpar_exp_suf> T_RP
 <lpar_exp_suf> -> T_RP 
-# <lpar_exp_suf> T_RⅭ
-SYNCH
 # <lpar_exp_suf> T_Semicolon
 SYNCH
 # <lpar_exp_suf> }
@@ -898,6 +896,8 @@ SYNCH
 <program> -> <func_ls> 
 # <program> T_Let
 <program> -> <func_ls> 
+# <program> T_Print
+<program> -> <func_ls> 
 # <program> }
 SYNCH
 # <rel_exp> ;
@@ -914,8 +914,10 @@ SYNCH
 <rel_exp> -> <eq_exp> <rel_exp_tail> 
 # <rel_exp> T_LB
 <rel_exp> -> <eq_exp> <rel_exp_tail> 
-# <rel_exp> T_LBrace
+# <rel_exp> T_LC
 SYNCH
+# <rel_exp> T_LOp_NOT
+<rel_exp> -> <eq_exp> <rel_exp_tail> 
 # <rel_exp> T_LOp_OR
 SYNCH
 # <rel_exp> T_LP
@@ -923,8 +925,6 @@ SYNCH
 # <rel_exp> T_RB
 SYNCH
 # <rel_exp> T_RP
-SYNCH
-# <rel_exp> T_RⅭ
 SYNCH
 # <rel_exp> T_Semicolon
 SYNCH
@@ -938,7 +938,7 @@ SYNCH
 SYNCH
 # <rel_exp_tail> T_Comma
 <rel_exp_tail> -> eps 
-# <rel_exp_tail> T_LBrace
+# <rel_exp_tail> T_LC
 <rel_exp_tail> -> eps 
 # <rel_exp_tail> T_LOp_AND
 <rel_exp_tail> -> T_LOp_AND <eq_exp> <rel_exp_tail> 
@@ -947,8 +947,6 @@ SYNCH
 # <rel_exp_tail> T_RB
 <rel_exp_tail> -> eps 
 # <rel_exp_tail> T_RP
-<rel_exp_tail> -> eps 
-# <rel_exp_tail> T_RⅭ
 <rel_exp_tail> -> eps 
 # <rel_exp_tail> T_Semicolon
 <rel_exp_tail> -> eps 
@@ -964,11 +962,11 @@ SYNCH
 <stmt> -> <if_stmt> 
 # <stmt> T_Let
 <stmt> -> <var_declaration> T_Semicolon 
-# <stmt> T_RBrace
+# <stmt> T_Print
+<stmt> -> T_Print T_LP <exp_ls> T_RP T_Semicolon 
+# <stmt> T_RC
 SYNCH
 # <stmt> T_Return
-SYNCH
-# <stmt> T_RⅭ
 SYNCH
 # <stmt> }
 SYNCH
@@ -978,6 +976,8 @@ SYNCH
 <stmt_after_id> -> T_Assign <exp> 
 # <stmt_after_id> T_LB
 <stmt_after_id> -> T_LB T_Decimal T_RB T_Assign <exp> 
+# <stmt_after_id> T_LP
+<stmt_after_id> -> T_LP <exp_ls_call> T_RP 
 # <stmt_after_id> T_Semicolon
 SYNCH
 # <stmt_after_id> }
@@ -992,11 +992,11 @@ SYNCH
 <stmt_ls> -> <stmt> <stmt_ls> 
 # <stmt_ls> T_Let
 <stmt_ls> -> <stmt> <stmt_ls> 
-# <stmt_ls> T_RBrace
+# <stmt_ls> T_Print
+<stmt_ls> -> <stmt> <stmt_ls> 
+# <stmt_ls> T_RC
 <stmt_ls> -> eps 
 # <stmt_ls> T_Return
-<stmt_ls> -> eps 
-# <stmt_ls> T_RⅭ
 <stmt_ls> -> eps 
 # <stmt_ls> }
 SYNCH
@@ -1012,13 +1012,13 @@ SYNCH
 <type> -> T_Int 
 # <type> T_LB
 <type> -> T_LB <type> T_Semicolon T_Decimal T_RB 
+# <type> T_LC
+SYNCH
 # <type> T_LP
 <type> -> T_LP <type_ls> T_RP 
 # <type> T_RP
 SYNCH
 # <type> T_Semicolon
-SYNCH
-# <type> T_ⅬⅭ
 SYNCH
 # <type> }
 SYNCH
