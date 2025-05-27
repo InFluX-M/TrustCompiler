@@ -8,6 +8,46 @@ SYNCH
 SYNCH
 # <arg> }
 SYNCH
+# <arg_item> ;
+SYNCH
+# <arg_item> T_Comma
+SYNCH
+# <arg_item> T_Decimal
+<arg_item> -> <exp> <arg_item_suffix> 
+# <arg_item> T_False
+<arg_item> -> <exp> <arg_item_suffix> 
+# <arg_item> T_Hexadecimal
+<arg_item> -> <exp> <arg_item_suffix> 
+# <arg_item> T_Id
+<arg_item> -> <exp> <arg_item_suffix> 
+# <arg_item> T_LB
+<arg_item> -> <exp> <arg_item_suffix> 
+# <arg_item> T_LOp_NOT
+<arg_item> -> <exp> <arg_item_suffix> 
+# <arg_item> T_LP
+<arg_item> -> <exp> <arg_item_suffix> 
+# <arg_item> T_RB
+SYNCH
+# <arg_item> T_RP
+SYNCH
+# <arg_item> T_String
+<arg_item> -> <exp> <arg_item_suffix> 
+# <arg_item> T_True
+<arg_item> -> <exp> <arg_item_suffix> 
+# <arg_item> }
+SYNCH
+# <arg_item_suffix> ;
+SYNCH
+# <arg_item_suffix> T_Assign
+<arg_item_suffix> -> T_Assign <exp> 
+# <arg_item_suffix> T_Comma
+<arg_item_suffix> -> eps 
+# <arg_item_suffix> T_RB
+<arg_item_suffix> -> eps 
+# <arg_item_suffix> T_RP
+<arg_item_suffix> -> eps 
+# <arg_item_suffix> }
+SYNCH
 # <arg_type> ;
 SYNCH
 # <arg_type> T_Colon
@@ -19,6 +59,8 @@ SYNCH
 # <arg_type> }
 SYNCH
 # <arith_exp> ;
+SYNCH
+# <arith_exp> T_Assign
 SYNCH
 # <arith_exp> T_Comma
 SYNCH
@@ -72,6 +114,8 @@ SYNCH
 <arith_exp_tail> -> T_AOp_MN <arith_term> <arith_exp_tail> 
 # <arith_exp_tail> T_AOp_Trust
 <arith_exp_tail> -> T_AOp_Trust <arith_term> <arith_exp_tail> 
+# <arith_exp_tail> T_Assign
+<arith_exp_tail> -> eps 
 # <arith_exp_tail> T_Comma
 <arith_exp_tail> -> eps 
 # <arith_exp_tail> T_LC
@@ -111,6 +155,8 @@ SYNCH
 # <arith_factor> T_AOp_RM
 SYNCH
 # <arith_factor> T_AOp_Trust
+SYNCH
+# <arith_factor> T_Assign
 SYNCH
 # <arith_factor> T_Comma
 SYNCH
@@ -163,6 +209,8 @@ SYNCH
 # <arith_term> T_AOp_MN
 SYNCH
 # <arith_term> T_AOp_Trust
+SYNCH
+# <arith_term> T_Assign
 SYNCH
 # <arith_term> T_Comma
 SYNCH
@@ -221,6 +269,8 @@ SYNCH
 # <arith_term_tail> T_AOp_RM
 <arith_term_tail> -> T_AOp_RM <arith_factor> <arith_term_tail> 
 # <arith_term_tail> T_AOp_Trust
+<arith_term_tail> -> eps 
+# <arith_term_tail> T_Assign
 <arith_term_tail> -> eps 
 # <arith_term_tail> T_Comma
 <arith_term_tail> -> eps 
@@ -284,6 +334,8 @@ SYNCH
 SYNCH
 # <cmp_exp> ;
 SYNCH
+# <cmp_exp> T_Assign
+SYNCH
 # <cmp_exp> T_Comma
 SYNCH
 # <cmp_exp> T_Decimal
@@ -324,6 +376,8 @@ SYNCH
 SYNCH
 # <cmp_exp_suf> ;
 SYNCH
+# <cmp_exp_suf> T_Assign
+<cmp_exp_suf> -> eps 
 # <cmp_exp_suf> T_Comma
 <cmp_exp_suf> -> eps 
 # <cmp_exp_suf> T_LC
@@ -460,6 +514,8 @@ SYNCH
 SYNCH
 # <eq_exp> ;
 SYNCH
+# <eq_exp> T_Assign
+SYNCH
 # <eq_exp> T_Comma
 SYNCH
 # <eq_exp> T_Decimal
@@ -496,6 +552,8 @@ SYNCH
 SYNCH
 # <eq_exp_tail> ;
 SYNCH
+# <eq_exp_tail> T_Assign
+<eq_exp_tail> -> eps 
 # <eq_exp_tail> T_Comma
 <eq_exp_tail> -> eps 
 # <eq_exp_tail> T_LC
@@ -517,6 +575,8 @@ SYNCH
 # <eq_exp_tail> }
 SYNCH
 # <exp> ;
+SYNCH
+# <exp> T_Assign
 SYNCH
 # <exp> T_Comma
 SYNCH
@@ -551,27 +611,27 @@ SYNCH
 # <exp_ls> ;
 SYNCH
 # <exp_ls> T_Decimal
-<exp_ls> -> <exp> <exp_ls_tail> 
+<exp_ls> -> <arg_item> <exp_ls_tail> 
 # <exp_ls> T_False
-<exp_ls> -> <exp> <exp_ls_tail> 
+<exp_ls> -> <arg_item> <exp_ls_tail> 
 # <exp_ls> T_Hexadecimal
-<exp_ls> -> <exp> <exp_ls_tail> 
+<exp_ls> -> <arg_item> <exp_ls_tail> 
 # <exp_ls> T_Id
-<exp_ls> -> <exp> <exp_ls_tail> 
+<exp_ls> -> <arg_item> <exp_ls_tail> 
 # <exp_ls> T_LB
-<exp_ls> -> <exp> <exp_ls_tail> 
+<exp_ls> -> <arg_item> <exp_ls_tail> 
 # <exp_ls> T_LOp_NOT
-<exp_ls> -> <exp> <exp_ls_tail> 
+<exp_ls> -> <arg_item> <exp_ls_tail> 
 # <exp_ls> T_LP
-<exp_ls> -> <exp> <exp_ls_tail> 
+<exp_ls> -> <arg_item> <exp_ls_tail> 
 # <exp_ls> T_RB
-SYNCH
+<exp_ls> -> eps 
 # <exp_ls> T_RP
-SYNCH
+<exp_ls> -> eps 
 # <exp_ls> T_String
-<exp_ls> -> <exp> <exp_ls_tail> 
+<exp_ls> -> <arg_item> <exp_ls_tail> 
 # <exp_ls> T_True
-<exp_ls> -> <exp> <exp_ls_tail> 
+<exp_ls> -> <arg_item> <exp_ls_tail> 
 # <exp_ls> }
 SYNCH
 # <exp_ls_arr> ;
@@ -625,7 +685,7 @@ SYNCH
 # <exp_ls_tail> ;
 SYNCH
 # <exp_ls_tail> T_Comma
-<exp_ls_tail> -> T_Comma <exp> <exp_ls_tail> 
+<exp_ls_tail> -> T_Comma <arg_item> <exp_ls_tail> 
 # <exp_ls_tail> T_RB
 <exp_ls_tail> -> eps 
 # <exp_ls_tail> T_RP
@@ -643,6 +703,8 @@ SYNCH
 # <fac_id_opt> T_AOp_RM
 <fac_id_opt> -> eps 
 # <fac_id_opt> T_AOp_Trust
+<fac_id_opt> -> eps 
+# <fac_id_opt> T_Assign
 <fac_id_opt> -> eps 
 # <fac_id_opt> T_Comma
 <fac_id_opt> -> eps 
@@ -687,6 +749,8 @@ SYNCH
 # <fac_lparen> T_AOp_RM
 SYNCH
 # <fac_lparen> T_AOp_Trust
+SYNCH
+# <fac_lparen> T_Assign
 SYNCH
 # <fac_lparen> T_Comma
 SYNCH
@@ -854,6 +918,8 @@ SYNCH
 SYNCH
 # <log_exp> ;
 SYNCH
+# <log_exp> T_Assign
+SYNCH
 # <log_exp> T_Comma
 SYNCH
 # <log_exp> T_Decimal
@@ -886,6 +952,8 @@ SYNCH
 SYNCH
 # <log_exp_tail> ;
 SYNCH
+# <log_exp_tail> T_Assign
+<log_exp_tail> -> eps 
 # <log_exp_tail> T_Comma
 <log_exp_tail> -> eps 
 # <log_exp_tail> T_LC
@@ -935,6 +1003,8 @@ SYNCH
 # <lpar_exp_suf> T_AOp_RM
 SYNCH
 # <lpar_exp_suf> T_AOp_Trust
+SYNCH
+# <lpar_exp_suf> T_Assign
 SYNCH
 # <lpar_exp_suf> T_Comma
 <lpar_exp_suf> -> T_Comma <exp_ls_tail> T_RP 
@@ -988,6 +1058,22 @@ SYNCH
 SYNCH
 # <pattern> }
 SYNCH
+# <println_args_list> ;
+SYNCH
+# <println_args_list> T_RP
+SYNCH
+# <println_args_list> T_String
+<println_args_list> -> T_String <println_format_args> 
+# <println_args_list> }
+SYNCH
+# <println_format_args> ;
+SYNCH
+# <println_format_args> T_Comma
+<println_format_args> -> T_Comma <exp_ls> 
+# <println_format_args> T_RP
+<println_format_args> -> eps 
+# <println_format_args> }
+SYNCH
 # <program> $
 <program> -> <func_ls> 
 # <program> ;
@@ -1013,6 +1099,8 @@ SYNCH
 # <program> }
 SYNCH
 # <rel_exp> ;
+SYNCH
+# <rel_exp> T_Assign
 SYNCH
 # <rel_exp> T_Comma
 SYNCH
@@ -1048,6 +1136,8 @@ SYNCH
 SYNCH
 # <rel_exp_tail> ;
 SYNCH
+# <rel_exp_tail> T_Assign
+<rel_exp_tail> -> eps 
 # <rel_exp_tail> T_Comma
 <rel_exp_tail> -> eps 
 # <rel_exp_tail> T_LC
@@ -1105,7 +1195,7 @@ SYNCH
 # <stmt> T_Loop
 <stmt> -> <loop_stmt> 
 # <stmt> T_Print
-<stmt> -> T_Print T_LP <exp_ls> T_RP T_Semicolon 
+<stmt> -> T_Print T_LP <println_args_list> T_RP T_Semicolon 
 # <stmt> T_RC
 SYNCH
 # <stmt> T_Return
