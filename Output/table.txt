@@ -258,6 +258,30 @@ SYNCH
 <assign_opt> -> eps 
 # <assign_opt> }
 SYNCH
+# <break_stmt> $
+SYNCH
+# <break_stmt> ;
+SYNCH
+# <break_stmt> T_Break
+<break_stmt> -> T_Break T_Semicolon 
+# <break_stmt> T_Continue
+SYNCH
+# <break_stmt> T_Id
+SYNCH
+# <break_stmt> T_If
+SYNCH
+# <break_stmt> T_Let
+SYNCH
+# <break_stmt> T_Loop
+SYNCH
+# <break_stmt> T_Print
+SYNCH
+# <break_stmt> T_RC
+SYNCH
+# <break_stmt> T_Return
+SYNCH
+# <break_stmt> }
+SYNCH
 # <cmp_exp> ;
 SYNCH
 # <cmp_exp> T_Comma
@@ -358,9 +382,37 @@ SYNCH
 SYNCH
 # <cmp_op> }
 SYNCH
+# <continue_stmt> $
+SYNCH
+# <continue_stmt> ;
+SYNCH
+# <continue_stmt> T_Break
+SYNCH
+# <continue_stmt> T_Continue
+<continue_stmt> -> T_Continue T_Semicolon 
+# <continue_stmt> T_Id
+SYNCH
+# <continue_stmt> T_If
+SYNCH
+# <continue_stmt> T_Let
+SYNCH
+# <continue_stmt> T_Loop
+SYNCH
+# <continue_stmt> T_Print
+SYNCH
+# <continue_stmt> T_RC
+SYNCH
+# <continue_stmt> T_Return
+SYNCH
+# <continue_stmt> }
+SYNCH
 # <else_alternative> $
 SYNCH
 # <else_alternative> ;
+SYNCH
+# <else_alternative> T_Break
+SYNCH
+# <else_alternative> T_Continue
 SYNCH
 # <else_alternative> T_Id
 SYNCH
@@ -369,6 +421,8 @@ SYNCH
 # <else_alternative> T_LC
 <else_alternative> -> T_LC <stmt_ls> T_RC 
 # <else_alternative> T_Let
+SYNCH
+# <else_alternative> T_Loop
 SYNCH
 # <else_alternative> T_Print
 SYNCH
@@ -382,6 +436,10 @@ SYNCH
 <else_part_opt> -> eps 
 # <else_part_opt> ;
 SYNCH
+# <else_part_opt> T_Break
+<else_part_opt> -> eps 
+# <else_part_opt> T_Continue
+<else_part_opt> -> eps 
 # <else_part_opt> T_Else
 <else_part_opt> -> T_Else <else_alternative> 
 # <else_part_opt> T_Id
@@ -389,6 +447,8 @@ SYNCH
 # <else_part_opt> T_If
 <else_part_opt> -> eps 
 # <else_part_opt> T_Let
+<else_part_opt> -> eps 
+# <else_part_opt> T_Loop
 <else_part_opt> -> eps 
 # <else_part_opt> T_Print
 <else_part_opt> -> eps 
@@ -678,15 +738,23 @@ SYNCH
 SYNCH
 # <func> ;
 SYNCH
+# <func> T_Break
+SYNCH
+# <func> T_Continue
+SYNCH
 # <func> T_Fn
-<func> -> T_Fn T_Id T_LP <func_args> T_RP <func_type> T_LC <stmt_ls> <func_ret> T_RC 
+<func> -> T_Fn T_Id T_LP <func_args> T_RP <func_type> T_LC <stmt_ls> T_RC 
 # <func> T_Id
 SYNCH
 # <func> T_If
 SYNCH
 # <func> T_Let
 SYNCH
+# <func> T_Loop
+SYNCH
 # <func> T_Print
+SYNCH
+# <func> T_Return
 SYNCH
 # <func> }
 SYNCH
@@ -710,6 +778,10 @@ SYNCH
 <func_ls> -> <stmt_ls> 
 # <func_ls> ;
 SYNCH
+# <func_ls> T_Break
+<func_ls> -> <stmt_ls> 
+# <func_ls> T_Continue
+<func_ls> -> <stmt_ls> 
 # <func_ls> T_Fn
 <func_ls> -> <func> <func_ls> 
 # <func_ls> T_Id
@@ -718,14 +790,16 @@ SYNCH
 <func_ls> -> <stmt_ls> 
 # <func_ls> T_Let
 <func_ls> -> <stmt_ls> 
+# <func_ls> T_Loop
+<func_ls> -> <stmt_ls> 
 # <func_ls> T_Print
+<func_ls> -> <stmt_ls> 
+# <func_ls> T_Return
 <func_ls> -> <stmt_ls> 
 # <func_ls> }
 SYNCH
 # <func_ret> ;
 SYNCH
-# <func_ret> T_RC
-<func_ret> -> eps 
 # <func_ret> T_Return
 <func_ret> -> T_Return <exp> T_Semicolon 
 # <func_ret> }
@@ -758,11 +832,17 @@ SYNCH
 SYNCH
 # <if_stmt> ;
 SYNCH
+# <if_stmt> T_Break
+SYNCH
+# <if_stmt> T_Continue
+SYNCH
 # <if_stmt> T_Id
 SYNCH
 # <if_stmt> T_If
 <if_stmt> -> T_If <exp> T_LC <stmt_ls> T_RC <else_part_opt> 
 # <if_stmt> T_Let
+SYNCH
+# <if_stmt> T_Loop
 SYNCH
 # <if_stmt> T_Print
 SYNCH
@@ -819,6 +899,30 @@ SYNCH
 # <log_exp_tail> T_Semicolon
 <log_exp_tail> -> eps 
 # <log_exp_tail> }
+SYNCH
+# <loop_stmt> $
+SYNCH
+# <loop_stmt> ;
+SYNCH
+# <loop_stmt> T_Break
+SYNCH
+# <loop_stmt> T_Continue
+SYNCH
+# <loop_stmt> T_Id
+SYNCH
+# <loop_stmt> T_If
+SYNCH
+# <loop_stmt> T_Let
+SYNCH
+# <loop_stmt> T_Loop
+<loop_stmt> -> T_Loop T_LC <stmt_ls> T_RC 
+# <loop_stmt> T_Print
+SYNCH
+# <loop_stmt> T_RC
+SYNCH
+# <loop_stmt> T_Return
+SYNCH
+# <loop_stmt> }
 SYNCH
 # <lpar_exp_suf> ;
 SYNCH
@@ -888,6 +992,10 @@ SYNCH
 <program> -> <func_ls> 
 # <program> ;
 SYNCH
+# <program> T_Break
+<program> -> <func_ls> 
+# <program> T_Continue
+<program> -> <func_ls> 
 # <program> T_Fn
 <program> -> <func_ls> 
 # <program> T_Id
@@ -896,7 +1004,11 @@ SYNCH
 <program> -> <func_ls> 
 # <program> T_Let
 <program> -> <func_ls> 
+# <program> T_Loop
+<program> -> <func_ls> 
 # <program> T_Print
+<program> -> <func_ls> 
+# <program> T_Return
 <program> -> <func_ls> 
 # <program> }
 SYNCH
@@ -952,22 +1064,52 @@ SYNCH
 <rel_exp_tail> -> eps 
 # <rel_exp_tail> }
 SYNCH
+# <return_stmt> $
+SYNCH
+# <return_stmt> ;
+SYNCH
+# <return_stmt> T_Break
+SYNCH
+# <return_stmt> T_Continue
+SYNCH
+# <return_stmt> T_Id
+SYNCH
+# <return_stmt> T_If
+SYNCH
+# <return_stmt> T_Let
+SYNCH
+# <return_stmt> T_Loop
+SYNCH
+# <return_stmt> T_Print
+SYNCH
+# <return_stmt> T_RC
+SYNCH
+# <return_stmt> T_Return
+<return_stmt> -> T_Return <exp> T_Semicolon 
+# <return_stmt> }
+SYNCH
 # <stmt> $
 SYNCH
 # <stmt> ;
 SYNCH
+# <stmt> T_Break
+<stmt> -> <break_stmt> 
+# <stmt> T_Continue
+<stmt> -> <continue_stmt> 
 # <stmt> T_Id
 <stmt> -> T_Id <stmt_after_id> T_Semicolon 
 # <stmt> T_If
 <stmt> -> <if_stmt> 
 # <stmt> T_Let
 <stmt> -> <var_declaration> T_Semicolon 
+# <stmt> T_Loop
+<stmt> -> <loop_stmt> 
 # <stmt> T_Print
 <stmt> -> T_Print T_LP <exp_ls> T_RP T_Semicolon 
 # <stmt> T_RC
 SYNCH
 # <stmt> T_Return
-SYNCH
+<stmt> -> <return_stmt> 
 # <stmt> }
 SYNCH
 # <stmt_after_id> ;
@@ -986,18 +1128,24 @@ SYNCH
 <stmt_ls> -> eps 
 # <stmt_ls> ;
 SYNCH
+# <stmt_ls> T_Break
+<stmt_ls> -> <stmt> <stmt_ls> 
+# <stmt_ls> T_Continue
+<stmt_ls> -> <stmt> <stmt_ls> 
 # <stmt_ls> T_Id
 <stmt_ls> -> <stmt> <stmt_ls> 
 # <stmt_ls> T_If
 <stmt_ls> -> <stmt> <stmt_ls> 
 # <stmt_ls> T_Let
 <stmt_ls> -> <stmt> <stmt_ls> 
+# <stmt_ls> T_Loop
+<stmt_ls> -> <stmt> <stmt_ls> 
 # <stmt_ls> T_Print
 <stmt_ls> -> <stmt> <stmt_ls> 
 # <stmt_ls> T_RC
 <stmt_ls> -> eps 
 # <stmt_ls> T_Return
-<stmt_ls> -> eps 
+<stmt_ls> -> <stmt> <stmt_ls> 
 # <stmt_ls> }
 SYNCH
 # <type> ;
