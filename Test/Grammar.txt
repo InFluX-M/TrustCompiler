@@ -8,7 +8,7 @@
 <func_type> -> T_Arrow <type> @ ε
 <func_ret> -> T_Return <exp> T_Semicolon @ ε
 <stmt_ls> -> <stmt> <stmt_ls> @ ε
-<stmt> -> <var_declaration> T_Semicolon @ T_Id <stmt_after_id> T_Semicolon @ <if_stmt> @ T_Print T_LP <exp_ls> T_RP T_Semicolon @ <loop_stmt>
+<stmt> -> <var_declaration> T_Semicolon @ T_Id <stmt_after_id> T_Semicolon @ <if_stmt> @ T_Print T_LP <exp_ls> T_RP T_Semicolon @ <loop_stmt> @ <break_stmt> @ <continue_stmt>
 <loop_stmt> -> T_Loop T_LC <stmt_ls> T_RC
 <if_stmt> -> T_If <exp> T_LC <stmt_ls> T_RC <else_part_opt>
 <else_part_opt> -> T_Else <else_alternative> @ ε
@@ -46,3 +46,5 @@
 <exp_ls_arr> -> <exp_ls> @ ε
 <exp_ls> -> <exp> <exp_ls_tail>
 <exp_ls_tail> -> T_Comma <exp> <exp_ls_tail> @ ε
+<break_stmt> -> T_Break T_Semicolon
+<continue_stmt> -> T_Continue T_Semicolon
