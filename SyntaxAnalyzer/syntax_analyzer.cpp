@@ -98,7 +98,7 @@ void SyntaxAnalyzer::extract(std::string line) {
         rule.set_head(head);
         rule.set_type(VALID);
         std::vector<std::string> rule_parts = split(rules_str[i]);
-        for (auto & rule_part : rule_parts) {
+        for (auto &rule_part: rule_parts) {
             Symbol tmp;
             if (rule_part == "ε") {
                 tmp.set_name("eps");
@@ -143,7 +143,7 @@ void SyntaxAnalyzer::calc_first(const Symbol &var) {
                 calc_first(part_body);
             }
             exist_eps = false;
-            for (const auto& first: firsts[part_body]) {
+            for (const auto &first: firsts[part_body]) {
                 if (first == eps) {
                     exist_eps = true;
                 } else {
@@ -515,62 +515,86 @@ void SyntaxAnalyzer::make_tree(bool update) {
 
         Symbol term = Symbol(match[tokens[index].get_type()], TERMINAL);
         int line_number = tokens[index].get_line_number();
+        std::string token_content = tokens[index].get_content();
 
         if (top_var.get_type() == TERMINAL) {
             if (term == top_var) {
-                std::string content = tokens[index].get_content();
-                top_node->get_data().set_content(content);
+                top_node->get_data().set_content(token_content);
                 top_node->get_data().set_line_number(line_number);
                 index++;
             } else {
-                std::cerr << RED << "Syntax Error: Terminals don't match, line: " << line_number << WHITE
-                          << std::endl;
-                std::cerr << RED
-                          << "Expected '" + top_var.get_name() + "' , but found '" + term.get_name() + "' instead."
-                          << WHITE << std::endl;
+                std::cerr << RED << "Syntax Error: Terminals don't match, line: " << line_number << WHITE << std::endl;
+                std::cerr << RED << "Expected '" << top_var.get_name() << "', but found '" << term.get_name()
+                          << "' with content '" << token_content << "' instead." << WHITE << std::endl;
                 std::cerr << "---------------------------------------------------------------" << std::endl;
                 num_errors++;
+                // Recovery: Keep the current input token, but pop the non-matching terminal from stack.
+                // This implies the expected terminal was "skipped".
             }
         } else {
-            Rule rule = table[{top_var, term}];
-            if (rule.get_type() == VALID) {
-                top_node->get_data().set_line_number(line_number);
+            auto it = table.find({top_var, term}); // Find the rule in the parsing table
+            if (it != table.end()) { // Rule found
+                Rule rule = it->second;
+                if (rule.get_type() == VALID) {
+                    top_node->get_data().set_line_number(line_number);
 
-                std::vector<Symbol> body = rule.get_body();
-                std::reverse(body.begin(), body.end());
-                for (const auto &var: body) {
-                    auto *node = new Node<Symbol>(var, top_node);
-                    top_node->push_front_children(node);
-                    if (var != eps) {
-                        stack.push(node);
+                    std::vector<Symbol> body = rule.get_body();
+                    std::reverse(body.begin(), body.end());
+                    for (const auto &var: body) {
+                        auto *node = new Node<Symbol>(var, top_node);
+                        top_node->push_front_children(node);
+                        if (var != eps) {
+                            stack.push(node);
+                        }
                     }
+                } else if (rule.get_type() == SYNCH) {
+                    std::cerr << RED << "Syntax Error: Synchronization attempted, line: " << line_number << WHITE
+                              << std::endl;
+                    std::cerr << RED << "Expected a production for non-terminal '" << top_var.get_name()
+                              << "', but encountered unexpected token '" << term.get_name() << "' (content: '"
+                              << token_content << "')." << WHITE << std::endl;
+                    std::cerr << RED << "Attempting to recover by skipping input until a synchronizing token is found."
+                              << WHITE << std::endl;
+                    std::cerr << "---------------------------------------------------------------" << std::endl;
+                    num_errors++;
+                    // Panic mode recovery: Skip tokens until one in FOLLOW(top_var) is found or Eof.
+                    while (index < tokens_len && follows[top_var].find(term) == follows[top_var].end() &&
+                           term != Symbol("$", TERMINAL)) {
+                        index++;
+                        if (index < tokens_len) {
+                            term = Symbol(match[tokens[index].get_type()], TERMINAL);
+                        }
+                    }
+                    stack.push(top_node); // Re-push the non-terminal, hoping the next token allows a match
+                } else if (rule.get_type() == EMPTY) {
+                    std::cerr << RED << "Syntax Error: Empty cell/Unexpected token, line: " << line_number << WHITE
+                              << std::endl;
+                    std::cerr << RED << "Ignored '" << term.get_name() << "' (content: '" << token_content
+                              << "') for non-terminal '" << top_var.get_name() << "' due to syntax mismatch." << WHITE
+                              << std::endl;
+                    std::cerr << "---------------------------------------------------------------" << std::endl;
+                    num_errors++;
+                    index++;
+                    stack.push(top_node);
                 }
-            } else if (rule.get_type() == SYNCH) {
-                std::cerr << RED << "Syntax Error: Synch, line: " << line_number << WHITE << std::endl;
-                std::cerr << RED
-                          << "Synced by adding '" + top_var.get_name() + "' before '" + term.get_name() + "'."
-                          << WHITE << std::endl;
-                std::cerr << "---------------------------------------------------------------" << std::endl;
-                num_errors++;
-            } else if (rule.get_type() == EMPTY) {
-                std::cerr << RED << "Syntax Error: Empty cell, line: " << line_number << WHITE << std::endl;
-                std::cerr << RED << "Ignored '" + term.get_name() + "' due to syntax mismatch." << WHITE
+            } else { // No rule found in table for this (Non-terminal, Terminal) pair
+                std::cerr << RED << "Syntax Error: Unexpected input or missing rule, line: " << line_number << WHITE
                           << std::endl;
+                std::cerr << RED << "No valid production found for non-terminal '" << top_var.get_name()
+                          << "' with input token '" << term.get_name() << "' (content: '" << token_content << "')."
+                          << WHITE << std::endl;
+                std::cerr << RED << "Attempting to skip the unexpected token." << WHITE << std::endl;
                 std::cerr << "---------------------------------------------------------------" << std::endl;
+                num_errors++;
                 index++;
-                stack.push(top_node);
-                num_errors++;
-            } else {
-                std::cerr << "Unknown Error: ?, line: " << line_number << WHITE << std::endl;
-                std::cerr << "---------------------------------------------------------------" << std::endl;
-                num_errors++;
+                stack.push(top_node); // Re-push the non-terminal, hoping the next token will lead to a valid parse.
             }
         }
     }
     if (num_errors == 0) {
         std::cout << GREEN << "Parsed tree successfully" << WHITE << std::endl;
     } else {
-        std::cout << YELLOW << "Parsed tree unsuccessfully" << WHITE << std::endl;
+        std::cout << YELLOW << "Parsed tree unsuccessfully with " << num_errors << " errors." << WHITE << std::endl;
     }
 }
 
