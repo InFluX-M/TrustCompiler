@@ -38,7 +38,7 @@
 <arith_exp_tail> -> T_AOp_Trust <arith_term> <arith_exp_tail> @ T_AOp_MN <arith_term> <arith_exp_tail> @ ε
 <arith_term> -> <arith_factor> <arith_term_tail>
 <arith_term_tail> -> T_AOp_ML <arith_factor> <arith_term_tail> @ T_AOp_DV <arith_factor> <arith_term_tail> @ T_AOp_RM <arith_factor> <arith_term_tail> @ ε
-<arith_factor> -> T_Hexadecimal @ T_Decimal @ T_String @ T_True @ T_False @ T_Id <fac_id_opt> @ T_LP <fac_lparen> @ T_LB <exp_ls_arr> T_RB @ T_LOp_NOT <arith_factor> @ T_AOp_MN <arith_factor>
+<arith_factor> -> T_Hexadecimal @ T_Decimal @ T_String @ T_True @ T_False @ T_Id <fac_id_opt> @ T_LP <fac_lparen> @ T_LB <exp_ls_arr> T_RB @ T_LOp_NOT <arith_factor> @ T_AOp_MN <arith_factor> @ T_AOp_Trust <arith_factor>
 <fac_id_opt> -> T_LP <exp_ls_call> T_RP @ T_LB <exp> T_RB @ ε
 <fac_lparen> -> <exp> <lpar_exp_suf>
 <lpar_exp_suf> -> T_RP @ <exp_ls_after_first_item>
@@ -51,6 +51,7 @@
 <continue_stmt> -> T_Continue T_Semicolon
 <return_stmt> -> T_Return <exp> T_Semicolon
 <println_args_list> -> T_String <println_format_args> @ <exp>
-<println_format_args> -> T_Comma <exp_ls> @ ε
+<println_format_args> -> <println_format_args_with_comma> @ ε
+<println_format_args_with_comma> -> T_Comma <exp_ls>
 <arg_item> -> <exp> <arg_item_suffix>
 <arg_item_suffix> -> T_Assign <exp> @ ε
