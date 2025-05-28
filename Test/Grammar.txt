@@ -50,7 +50,7 @@
 <break_stmt> -> T_Break T_Semicolon
 <continue_stmt> -> T_Continue T_Semicolon
 <return_stmt> -> T_Return <exp> T_Semicolon
-<println_args_list> -> T_String <println_format_args>
+<println_args_list> -> T_String <println_format_args> @ <exp>
 <println_format_args> -> T_Comma <exp_ls> @ ε
 <arg_item> -> <exp> <arg_item_suffix>
 <arg_item_suffix> -> T_Assign <exp> @ ε
