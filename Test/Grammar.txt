@@ -8,7 +8,7 @@
 <func_type> -> T_Arrow <type> @ ε
 <func_ret> -> T_Return <exp> T_Semicolon @ ε
 <stmt_ls> -> <stmt> <stmt_ls> @ ε
-<stmt> -> <var_declaration> T_Semicolon @ T_Id <stmt_after_id> T_Semicolon @ <if_stmt> @ T_Print T_LP <exp_ls> T_RP T_Semicolon @ <loop_stmt> @ <break_stmt> @ <continue_stmt> @ <return_stmt>
+<stmt> -> <var_declaration> T_Semicolon @ T_Id <stmt_after_id> T_Semicolon @ <if_stmt> @ <println_stmt> @ <loop_stmt> @ <break_stmt> @ <continue_stmt> @ <return_stmt>
 <loop_stmt> -> T_Loop T_LC <stmt_ls> T_RC
 <if_stmt> -> T_If <exp> T_LC <stmt_ls> T_RC <else_part_opt>
 <else_part_opt> -> T_Else <else_alternative> @ ε
@@ -52,3 +52,17 @@
 <break_stmt> -> T_Break T_Semicolon
 <continue_stmt> -> T_Continue T_Semicolon
 <return_stmt> -> T_Return <exp> T_Semicolon
+<println_stmt> -> T_Print T_LP <println_args> T_RP T_Semicolon
+<println_args> -> T_String <println_format_args_opt> @ <exp_non_string>
+<exp_non_string> -> <rel_exp_non_string> <log_exp_tail>
+<rel_exp_non_string> -> <eq_exp_non_string> <rel_exp_tail>
+<eq_exp_non_string> -> <cmp_exp_non_string> <eq_exp_tail>
+<cmp_exp_non_string> -> <arith_exp_non_string> <cmp_exp_suf>
+<arith_exp_non_string> -> <arith_term_non_string> <arith_exp_tail>
+<arith_term_non_string> -> <arith_factor_non_string> <arith_term_tail>
+<arith_factor_non_string> -> T_Hexadecimal @ T_Decimal @ T_True @ T_False @ T_Id <fac_id_opt> @ T_LP <fac_lparen> @ T_LB <exp_ls_arr> T_RB @ T_LOp_NOT <arith_factor>
+<println_format_args_opt> -> T_Comma <println_format_args_list> @ ε
+<println_format_args_list> -> <println_format_arg_item> <println_format_args_list_tail>
+<println_format_args_list_tail> -> T_Comma <println_format_arg_item> <println_format_args_list_tail> @ ε
+<println_format_arg_item> -> <arg_item>
+<id_println_format_suffix> -> T_Assign <exp> @ <fac_id_opt> <arith_term_tail> <arith_exp_tail> <cmp_exp_suf> <eq_exp_tail> <rel_exp_tail> <log_exp_tail>
