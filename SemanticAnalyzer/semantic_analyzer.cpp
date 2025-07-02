@@ -240,23 +240,6 @@ void SemanticAnalyzer::dfs(Node<Symbol>* node) {
                 }
             }
         }
-
-
-    } else if (head_name == "stmt_after_id") {
-        if (children.size() != 3) {
-            // assign new value to a var or array member
-            std::string name = node->get_parent()->get_children()[0]->get_data().get_content();
-            if (!symbol_table[current_func][name].get_mut()) {
-                std::cerr << RED 
-                        << "Semantic Error [Line " << line_number << "]: "
-                        << "Cannot assign to immutable variable '" << name << "'.\n"
-                        << "  - This variable was not declared as mutable (e.g., 'let mut " << name << "').\n"
-                        << "  - To allow mutation, declare the variable with the 'mut' keyword.\n"
-                        << WHITE << std::endl;
-                std::cerr << "----------------------------------------------------------------" << std::endl;
-                num_errors++;
-            }
-        }
     } else {
         for (auto child : children) {
             dfs(child);
@@ -396,8 +379,45 @@ void SemanticAnalyzer::dfs(Node<Symbol>* node) {
             // array literal
             symbol.set_exp_type(TYPE_ARRAY);
         }
-        
+    } else if (head_name == "stmt_after_id") {
+        if (children.size() != 3) {
+            // assign new value to a var or array member
+            std::string name = node->get_parent()->get_children()[0]->get_data().get_content();
+
+            if (symbol_table[current_func][name].get_stype() == VOID) {
+                semantic_type stp;
+                if (children.size() == 2) {
+                    stp = exp_t_to_semantic_type(children[1]->get_data().get_exp_type());
+                } else {
+                    stp = exp_t_to_semantic_type(children[4]->get_data().get_exp_type());
+                }
+
+                if (stp == VOID) {
+                    std::cerr << RED 
+                            << "Semantic Error [Line " << line_number << "]: "
+                            << "Unable to infer type for variable '" << name << "' from the assigned expression.\n"
+                            << "  - The expression has an unsupported or unknown type.\n"
+                            << "  - Ensure the expression is valid and has a type like int, bool, array, or tuple.\n"
+                            << WHITE << std::endl;
+                    std::cerr << "----------------------------------------------------------------" << std::endl;
+                    num_errors++;
+                    return;
+                } else {
+                    symbol_table[current_func][name].set_stype(stp);
+                }
+            } else if (!symbol_table[current_func][name].get_mut()) {
+                std::cerr << RED 
+                        << "Semantic Error [Line " << line_number << "]: "
+                        << "Cannot assign to immutable variable '" << name << "'.\n"
+                        << "  - This variable was not declared as mutable (e.g., 'let mut " << name << "').\n"
+                        << "  - To allow mutation, declare the variable with the 'mut' keyword.\n"
+                        << WHITE << std::endl;
+                std::cerr << "----------------------------------------------------------------" << std::endl;
+                num_errors++;
+            }
+        }
     } 
+
 }
 
 SemanticAnalyzer::SemanticAnalyzer(Tree<Symbol> _parse_tree, std::string output_file_name) {
