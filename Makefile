@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -g -Wall -std=c++17
+CXXFLAGS = -g -O0 -Wall -std=c++17
 
 SRC = main.cpp \
       LexicalAnalyzer/lexical_analyzer.cpp \

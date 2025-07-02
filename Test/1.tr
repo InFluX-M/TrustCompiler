@@ -1,1 +1,1 @@
-let x = true;
+let mut (x, y, z) : (i32, bool, i32, i32, bool);

@@ -29,6 +29,22 @@ const std::string RED = COLORED_ERRORS ? "\033[0;31m" : "";
 const std::string GREEN = COLORED_ERRORS ? "\033[0;32m" : "";
 const std::string YELLOW = COLORED_ERRORS ? "\033[0;33m" : "";
 
+enum semantic_type {
+    VOID,
+    INT,
+    BOOL,
+    CHAR,
+    ARRAY,
+    TUPLE
+};
+
+const std::string semantic_type_to_string[] = {
+    "void",
+    "int",
+    "bool",
+    "char"
+};
+
 enum token_type {
     T_Bool,
     T_Break,
@@ -220,6 +236,9 @@ private:
     symbol_type type;
     int line_number;
     std::string content;
+    semantic_type stype;
+    std::vector<semantic_type> params_type;
+    std::string val;
 
 public:
     Symbol() {}
@@ -261,6 +280,30 @@ public:
 
     std::string get_content() {
         return content;
+    }
+
+    void set_stype(semantic_type _stype) {
+        stype = _stype; 
+    }
+    semantic_type get_stype() const {
+        return stype;
+    }
+    void add_to_params_type(semantic_type _stype) {
+        params_type.push_back(_stype);
+    }
+    void add_to_params_type(std::vector<semantic_type> &_params_type) {
+        for (auto _stype : _params_type) {
+            params_type.push_back(_stype);
+        }
+    }
+    std::vector<semantic_type>& get_params_type() {
+        return params_type;
+    }
+    void set_val(std::string _val) {
+        val = _val;
+    }
+    std::string get_val() {
+        return val;
     }
 
     bool operator==(const Symbol &other) const {

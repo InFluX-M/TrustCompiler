@@ -108,6 +108,44 @@ SYNCH
 <arith_exp> -> <arith_term> <arith_exp_tail> 
 # <arith_exp> }
 SYNCH
+# <arith_exp_non_string> ;
+SYNCH
+# <arith_exp_non_string> T_Decimal
+<arith_exp_non_string> -> <arith_term_non_string> <arith_exp_tail> 
+# <arith_exp_non_string> T_False
+<arith_exp_non_string> -> <arith_term_non_string> <arith_exp_tail> 
+# <arith_exp_non_string> T_Hexadecimal
+<arith_exp_non_string> -> <arith_term_non_string> <arith_exp_tail> 
+# <arith_exp_non_string> T_Id
+<arith_exp_non_string> -> <arith_term_non_string> <arith_exp_tail> 
+# <arith_exp_non_string> T_LB
+<arith_exp_non_string> -> <arith_term_non_string> <arith_exp_tail> 
+# <arith_exp_non_string> T_LOp_AND
+SYNCH
+# <arith_exp_non_string> T_LOp_NOT
+<arith_exp_non_string> -> <arith_term_non_string> <arith_exp_tail> 
+# <arith_exp_non_string> T_LOp_OR
+SYNCH
+# <arith_exp_non_string> T_LP
+<arith_exp_non_string> -> <arith_term_non_string> <arith_exp_tail> 
+# <arith_exp_non_string> T_ROp_E
+SYNCH
+# <arith_exp_non_string> T_ROp_G
+SYNCH
+# <arith_exp_non_string> T_ROp_GE
+SYNCH
+# <arith_exp_non_string> T_ROp_L
+SYNCH
+# <arith_exp_non_string> T_ROp_LE
+SYNCH
+# <arith_exp_non_string> T_ROp_NE
+SYNCH
+# <arith_exp_non_string> T_RP
+SYNCH
+# <arith_exp_non_string> T_True
+<arith_exp_non_string> -> <arith_term_non_string> <arith_exp_tail> 
+# <arith_exp_non_string> }
+SYNCH
 # <arith_exp_tail> ;
 SYNCH
 # <arith_exp_tail> T_AOp_MN
@@ -204,6 +242,54 @@ SYNCH
 <arith_factor> -> T_True 
 # <arith_factor> }
 SYNCH
+# <arith_factor_non_string> ;
+SYNCH
+# <arith_factor_non_string> T_AOp_DV
+SYNCH
+# <arith_factor_non_string> T_AOp_ML
+SYNCH
+# <arith_factor_non_string> T_AOp_MN
+SYNCH
+# <arith_factor_non_string> T_AOp_RM
+SYNCH
+# <arith_factor_non_string> T_AOp_Trust
+SYNCH
+# <arith_factor_non_string> T_Decimal
+<arith_factor_non_string> -> T_Decimal 
+# <arith_factor_non_string> T_False
+<arith_factor_non_string> -> T_False 
+# <arith_factor_non_string> T_Hexadecimal
+<arith_factor_non_string> -> T_Hexadecimal 
+# <arith_factor_non_string> T_Id
+<arith_factor_non_string> -> T_Id <fac_id_opt> 
+# <arith_factor_non_string> T_LB
+<arith_factor_non_string> -> T_LB <exp_ls_arr> T_RB 
+# <arith_factor_non_string> T_LOp_AND
+SYNCH
+# <arith_factor_non_string> T_LOp_NOT
+<arith_factor_non_string> -> T_LOp_NOT <arith_factor> 
+# <arith_factor_non_string> T_LOp_OR
+SYNCH
+# <arith_factor_non_string> T_LP
+<arith_factor_non_string> -> T_LP <fac_lparen> 
+# <arith_factor_non_string> T_ROp_E
+SYNCH
+# <arith_factor_non_string> T_ROp_G
+SYNCH
+# <arith_factor_non_string> T_ROp_GE
+SYNCH
+# <arith_factor_non_string> T_ROp_L
+SYNCH
+# <arith_factor_non_string> T_ROp_LE
+SYNCH
+# <arith_factor_non_string> T_ROp_NE
+SYNCH
+# <arith_factor_non_string> T_RP
+SYNCH
+# <arith_factor_non_string> T_True
+<arith_factor_non_string> -> T_True 
+# <arith_factor_non_string> }
+SYNCH
 # <arith_term> ;
 SYNCH
 # <arith_term> T_AOp_MN
@@ -257,6 +343,48 @@ SYNCH
 # <arith_term> T_True
 <arith_term> -> <arith_factor> <arith_term_tail> 
 # <arith_term> }
+SYNCH
+# <arith_term_non_string> ;
+SYNCH
+# <arith_term_non_string> T_AOp_MN
+SYNCH
+# <arith_term_non_string> T_AOp_Trust
+SYNCH
+# <arith_term_non_string> T_Decimal
+<arith_term_non_string> -> <arith_factor_non_string> <arith_term_tail> 
+# <arith_term_non_string> T_False
+<arith_term_non_string> -> <arith_factor_non_string> <arith_term_tail> 
+# <arith_term_non_string> T_Hexadecimal
+<arith_term_non_string> -> <arith_factor_non_string> <arith_term_tail> 
+# <arith_term_non_string> T_Id
+<arith_term_non_string> -> <arith_factor_non_string> <arith_term_tail> 
+# <arith_term_non_string> T_LB
+<arith_term_non_string> -> <arith_factor_non_string> <arith_term_tail> 
+# <arith_term_non_string> T_LOp_AND
+SYNCH
+# <arith_term_non_string> T_LOp_NOT
+<arith_term_non_string> -> <arith_factor_non_string> <arith_term_tail> 
+# <arith_term_non_string> T_LOp_OR
+SYNCH
+# <arith_term_non_string> T_LP
+<arith_term_non_string> -> <arith_factor_non_string> <arith_term_tail> 
+# <arith_term_non_string> T_ROp_E
+SYNCH
+# <arith_term_non_string> T_ROp_G
+SYNCH
+# <arith_term_non_string> T_ROp_GE
+SYNCH
+# <arith_term_non_string> T_ROp_L
+SYNCH
+# <arith_term_non_string> T_ROp_LE
+SYNCH
+# <arith_term_non_string> T_ROp_NE
+SYNCH
+# <arith_term_non_string> T_RP
+SYNCH
+# <arith_term_non_string> T_True
+<arith_term_non_string> -> <arith_factor_non_string> <arith_term_tail> 
+# <arith_term_non_string> }
 SYNCH
 # <arith_term_tail> ;
 SYNCH
@@ -373,6 +501,36 @@ SYNCH
 # <cmp_exp> T_True
 <cmp_exp> -> <arith_exp> <cmp_exp_suf> 
 # <cmp_exp> }
+SYNCH
+# <cmp_exp_non_string> ;
+SYNCH
+# <cmp_exp_non_string> T_Decimal
+<cmp_exp_non_string> -> <arith_exp_non_string> <cmp_exp_suf> 
+# <cmp_exp_non_string> T_False
+<cmp_exp_non_string> -> <arith_exp_non_string> <cmp_exp_suf> 
+# <cmp_exp_non_string> T_Hexadecimal
+<cmp_exp_non_string> -> <arith_exp_non_string> <cmp_exp_suf> 
+# <cmp_exp_non_string> T_Id
+<cmp_exp_non_string> -> <arith_exp_non_string> <cmp_exp_suf> 
+# <cmp_exp_non_string> T_LB
+<cmp_exp_non_string> -> <arith_exp_non_string> <cmp_exp_suf> 
+# <cmp_exp_non_string> T_LOp_AND
+SYNCH
+# <cmp_exp_non_string> T_LOp_NOT
+<cmp_exp_non_string> -> <arith_exp_non_string> <cmp_exp_suf> 
+# <cmp_exp_non_string> T_LOp_OR
+SYNCH
+# <cmp_exp_non_string> T_LP
+<cmp_exp_non_string> -> <arith_exp_non_string> <cmp_exp_suf> 
+# <cmp_exp_non_string> T_ROp_E
+SYNCH
+# <cmp_exp_non_string> T_ROp_NE
+SYNCH
+# <cmp_exp_non_string> T_RP
+SYNCH
+# <cmp_exp_non_string> T_True
+<cmp_exp_non_string> -> <arith_exp_non_string> <cmp_exp_suf> 
+# <cmp_exp_non_string> }
 SYNCH
 # <cmp_exp_suf> ;
 SYNCH
@@ -549,6 +707,32 @@ SYNCH
 # <eq_exp> T_True
 <eq_exp> -> <cmp_exp> <eq_exp_tail> 
 # <eq_exp> }
+SYNCH
+# <eq_exp_non_string> ;
+SYNCH
+# <eq_exp_non_string> T_Decimal
+<eq_exp_non_string> -> <cmp_exp_non_string> <eq_exp_tail> 
+# <eq_exp_non_string> T_False
+<eq_exp_non_string> -> <cmp_exp_non_string> <eq_exp_tail> 
+# <eq_exp_non_string> T_Hexadecimal
+<eq_exp_non_string> -> <cmp_exp_non_string> <eq_exp_tail> 
+# <eq_exp_non_string> T_Id
+<eq_exp_non_string> -> <cmp_exp_non_string> <eq_exp_tail> 
+# <eq_exp_non_string> T_LB
+<eq_exp_non_string> -> <cmp_exp_non_string> <eq_exp_tail> 
+# <eq_exp_non_string> T_LOp_AND
+SYNCH
+# <eq_exp_non_string> T_LOp_NOT
+<eq_exp_non_string> -> <cmp_exp_non_string> <eq_exp_tail> 
+# <eq_exp_non_string> T_LOp_OR
+SYNCH
+# <eq_exp_non_string> T_LP
+<eq_exp_non_string> -> <cmp_exp_non_string> <eq_exp_tail> 
+# <eq_exp_non_string> T_RP
+SYNCH
+# <eq_exp_non_string> T_True
+<eq_exp_non_string> -> <cmp_exp_non_string> <eq_exp_tail> 
+# <eq_exp_non_string> }
 SYNCH
 # <eq_exp_tail> ;
 SYNCH
@@ -733,6 +917,28 @@ SYNCH
 # <exp_ls_tail> T_RP
 <exp_ls_tail> -> eps 
 # <exp_ls_tail> }
+SYNCH
+# <exp_non_string> ;
+SYNCH
+# <exp_non_string> T_Decimal
+<exp_non_string> -> <rel_exp_non_string> <log_exp_tail> 
+# <exp_non_string> T_False
+<exp_non_string> -> <rel_exp_non_string> <log_exp_tail> 
+# <exp_non_string> T_Hexadecimal
+<exp_non_string> -> <rel_exp_non_string> <log_exp_tail> 
+# <exp_non_string> T_Id
+<exp_non_string> -> <rel_exp_non_string> <log_exp_tail> 
+# <exp_non_string> T_LB
+<exp_non_string> -> <rel_exp_non_string> <log_exp_tail> 
+# <exp_non_string> T_LOp_NOT
+<exp_non_string> -> <rel_exp_non_string> <log_exp_tail> 
+# <exp_non_string> T_LP
+<exp_non_string> -> <rel_exp_non_string> <log_exp_tail> 
+# <exp_non_string> T_RP
+SYNCH
+# <exp_non_string> T_True
+<exp_non_string> -> <rel_exp_non_string> <log_exp_tail> 
+# <exp_non_string> }
 SYNCH
 # <fac_id_opt> ;
 SYNCH
@@ -934,6 +1140,42 @@ SYNCH
 <id_ls_tail> -> eps 
 # <id_ls_tail> }
 SYNCH
+# <id_println_format_suffix> ;
+SYNCH
+# <id_println_format_suffix> T_AOp_DV
+<id_println_format_suffix> -> <fac_id_opt> <arith_term_tail> <arith_exp_tail> <cmp_exp_suf> <eq_exp_tail> <rel_exp_tail> <log_exp_tail> 
+# <id_println_format_suffix> T_AOp_ML
+<id_println_format_suffix> -> <fac_id_opt> <arith_term_tail> <arith_exp_tail> <cmp_exp_suf> <eq_exp_tail> <rel_exp_tail> <log_exp_tail> 
+# <id_println_format_suffix> T_AOp_MN
+<id_println_format_suffix> -> <fac_id_opt> <arith_term_tail> <arith_exp_tail> <cmp_exp_suf> <eq_exp_tail> <rel_exp_tail> <log_exp_tail> 
+# <id_println_format_suffix> T_AOp_RM
+<id_println_format_suffix> -> <fac_id_opt> <arith_term_tail> <arith_exp_tail> <cmp_exp_suf> <eq_exp_tail> <rel_exp_tail> <log_exp_tail> 
+# <id_println_format_suffix> T_AOp_Trust
+<id_println_format_suffix> -> <fac_id_opt> <arith_term_tail> <arith_exp_tail> <cmp_exp_suf> <eq_exp_tail> <rel_exp_tail> <log_exp_tail> 
+# <id_println_format_suffix> T_Assign
+<id_println_format_suffix> -> T_Assign <exp> 
+# <id_println_format_suffix> T_LB
+<id_println_format_suffix> -> <fac_id_opt> <arith_term_tail> <arith_exp_tail> <cmp_exp_suf> <eq_exp_tail> <rel_exp_tail> <log_exp_tail> 
+# <id_println_format_suffix> T_LOp_AND
+<id_println_format_suffix> -> <fac_id_opt> <arith_term_tail> <arith_exp_tail> <cmp_exp_suf> <eq_exp_tail> <rel_exp_tail> <log_exp_tail> 
+# <id_println_format_suffix> T_LOp_OR
+<id_println_format_suffix> -> <fac_id_opt> <arith_term_tail> <arith_exp_tail> <cmp_exp_suf> <eq_exp_tail> <rel_exp_tail> <log_exp_tail> 
+# <id_println_format_suffix> T_LP
+<id_println_format_suffix> -> <fac_id_opt> <arith_term_tail> <arith_exp_tail> <cmp_exp_suf> <eq_exp_tail> <rel_exp_tail> <log_exp_tail> 
+# <id_println_format_suffix> T_ROp_E
+<id_println_format_suffix> -> <fac_id_opt> <arith_term_tail> <arith_exp_tail> <cmp_exp_suf> <eq_exp_tail> <rel_exp_tail> <log_exp_tail> 
+# <id_println_format_suffix> T_ROp_G
+<id_println_format_suffix> -> <fac_id_opt> <arith_term_tail> <arith_exp_tail> <cmp_exp_suf> <eq_exp_tail> <rel_exp_tail> <log_exp_tail> 
+# <id_println_format_suffix> T_ROp_GE
+<id_println_format_suffix> -> <fac_id_opt> <arith_term_tail> <arith_exp_tail> <cmp_exp_suf> <eq_exp_tail> <rel_exp_tail> <log_exp_tail> 
+# <id_println_format_suffix> T_ROp_L
+<id_println_format_suffix> -> <fac_id_opt> <arith_term_tail> <arith_exp_tail> <cmp_exp_suf> <eq_exp_tail> <rel_exp_tail> <log_exp_tail> 
+# <id_println_format_suffix> T_ROp_LE
+<id_println_format_suffix> -> <fac_id_opt> <arith_term_tail> <arith_exp_tail> <cmp_exp_suf> <eq_exp_tail> <rel_exp_tail> <log_exp_tail> 
+# <id_println_format_suffix> T_ROp_NE
+<id_println_format_suffix> -> <fac_id_opt> <arith_term_tail> <arith_exp_tail> <cmp_exp_suf> <eq_exp_tail> <rel_exp_tail> <log_exp_tail> 
+# <id_println_format_suffix> }
+SYNCH
 # <if_stmt> $
 SYNCH
 # <if_stmt> ;
@@ -1100,21 +1342,119 @@ SYNCH
 SYNCH
 # <pattern> }
 SYNCH
-# <println_args_list> ;
+# <println_args> ;
 SYNCH
-# <println_args_list> T_RP
+# <println_args> T_Decimal
+<println_args> -> <exp_non_string> 
+# <println_args> T_False
+<println_args> -> <exp_non_string> 
+# <println_args> T_Hexadecimal
+<println_args> -> <exp_non_string> 
+# <println_args> T_Id
+<println_args> -> <exp_non_string> 
+# <println_args> T_LB
+<println_args> -> <exp_non_string> 
+# <println_args> T_LOp_NOT
+<println_args> -> <exp_non_string> 
+# <println_args> T_LP
+<println_args> -> <exp_non_string> 
+# <println_args> T_RP
 SYNCH
-# <println_args_list> T_String
-<println_args_list> -> T_String <println_format_args> 
-# <println_args_list> }
+# <println_args> T_String
+<println_args> -> T_String <println_format_args_opt> 
+# <println_args> T_True
+<println_args> -> <exp_non_string> 
+# <println_args> }
 SYNCH
-# <println_format_args> ;
+# <println_format_arg_item> ;
 SYNCH
-# <println_format_args> T_Comma
-<println_format_args> -> T_Comma <exp_ls> 
-# <println_format_args> T_RP
-<println_format_args> -> eps 
-# <println_format_args> }
+# <println_format_arg_item> T_Comma
+SYNCH
+# <println_format_arg_item> T_Decimal
+<println_format_arg_item> -> <arg_item> 
+# <println_format_arg_item> T_False
+<println_format_arg_item> -> <arg_item> 
+# <println_format_arg_item> T_Hexadecimal
+<println_format_arg_item> -> <arg_item> 
+# <println_format_arg_item> T_Id
+<println_format_arg_item> -> <arg_item> 
+# <println_format_arg_item> T_LB
+<println_format_arg_item> -> <arg_item> 
+# <println_format_arg_item> T_LOp_NOT
+<println_format_arg_item> -> <arg_item> 
+# <println_format_arg_item> T_LP
+<println_format_arg_item> -> <arg_item> 
+# <println_format_arg_item> T_RP
+SYNCH
+# <println_format_arg_item> T_String
+<println_format_arg_item> -> <arg_item> 
+# <println_format_arg_item> T_True
+<println_format_arg_item> -> <arg_item> 
+# <println_format_arg_item> }
+SYNCH
+# <println_format_args_list> ;
+SYNCH
+# <println_format_args_list> T_Decimal
+<println_format_args_list> -> <println_format_arg_item> <println_format_args_list_tail> 
+# <println_format_args_list> T_False
+<println_format_args_list> -> <println_format_arg_item> <println_format_args_list_tail> 
+# <println_format_args_list> T_Hexadecimal
+<println_format_args_list> -> <println_format_arg_item> <println_format_args_list_tail> 
+# <println_format_args_list> T_Id
+<println_format_args_list> -> <println_format_arg_item> <println_format_args_list_tail> 
+# <println_format_args_list> T_LB
+<println_format_args_list> -> <println_format_arg_item> <println_format_args_list_tail> 
+# <println_format_args_list> T_LOp_NOT
+<println_format_args_list> -> <println_format_arg_item> <println_format_args_list_tail> 
+# <println_format_args_list> T_LP
+<println_format_args_list> -> <println_format_arg_item> <println_format_args_list_tail> 
+# <println_format_args_list> T_RP
+SYNCH
+# <println_format_args_list> T_String
+<println_format_args_list> -> <println_format_arg_item> <println_format_args_list_tail> 
+# <println_format_args_list> T_True
+<println_format_args_list> -> <println_format_arg_item> <println_format_args_list_tail> 
+# <println_format_args_list> }
+SYNCH
+# <println_format_args_list_tail> ;
+SYNCH
+# <println_format_args_list_tail> T_Comma
+<println_format_args_list_tail> -> T_Comma <println_format_arg_item> <println_format_args_list_tail> 
+# <println_format_args_list_tail> T_RP
+<println_format_args_list_tail> -> eps 
+# <println_format_args_list_tail> }
+SYNCH
+# <println_format_args_opt> ;
+SYNCH
+# <println_format_args_opt> T_Comma
+<println_format_args_opt> -> T_Comma <println_format_args_list> 
+# <println_format_args_opt> T_RP
+<println_format_args_opt> -> eps 
+# <println_format_args_opt> }
+SYNCH
+# <println_stmt> $
+SYNCH
+# <println_stmt> ;
+SYNCH
+# <println_stmt> T_Break
+SYNCH
+# <println_stmt> T_Continue
+SYNCH
+# <println_stmt> T_Id
+SYNCH
+# <println_stmt> T_If
+SYNCH
+# <println_stmt> T_Let
+SYNCH
+# <println_stmt> T_Loop
+SYNCH
+# <println_stmt> T_Print
+<println_stmt> -> T_Print T_LP <println_args> T_RP T_Semicolon 
+# <println_stmt> T_RC
+SYNCH
+# <println_stmt> T_Return
+SYNCH
+# <println_stmt> }
 SYNCH
 # <program> $
 <program> -> <func_ls> 
@@ -1175,6 +1515,30 @@ SYNCH
 # <rel_exp> T_True
 <rel_exp> -> <eq_exp> <rel_exp_tail> 
 # <rel_exp> }
+SYNCH
+# <rel_exp_non_string> ;
+SYNCH
+# <rel_exp_non_string> T_Decimal
+<rel_exp_non_string> -> <eq_exp_non_string> <rel_exp_tail> 
+# <rel_exp_non_string> T_False
+<rel_exp_non_string> -> <eq_exp_non_string> <rel_exp_tail> 
+# <rel_exp_non_string> T_Hexadecimal
+<rel_exp_non_string> -> <eq_exp_non_string> <rel_exp_tail> 
+# <rel_exp_non_string> T_Id
+<rel_exp_non_string> -> <eq_exp_non_string> <rel_exp_tail> 
+# <rel_exp_non_string> T_LB
+<rel_exp_non_string> -> <eq_exp_non_string> <rel_exp_tail> 
+# <rel_exp_non_string> T_LOp_NOT
+<rel_exp_non_string> -> <eq_exp_non_string> <rel_exp_tail> 
+# <rel_exp_non_string> T_LOp_OR
+SYNCH
+# <rel_exp_non_string> T_LP
+<rel_exp_non_string> -> <eq_exp_non_string> <rel_exp_tail> 
+# <rel_exp_non_string> T_RP
+SYNCH
+# <rel_exp_non_string> T_True
+<rel_exp_non_string> -> <eq_exp_non_string> <rel_exp_tail> 
+# <rel_exp_non_string> }
 SYNCH
 # <rel_exp_tail> ;
 SYNCH
@@ -1237,7 +1601,7 @@ SYNCH
 # <stmt> T_Loop
 <stmt> -> <loop_stmt> 
 # <stmt> T_Print
-<stmt> -> T_Print T_LP <println_args_list> T_RP T_Semicolon 
+<stmt> -> <println_stmt> 
 # <stmt> T_RC
 SYNCH
 # <stmt> T_Return

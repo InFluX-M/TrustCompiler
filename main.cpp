@@ -1,9 +1,11 @@
 #include "LexicalAnalyzer/lexical_analyzer.h"
 #include "SyntaxAnalyzer/syntax_analyzer.h"
+#include "SemanticAnalyzer/semantic_analyzer.h"
+
 #include <iostream>
 
 int main() {
-    std::string input_file = "Test/", output_file = "Output/", file;
+    std::string input_file = "/home/influx/TrustCompiler/Test/", output_file = "/home/influx/TrustCompiler/Output/", file;
 
     std::cout << "Enter the file name: ";
     std::cin >> file;
@@ -21,6 +23,9 @@ int main() {
     syn_analyzer.write();
 
     std::cout << "Syntax analysis completed successfully!" << std::endl;
+
+    SemanticAnalyzer sem_analyzer(syn_analyzer.get_tree(), output_file + file + ".sem");
+    sem_analyzer.dfs(syn_analyzer.get_tree().get_root());
 
     return SUCCESS;
 }

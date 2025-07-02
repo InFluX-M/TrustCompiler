@@ -9,11 +9,14 @@ add_executable(TrustCompiler
         main.cpp
         LexicalAnalyzer/lexical_analyzer.cpp
         utils.h
-        SyntaxAnalyzer/syntax_analyzer.cpp)
+        SyntaxAnalyzer/syntax_analyzer.cpp
+        SemanticAnalyzer/semantic_analyzer.cpp
+        )
 
 include_directories(
         .
         LexicalAnalyzer
         SyntaxAnalyzer
+        SemanticAnalyzer
 )
 
