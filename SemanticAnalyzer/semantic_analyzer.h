@@ -25,6 +25,7 @@ class SymbolTableEntry {
         SymbolTableEntry() {
             type = NONE;
         }
+        
         SymbolTableEntry(id_type _type) {
             type = _type;
             stype = VOID;
@@ -48,7 +49,7 @@ class SymbolTableEntry {
         void set_name(std::string _name) {
             name = std::move(_name);
         }
-        std::string get_name() {
+        std::string get_name() const {
             return name;
         }
         void set_type(id_type _type) {
@@ -104,7 +105,7 @@ class SemanticAnalyzer {
         std::string out_address;
         Tree<Symbol> parse_tree;
 
-        std::map<std::string, std::vector<SymbolTableEntry>> symbol_table;
+        std::map<std::string, std::map<std::string, SymbolTableEntry>> symbol_table;
 
         int def_area;
         std::string current_func;

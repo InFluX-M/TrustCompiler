@@ -25,7 +25,17 @@
                   │        │        │        │                          ├── T_Id
                   │        │        │        │                          │        └── 'z'
                   │        │        │        │                          └── <id_ls_tail>
-                  │        │        │        │                                   └── eps
+                  │        │        │        │                                   ├── T_Comma
+                  │        │        │        │                                   │        └── ','
+                  │        │        │        │                                   ├── T_Id
+                  │        │        │        │                                   │        └── 'u'
+                  │        │        │        │                                   └── <id_ls_tail>
+                  │        │        │        │                                            ├── T_Comma
+                  │        │        │        │                                            │        └── ','
+                  │        │        │        │                                            ├── T_Id
+                  │        │        │        │                                            │        └── 'v'
+                  │        │        │        │                                            └── <id_ls_tail>
+                  │        │        │        │                                                     └── eps
                   │        │        │        └── T_RP
                   │        │        │                 └── ')'
                   │        │        ├── <type_opt>
@@ -42,28 +52,16 @@
                   │        │        │                 │                 ├── T_Comma
                   │        │        │                 │                 │        └── ','
                   │        │        │                 │                 ├── <type>
-                  │        │        │                 │                 │        └── T_Bool
-                  │        │        │                 │                 │                 └── 'bool'
+                  │        │        │                 │                 │        └── T_Int
+                  │        │        │                 │                 │                 └── 'i32'
                   │        │        │                 │                 └── <type_ls_tail>
                   │        │        │                 │                          ├── T_Comma
                   │        │        │                 │                          │        └── ','
                   │        │        │                 │                          ├── <type>
-                  │        │        │                 │                          │        └── T_Int
-                  │        │        │                 │                          │                 └── 'i32'
+                  │        │        │                 │                          │        └── T_Bool
+                  │        │        │                 │                          │                 └── 'bool'
                   │        │        │                 │                          └── <type_ls_tail>
-                  │        │        │                 │                                   ├── T_Comma
-                  │        │        │                 │                                   │        └── ','
-                  │        │        │                 │                                   ├── <type>
-                  │        │        │                 │                                   │        └── T_Int
-                  │        │        │                 │                                   │                 └── 'i32'
-                  │        │        │                 │                                   └── <type_ls_tail>
-                  │        │        │                 │                                            ├── T_Comma
-                  │        │        │                 │                                            │        └── ','
-                  │        │        │                 │                                            ├── <type>
-                  │        │        │                 │                                            │        └── T_Bool
-                  │        │        │                 │                                            │                 └── 'bool'
-                  │        │        │                 │                                            └── <type_ls_tail>
-                  │        │        │                 │                                                     └── eps
+                  │        │        │                 │                                   └── eps
                   │        │        │                 └── T_RP
                   │        │        │                          └── ')'
                   │        │        └── <assign_opt>
@@ -71,4 +69,56 @@
                   │        └── T_Semicolon
                   │                 └── ';'
                   └── <stmt_ls>
-                           └── eps
+                           ├── <stmt>
+                           │        ├── <var_declaration>
+                           │        │        ├── T_Let
+                           │        │        │        └── 'let'
+                           │        │        ├── <mut_opt>
+                           │        │        │        └── eps
+                           │        │        ├── <pattern>
+                           │        │        │        └── T_Id
+                           │        │        │                 └── 'p'
+                           │        │        ├── <type_opt>
+                           │        │        │        └── eps
+                           │        │        └── <assign_opt>
+                           │        │                 ├── T_Assign
+                           │        │                 │        └── '='
+                           │        │                 └── <exp>
+                           │        │                          └── <log_exp>
+                           │        │                                   ├── <rel_exp>
+                           │        │                                   │        ├── <eq_exp>
+                           │        │                                   │        │        ├── <cmp_exp>
+                           │        │                                   │        │        │        ├── <arith_exp>
+                           │        │                                   │        │        │        │        ├── <arith_term>
+                           │        │                                   │        │        │        │        │        ├── <arith_factor>
+                           │        │                                   │        │        │        │        │        │        ├── T_Id
+                           │        │                                   │        │        │        │        │        │        │        └── 'x'
+                           │        │                                   │        │        │        │        │        │        └── <fac_id_opt>
+                           │        │                                   │        │        │        │        │        │                 └── eps
+                           │        │                                   │        │        │        │        │        └── <arith_term_tail>
+                           │        │                                   │        │        │        │        │                 └── eps
+                           │        │                                   │        │        │        │        └── <arith_exp_tail>
+                           │        │                                   │        │        │        │                 ├── T_AOp_Trust
+                           │        │                                   │        │        │        │                 │        └── '+'
+                           │        │                                   │        │        │        │                 ├── <arith_term>
+                           │        │                                   │        │        │        │                 │        ├── <arith_factor>
+                           │        │                                   │        │        │        │                 │        │        ├── T_Id
+                           │        │                                   │        │        │        │                 │        │        │        └── 'k'
+                           │        │                                   │        │        │        │                 │        │        └── <fac_id_opt>
+                           │        │                                   │        │        │        │                 │        │                 └── eps
+                           │        │                                   │        │        │        │                 │        └── <arith_term_tail>
+                           │        │                                   │        │        │        │                 │                 └── eps
+                           │        │                                   │        │        │        │                 └── <arith_exp_tail>
+                           │        │                                   │        │        │        │                          └── eps
+                           │        │                                   │        │        │        └── <cmp_exp_suf>
+                           │        │                                   │        │        │                 └── eps
+                           │        │                                   │        │        └── <eq_exp_tail>
+                           │        │                                   │        │                 └── eps
+                           │        │                                   │        └── <rel_exp_tail>
+                           │        │                                   │                 └── eps
+                           │        │                                   └── <log_exp_tail>
+                           │        │                                            └── eps
+                           │        └── T_Semicolon
+                           │                 └── ';'
+                           └── <stmt_ls>
+                                    └── eps
