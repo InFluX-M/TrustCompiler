@@ -820,44 +820,8 @@ SYNCH
 SYNCH
 # <exp_ls_after_first_item> ;
 SYNCH
-# <exp_ls_after_first_item> T_AOp_DV
-SYNCH
-# <exp_ls_after_first_item> T_AOp_ML
-SYNCH
-# <exp_ls_after_first_item> T_AOp_MN
-SYNCH
-# <exp_ls_after_first_item> T_AOp_RM
-SYNCH
-# <exp_ls_after_first_item> T_AOp_Trust
-SYNCH
-# <exp_ls_after_first_item> T_Assign
-SYNCH
 # <exp_ls_after_first_item> T_Comma
 <exp_ls_after_first_item> -> T_Comma <exp_ls> T_RP 
-# <exp_ls_after_first_item> T_LC
-SYNCH
-# <exp_ls_after_first_item> T_LOp_AND
-SYNCH
-# <exp_ls_after_first_item> T_LOp_OR
-SYNCH
-# <exp_ls_after_first_item> T_RB
-SYNCH
-# <exp_ls_after_first_item> T_ROp_E
-SYNCH
-# <exp_ls_after_first_item> T_ROp_G
-SYNCH
-# <exp_ls_after_first_item> T_ROp_GE
-SYNCH
-# <exp_ls_after_first_item> T_ROp_L
-SYNCH
-# <exp_ls_after_first_item> T_ROp_LE
-SYNCH
-# <exp_ls_after_first_item> T_ROp_NE
-SYNCH
-# <exp_ls_after_first_item> T_RP
-SYNCH
-# <exp_ls_after_first_item> T_Semicolon
-SYNCH
 # <exp_ls_after_first_item> }
 SYNCH
 # <exp_ls_arr> ;
@@ -1291,7 +1255,7 @@ SYNCH
 # <lpar_exp_suf> T_Assign
 SYNCH
 # <lpar_exp_suf> T_Comma
-<lpar_exp_suf> -> <exp_ls_after_first_item> 
+<lpar_exp_suf> -> T_Comma <pure_exp_ls> T_RP 
 # <lpar_exp_suf> T_LC
 SYNCH
 # <lpar_exp_suf> T_LOp_AND
@@ -1479,6 +1443,38 @@ SYNCH
 # <program> T_Return
 <program> -> <func_ls> 
 # <program> }
+SYNCH
+# <pure_exp_ls> ;
+SYNCH
+# <pure_exp_ls> T_Decimal
+<pure_exp_ls> -> <exp> <pure_exp_ls_tail> 
+# <pure_exp_ls> T_False
+<pure_exp_ls> -> <exp> <pure_exp_ls_tail> 
+# <pure_exp_ls> T_Hexadecimal
+<pure_exp_ls> -> <exp> <pure_exp_ls_tail> 
+# <pure_exp_ls> T_Id
+<pure_exp_ls> -> <exp> <pure_exp_ls_tail> 
+# <pure_exp_ls> T_LB
+<pure_exp_ls> -> <exp> <pure_exp_ls_tail> 
+# <pure_exp_ls> T_LOp_NOT
+<pure_exp_ls> -> <exp> <pure_exp_ls_tail> 
+# <pure_exp_ls> T_LP
+<pure_exp_ls> -> <exp> <pure_exp_ls_tail> 
+# <pure_exp_ls> T_RP
+<pure_exp_ls> -> eps 
+# <pure_exp_ls> T_String
+<pure_exp_ls> -> <exp> <pure_exp_ls_tail> 
+# <pure_exp_ls> T_True
+<pure_exp_ls> -> <exp> <pure_exp_ls_tail> 
+# <pure_exp_ls> }
+SYNCH
+# <pure_exp_ls_tail> ;
+SYNCH
+# <pure_exp_ls_tail> T_Comma
+<pure_exp_ls_tail> -> T_Comma <exp> <pure_exp_ls_tail> 
+# <pure_exp_ls_tail> T_RP
+<pure_exp_ls_tail> -> eps 
+# <pure_exp_ls_tail> }
 SYNCH
 # <rel_exp> ;
 SYNCH

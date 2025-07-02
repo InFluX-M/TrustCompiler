@@ -9,6 +9,7 @@ enum id_type {
     NONE
 };
 
+
 class SymbolTableEntry {
     private:
         std::string name;

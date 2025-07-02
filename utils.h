@@ -29,11 +29,21 @@ const std::string RED = COLORED_ERRORS ? "\033[0;31m" : "";
 const std::string GREEN = COLORED_ERRORS ? "\033[0;32m" : "";
 const std::string YELLOW = COLORED_ERRORS ? "\033[0;33m" : "";
 
+enum exp_type {
+    TYPE_INT,        // numbers, arithmetic ops
+    TYPE_BOOL,       // logical/comparison ops
+    TYPE_STRING,     // string literals, string vars
+    TYPE_ARRAY,      // literal arrays
+    TYPE_TUPLE,      // tuple literals
+    TYPE_FUNCTION,   // function identifiers (not the call result!)
+    TYPE_UNKNOWN,    // error, untyped, or deferred inference
+    TYPE_VOID,
+};
+
 enum semantic_type {
     VOID,
     INT,
     BOOL,
-    CHAR,
     ARRAY,
     TUPLE
 };
@@ -239,6 +249,7 @@ private:
     semantic_type stype;
     std::vector<semantic_type> params_type;
     std::string val;
+    exp_type exp_t;
 
 public:
     Symbol() {}
@@ -304,6 +315,14 @@ public:
     }
     std::string get_val() {
         return val;
+    }
+
+    void set_exp_type(exp_type _exp_t) {
+        exp_t = _exp_t;
+    }
+
+    exp_type get_exp_type() const {
+        return exp_t;
     }
 
     bool operator==(const Symbol &other) const {
