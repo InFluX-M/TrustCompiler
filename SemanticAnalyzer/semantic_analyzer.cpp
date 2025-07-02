@@ -97,7 +97,7 @@ void SemanticAnalyzer::dfs(Node<Symbol>* node) {
         for (int i = 0; i < names.size(); i++) {
             SymbolTableEntry x(VAR);
             x.set_name(names[i]);
-            x.set_mut(children[1]->get_children().empty() ? false : true);
+            x.set_mut(children[1]->get_children()[0]->get_data().get_name() == "eps" ? false : true);
             x.set_def_area(def_area);
             
             symbol_table[current_func][names[i]] = x;
@@ -171,7 +171,23 @@ void SemanticAnalyzer::dfs(Node<Symbol>* node) {
                 }
             }
         }
-    } else {
+    } else if (head_name == "stmt_after_id") {
+        if (children.size() != 3) {
+            // assign new value to a var or array member
+            std::string name = node->get_parent()->get_children()[0]->get_data().get_content();
+            if (!symbol_table[current_func][name].get_mut()) {
+                std::cerr << RED 
+                        << "Semantic Error [Line " << line_number << "]: "
+                        << "Cannot assign to immutable variable '" << name << "'.\n"
+                        << "  - This variable was not declared as mutable (e.g., 'let mut " << name << "').\n"
+                        << "  - To allow mutation, declare the variable with the 'mut' keyword.\n"
+                        << WHITE << std::endl;
+                std::cerr << "----------------------------------------------------------------" << std::endl;
+                num_errors++;
+            }
+        }
+    }    
+    else {
         for (auto child : children) {
             dfs(child);
         }

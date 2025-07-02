@@ -1,2 +1,2 @@
-let mut (x, y, z, u, v) : (i32, i32, bool);
-let p = x + k;
+let x : [i32 ; 20];
+x[0] = 70;
