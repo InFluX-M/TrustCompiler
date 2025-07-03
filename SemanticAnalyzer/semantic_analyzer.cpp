@@ -246,7 +246,11 @@ void SemanticAnalyzer::dfs(Node<Symbol>* node) {
         }
     }
 
-    if (head_name == "T_Int") {
+    if (head_name == "program") {
+    } else if (head_name == "func_ls") {
+    } else if (head_name == "stmt_ls") {
+    } else if (head_name == "stmt") {
+    } else if (head_name == "T_Int") {
         symbol.set_stype(INT);
     } else if (head_name == "T_Bool") {
         symbol.set_stype(BOOL);
@@ -353,7 +357,8 @@ void SemanticAnalyzer::dfs(Node<Symbol>* node) {
         } else if (children[0]->get_data().get_name() == "T_LP") {
             if (children[1]->get_children()[1]->get_children()[0]->get_data().get_name() == "T_RP") {
                 // parentheses
-                symbol.set_exp_type(children[1]->get_children()[1]->get_children()[0]->get_data().get_exp_type());
+                exp_type tmp = children[1]->get_children()[0]->get_data().get_exp_type();
+                symbol.set_exp_type(tmp);
             } else if (children[1]->get_children()[1]->get_children()[0]->get_data().get_name() == "T_Comma") {
                 // tuple
                 symbol.set_exp_type(TYPE_TUPLE);
@@ -416,7 +421,18 @@ void SemanticAnalyzer::dfs(Node<Symbol>* node) {
                 num_errors++;
             }
         }
-    } 
+    } else if (head_name == "if_stmt") {
+        if (children[1]->get_data().get_exp_type() != TYPE_BOOL) {
+            std::cerr << RED 
+                    << "Semantic Error [Line " << line_number << "]: "
+                    << "Condition in 'if' statement must be of type 'bool'.\n"
+                    << "  - The expression used in the condition is not a boolean expression.\n"
+                    << "  - Ensure the condition evaluates to a boolean value (true or false).\n"
+                    << WHITE << std::endl;
+            std::cerr << "----------------------------------------------------------------" << std::endl;
+            num_errors++;
+        }
+    }
 
 }
 
