@@ -45,14 +45,17 @@ enum semantic_type {
     INT,
     BOOL,
     ARRAY,
-    TUPLE
+    TUPLE,
+    UNK
 };
 
 const std::string semantic_type_to_string[] = {
     "void",
     "int",
     "bool",
-    "char"
+    "array",
+    "tuple",
+    "unk"
 };
 
 enum token_type {
@@ -248,6 +251,7 @@ private:
     std::string content;
     semantic_type stype;
     std::vector<semantic_type> params_type;
+    std::vector<semantic_type> tuple_types;
     std::string val;
     exp_type exp_t;
 
@@ -299,6 +303,7 @@ public:
     semantic_type get_stype() const {
         return stype;
     }
+
     void add_to_params_type(semantic_type _stype) {
         params_type.push_back(_stype);
     }
@@ -310,6 +315,19 @@ public:
     std::vector<semantic_type>& get_params_type() {
         return params_type;
     }
+
+    void add_to_tuple_types(semantic_type _stype) {
+        tuple_types.push_back(_stype);
+    }
+    void add_to_tuple_types(std::vector<semantic_type> &_tuple_types) {
+        for (auto _stype : _tuple_types) {
+            tuple_types.push_back(_stype);
+        }
+    }
+    std::vector<semantic_type>& get_tuple_types() {
+        return tuple_types;
+    }
+
     void set_val(std::string _val) {
         val = _val;
     }

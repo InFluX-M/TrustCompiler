@@ -1,4 +1,4 @@
-let x = (4 - (3 + 1));
-if x || (32 + 2 == 34) {
-
+fn add() -> () {
+    let x = (2, 4, true);
+    return x;
 }

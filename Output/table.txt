@@ -1019,7 +1019,7 @@ SYNCH
 # <func> T_Continue
 SYNCH
 # <func> T_Fn
-<func> -> T_Fn T_Id T_LP <func_args> T_RP <func_type> T_LC <stmt_ls> T_RC 
+<func> -> T_Fn T_Id T_LP <func_args> T_RP <func_type> T_LC <stmt_ls> <return_stmt> T_RC 
 # <func> T_Id
 SYNCH
 # <func> T_If
@@ -1029,8 +1029,6 @@ SYNCH
 # <func> T_Loop
 SYNCH
 # <func> T_Print
-SYNCH
-# <func> T_Return
 SYNCH
 # <func> }
 SYNCH
@@ -1069,8 +1067,6 @@ SYNCH
 # <func_ls> T_Loop
 <func_ls> -> <stmt_ls> 
 # <func_ls> T_Print
-<func_ls> -> <stmt_ls> 
-# <func_ls> T_Return
 <func_ls> -> <stmt_ls> 
 # <func_ls> }
 SYNCH
@@ -1292,6 +1288,28 @@ SYNCH
 <mut_opt> -> T_Mut 
 # <mut_opt> }
 SYNCH
+# <opt_dec> ;
+SYNCH
+# <opt_dec> T_Decimal
+<opt_dec> -> T_Decimal 
+# <opt_dec> T_RB
+<opt_dec> -> eps 
+# <opt_dec> }
+SYNCH
+# <opt_type> ;
+SYNCH
+# <opt_type> T_Bool
+<opt_type> -> T_Bool 
+# <opt_type> T_Int
+<opt_type> -> T_Int 
+# <opt_type> T_LB
+<opt_type> -> T_LB <opt_type> T_Semicolon <opt_dec> T_RB 
+# <opt_type> T_LP
+<opt_type> -> T_LP <type_ls> T_RP 
+# <opt_type> T_Semicolon
+<opt_type> -> eps 
+# <opt_type> }
+SYNCH
 # <pattern> ;
 SYNCH
 # <pattern> T_Assign
@@ -1440,8 +1458,6 @@ SYNCH
 <program> -> <func_ls> 
 # <program> T_Print
 <program> -> <func_ls> 
-# <program> T_Return
-<program> -> <func_ls> 
 # <program> }
 SYNCH
 # <pure_exp_ls> ;
@@ -1556,26 +1572,10 @@ SYNCH
 <rel_exp_tail> -> eps 
 # <rel_exp_tail> }
 SYNCH
-# <return_stmt> $
-SYNCH
 # <return_stmt> ;
 SYNCH
-# <return_stmt> T_Break
-SYNCH
-# <return_stmt> T_Continue
-SYNCH
-# <return_stmt> T_Id
-SYNCH
-# <return_stmt> T_If
-SYNCH
-# <return_stmt> T_Let
-SYNCH
-# <return_stmt> T_Loop
-SYNCH
-# <return_stmt> T_Print
-SYNCH
 # <return_stmt> T_RC
-SYNCH
+<return_stmt> -> eps 
 # <return_stmt> T_Return
 <return_stmt> -> T_Return <exp> T_Semicolon 
 # <return_stmt> }
@@ -1601,7 +1601,7 @@ SYNCH
 # <stmt> T_RC
 SYNCH
 # <stmt> T_Return
-<stmt> -> <return_stmt> 
+SYNCH
 # <stmt> }
 SYNCH
 # <stmt_after_id> ;
@@ -1637,7 +1637,7 @@ SYNCH
 # <stmt_ls> T_RC
 <stmt_ls> -> eps 
 # <stmt_ls> T_Return
-<stmt_ls> -> <stmt> <stmt_ls> 
+<stmt_ls> -> eps 
 # <stmt_ls> }
 SYNCH
 # <type> ;
@@ -1651,7 +1651,7 @@ SYNCH
 # <type> T_Int
 <type> -> T_Int 
 # <type> T_LB
-<type> -> T_LB <type> T_Semicolon T_Decimal T_RB 
+<type> -> T_LB <opt_type> T_Semicolon <opt_dec> T_RB 
 # <type> T_LC
 SYNCH
 # <type> T_LP
@@ -1673,7 +1673,7 @@ SYNCH
 # <type_ls> T_LP
 <type_ls> -> <type> <type_ls_tail> 
 # <type_ls> T_RP
-SYNCH
+<type_ls> -> eps 
 # <type_ls> }
 SYNCH
 # <type_ls_tail> ;

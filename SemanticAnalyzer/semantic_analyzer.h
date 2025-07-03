@@ -16,6 +16,7 @@ class SymbolTableEntry {
         id_type type;
         semantic_type stype;
         std::vector<std::pair<std::string, semantic_type>> parameters;
+        std::vector<semantic_type> tuple_types;
         int def_area;
         bool mut;
 
@@ -29,15 +30,15 @@ class SymbolTableEntry {
         
         SymbolTableEntry(id_type _type) {
             type = _type;
-            stype = VOID;
+            stype = UNK;
             def_area = 0;
             mut = false;
             arr_len = 0;
-            arr_type = VOID;
+            arr_type = UNK;
         }
 
         SymbolTableEntry(id_type _type, semantic_type _stype, int _def_area, bool _mut = false, 
-                         int _arr_len = 0, semantic_type _arr_type = VOID) {
+                         int _arr_len = 0, semantic_type _arr_type = UNK) {
             type = _type;
             stype = _stype;
             def_area = _def_area;
@@ -71,6 +72,19 @@ class SymbolTableEntry {
         std::vector<std::pair<std::string, semantic_type>>& get_parameters() {
             return parameters;
         }
+
+        void add_to_tuple_types(semantic_type _stype) {
+            tuple_types.push_back(_stype);
+        }
+        void add_to_tuple_types(std::vector<semantic_type> &_tuple_types) {
+            for (auto _stype : _tuple_types) {
+                tuple_types.push_back(_stype);
+            }
+        }
+        std::vector<semantic_type>& get_tuple_types() {
+            return tuple_types;
+        }
+
         void set_def_area(int _def_area) {
             def_area = _def_area;
         }
