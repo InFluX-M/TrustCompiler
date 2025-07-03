@@ -162,7 +162,7 @@ void SemanticAnalyzer::dfs(Node<Symbol>* node) {
                     int children_size_type = children[3]->get_children()[1]->get_children().size();
                     if (children_size_type == 5) {
                         symbol_table[current_func][names[0]].set_stype(ARRAY);
-                        symbol_table[current_func][names[0]].set_arr_len(stoi(children[3]->get_children()[1]->get_children()[3]->get_data().get_content()));
+                        symbol_table[current_func][names[0]].set_arr_len(stoi(children[3]->get_children()[1]->get_children()[3]->get_children()[0]->get_data().get_content()));
                         symbol_table[current_func][names[0]].set_arr_type((children[3]->get_children()[1]->get_children()[1]->get_children()[0]->get_data().get_name() == "T_Int") ? INT : BOOL);
                     } else if (children_size_type == 3) {
                         symbol_table[current_func][names[0]].set_stype(TUPLE);
@@ -392,8 +392,6 @@ void SemanticAnalyzer::dfs(Node<Symbol>* node) {
         }
 
     } else if (head_name == "log_exp" or head_name == "rel_exp" or head_name == "eq_exp" or head_name == "cmp_exp") {
-        
-        
         if (children[1]->get_children()[0]->get_data().get_name() != "eps") {
             symbol.set_exp_type(TYPE_BOOL);
         } else {
@@ -517,7 +515,6 @@ void SemanticAnalyzer::dfs(Node<Symbol>* node) {
                             << WHITE << std::endl;
                     std::cerr << "----------------------------------------------------------------" << std::endl;
                     num_errors++;
-                    return;
                 } else {
                     symbol_table[current_func][name].set_stype(stp);
                 }
@@ -530,6 +527,54 @@ void SemanticAnalyzer::dfs(Node<Symbol>* node) {
                         << WHITE << std::endl;
                 std::cerr << "----------------------------------------------------------------" << std::endl;
                 num_errors++;
+            }
+
+            if (children.size() == 2) {
+                semantic_type stp = exp_t_to_semantic_type(children[1]->get_data().get_exp_type());
+
+                if (stp == UNK) {
+                    std::cerr << RED 
+                            << "Semantic Error [Line " << line_number << "]: "
+                            << "Unable to infer type for variable '" << name << "' from the assigned expression.\n"
+                            << "  - The expression has an unsupported or unknown type.\n"
+                            << "  - Ensure the expression is valid and has a type like int, bool, array, or tuple.\n"
+                            << WHITE << std::endl;
+                    std::cerr << "----------------------------------------------------------------" << std::endl;
+                    num_errors++;
+                } else if (stp != symbol_table[current_func][name].get_stype()) {
+                    std::cerr << RED 
+                            << "Semantic Error [Line " << line_number << "]: "
+                            << "Type mismatch for variable '" << name << "'.\n"
+                            << "  - Expected type '" << semantic_type_to_string[symbol_table[current_func][name].get_stype()] 
+                            << "' but got type '" << semantic_type_to_string[stp] << "'.\n"
+                            << "  - Ensure the assigned value matches the variable's declared type.\n"
+                            << WHITE << std::endl;
+                    std::cerr << "----------------------------------------------------------------" << std::endl;
+                    num_errors++;
+                }
+            } else {
+                semantic_type stp = exp_t_to_semantic_type(children[4]->get_data().get_exp_type());
+
+                if (stp == UNK) {
+                    std::cerr << RED 
+                            << "Semantic Error [Line " << line_number << "]: "
+                            << "Unable to infer type for variable '" << name << "' from the assigned expression.\n"
+                            << "  - The expression has an unsupported or unknown type.\n"
+                            << "  - Ensure the expression is valid and has a type like int, bool, array, or tuple.\n"
+                            << WHITE << std::endl;
+                    std::cerr << "----------------------------------------------------------------" << std::endl;
+                    num_errors++;
+                } else if (stp != symbol_table[current_func][name].get_stype()) {
+                    std::cerr << RED 
+                            << "Semantic Error [Line " << line_number << "]: "
+                            << "Type mismatch for variable '" << name << "'.\n"
+                            << "  - Expected type '" << semantic_type_to_string[symbol_table[current_func][name].get_arr_type()] 
+                            << "' but got type '" << semantic_type_to_string[stp] << "'.\n"
+                            << "  - Ensure the assigned value matches the variable's declared type.\n"
+                            << WHITE << std::endl;
+                    std::cerr << "----------------------------------------------------------------" << std::endl;
+                    num_errors++;
+                }
             }
         }
     } else if (head_name == "if_stmt") {
