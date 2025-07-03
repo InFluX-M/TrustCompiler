@@ -284,6 +284,8 @@ void SemanticAnalyzer::dfs(Node<Symbol>* node) {
         }
 
     } else if (head_name == "log_exp" or head_name == "rel_exp" or head_name == "eq_exp" or head_name == "cmp_exp") {
+        
+        
         if (children[1]->get_children()[0]->get_data().get_name() != "eps") {
             symbol.set_exp_type(TYPE_BOOL);
         } else {
@@ -432,8 +434,106 @@ void SemanticAnalyzer::dfs(Node<Symbol>* node) {
             std::cerr << "----------------------------------------------------------------" << std::endl;
             num_errors++;
         }
-    }
+    } else if (head_name == "log_exp_tail" or head_name == "rel_exp_tail") {
+        if (children[0]->get_data().get_name() != "eps") {
+            semantic_type stp_l = exp_t_to_semantic_type(node->get_parent()->get_children()[0]->get_data().get_exp_type());
+            semantic_type stp_r = exp_t_to_semantic_type(children[1]->get_data().get_exp_type());
+            
+            // error for logical operate, operand is boolean
+            if (stp_l != BOOL) {
+                std::cerr << RED 
+                        << "Semantic Error [Line " << line_number << "]: "
+                        << "Left operand of logical operator must be of type 'bool'.\n"
+                        << "  - The left operand has type '" << semantic_type_to_string[stp_l] << "' which is not boolean.\n"
+                        << "  - Ensure the left operand is a boolean expression (true or false).\n"
+                        << WHITE << std::endl;
+                std::cerr << "----------------------------------------------------------------" << std::endl;
+                num_errors++;
+            }
 
+            if (stp_r != BOOL) {
+                std::cerr << RED 
+                        << "Semantic Error [Line " << line_number << "]: "
+                        << "Right operand of logical operator must be of type 'bool'.\n"
+                        << "  - The right operand has type '" << semantic_type_to_string[stp_r] << "' which is not boolean.\n"
+                        << "  - Ensure the right operand is a boolean expression (true or false).\n"
+                        << WHITE << std::endl;
+                std::cerr << "----------------------------------------------------------------" << std::endl;
+                num_errors++;
+            }
+        }
+    } else if (head_name == "eq_exp_tail") {
+        if (children[0]->get_data().get_name() != "eps") {
+            semantic_type stp_l = exp_t_to_semantic_type(node->get_parent()->get_children()[0]->get_data().get_exp_type());
+            semantic_type stp_r = exp_t_to_semantic_type(children[1]->get_data().get_exp_type());
+
+            if (stp_l != stp_r) {
+                std::cerr << RED 
+                        << "Semantic Error [Line " << line_number << "]: "
+                        << "Operands of equality operator must have the same type.\n"
+                        << "  - Left operand has type '" << semantic_type_to_string[stp_l] 
+                        << "' and right operand has type '" << semantic_type_to_string[stp_r] << "'.\n"
+                        << "  - Ensure both operands are of the same type for comparison.\n"
+                        << WHITE << std::endl;
+                std::cerr << "----------------------------------------------------------------" << std::endl;
+                num_errors++;
+            }
+        }
+    } else if (head_name == "cmp_exp_suf") {
+        if (children[0]->get_data().get_name() != "eps") {
+            semantic_type stp_l = exp_t_to_semantic_type(node->get_parent()->get_children()[0]->get_data().get_exp_type());
+            semantic_type stp_r = exp_t_to_semantic_type(children[1]->get_data().get_exp_type());
+
+            if (stp_l != INT) {
+                std::cerr << RED 
+                        << "Semantic Error [Line " << line_number << "]: "
+                        << "Left operand of comparison operator must be of type 'int'.\n"
+                        << "  - The left operand has type '" << semantic_type_to_string[stp_l] << "' which is not integer.\n"
+                        << "  - Ensure the left operand is an integer expression.\n"
+                        << WHITE << std::endl;
+                std::cerr << "----------------------------------------------------------------" << std::endl;
+                num_errors++;
+            }
+
+            if (stp_r != INT) {
+                std::cerr << RED 
+                        << "Semantic Error [Line " << line_number << "]: "
+                        << "Right operand of comparison operator must be of type 'int'.\n"
+                        << "  - The right operand has type '" << semantic_type_to_string[stp_r] << "' which is not integer.\n"
+                        << "  - Ensure the right operand is an integer expression.\n"
+                        << WHITE << std::endl;
+                std::cerr << "----------------------------------------------------------------" << std::endl;
+                num_errors++;
+            }
+        }
+    } else if (head_name == "arith_exp_tail" or head_name == "arith_term_tail") {
+        if (children[0]->get_data().get_name() != "eps") {
+            semantic_type stp_l = exp_t_to_semantic_type(node->get_parent()->get_children()[0]->get_data().get_exp_type());
+            semantic_type stp_r = exp_t_to_semantic_type(children[1]->get_data().get_exp_type());
+
+            if (stp_l != INT) {
+                std::cerr << RED 
+                        << "Semantic Error [Line " << line_number << "]: "
+                        << "Left operand of arithmetic operator must be of type 'int'.\n"
+                        << "  - The left operand has type '" << semantic_type_to_string[stp_l] << "' which is not integer.\n"
+                        << "  - Ensure the left operand is an integer expression.\n"
+                        << WHITE << std::endl;
+                std::cerr << "----------------------------------------------------------------" << std::endl;
+                num_errors++;
+            }
+
+            if (stp_r != INT) {
+                std::cerr << RED 
+                        << "Semantic Error [Line " << line_number << "]: "
+                        << "Right operand of arithmetic operator must be of type 'int'.\n"
+                        << "  - The right operand has type '" << semantic_type_to_string[stp_r] << "' which is not integer.\n"
+                        << "  - Ensure the right operand is an integer expression.\n"
+                        << WHITE << std::endl;
+                std::cerr << "----------------------------------------------------------------" << std::endl;
+                num_errors++;
+            }
+        }
+    }
 }
 
 SemanticAnalyzer::SemanticAnalyzer(Tree<Symbol> _parse_tree, std::string output_file_name) {

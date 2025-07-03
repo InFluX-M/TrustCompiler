@@ -13,7 +13,13 @@
 < type: T_Semicolon, line: 1, content: ; >
 < type: T_If, line: 2, content: if >
 < type: T_Id, line: 2, content: x >
+< type: T_LOp_OR, line: 2, content: || >
+< type: T_LP, line: 2, content: ( >
+< type: T_Decimal, line: 2, content: 32 >
 < type: T_AOp_Trust, line: 2, content: + >
-< type: T_Decimal, line: 2, content: 3 >
+< type: T_Decimal, line: 2, content: 2 >
+< type: T_ROp_E, line: 2, content: == >
+< type: T_Decimal, line: 2, content: 34 >
+< type: T_RP, line: 2, content: ) >
 < type: T_LC, line: 2, content: { >
 < type: T_RC, line: 4, content: } >
