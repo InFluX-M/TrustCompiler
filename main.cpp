@@ -25,7 +25,8 @@ int main() {
     std::cout << "Syntax analysis completed successfully!" << std::endl;
 
     SemanticAnalyzer sem_analyzer(syn_analyzer.get_tree(), output_file + file + ".sem");
-    sem_analyzer.dfs(syn_analyzer.get_tree().get_root());
+    // sem_analyzer.dfs(syn_analyzer.get_tree().get_root());
+    sem_analyzer.analyse();
 
     std::cout << "Semantic analysis completed successfully!" << std::endl;
 
