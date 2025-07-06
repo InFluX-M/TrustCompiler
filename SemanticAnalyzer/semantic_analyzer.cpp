@@ -164,7 +164,7 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
         for (const auto &name: names) {
             if (symbol_table[current_func].count(name) && symbol_table[current_func][name].get_def_area() == def_area) {
                 std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
-                          << "Identifier '" << name << "' is already defined in this scope.\n" << WHITE << std::endl;
+                          << "Identifier '" << name << "' is already defined in this scope." << WHITE << std::endl;
                 std::cerr << "----------------------------------------------------------------" << std::endl;
                 num_errors++;
             } else {
