@@ -464,6 +464,16 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                     num_errors++;
                     symbol.set_exp_type(TYPE_UNKNOWN);
                 } else {
+                    Node<Symbol> *index_exp_node = fac_id_opt->get_children()[1];
+                    if (index_exp_node->get_data().get_exp_type() != TYPE_INT) {
+                        std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
+                                  << "Array index must be of type 'i32'.\n"
+                                  << "  - The provided index for array '" << id_name << "' is not an integer.\n"
+                                  << WHITE << std::endl;
+                        std::cerr << "----------------------------------------------------------------" << std::endl;
+                        num_errors++;
+                    }
+
                     semantic_type arr_elem_type = symbol_table[current_func][id_name].get_arr_type();
                     exp_type call_exp_type;
                     switch (arr_elem_type) {
