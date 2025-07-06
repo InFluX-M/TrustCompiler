@@ -160,7 +160,7 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                     std::cerr << "---------------------------------------------------------------" << std::endl;
                     num_errors++;
                 }
-            } else if (child_name == "func_dec") {
+            } else if (child_name == "func") {
                 child->get_data().set_stype(symbol.get_stype());
                 std::string id_name = node->get_parent()->get_children()[1]->get_data().get_content();
                 semantic_type id_stype = node->get_parent()->get_children()[1]->get_data().get_stype();
