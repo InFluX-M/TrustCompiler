@@ -13,7 +13,7 @@
 <if_stmt> -> T_If <exp> T_LC <stmt_ls> T_RC <else_part_opt>
 <else_part_opt> -> T_Else <else_alternative> @ ε
 <else_alternative> -> <if_stmt>  @ T_LC <stmt_ls> T_RC
-<stmt_after_id> -> T_Assign <exp> @ T_LB T_Decimal T_RB T_Assign <exp> @ T_LP <exp_ls_call> T_RP
+<stmt_after_id> -> T_Assign <exp> @ T_LB <exp> T_RB T_Assign <exp> @ T_LP <exp_ls_call> T_RP
 <var_declaration> -> T_Let <mut_opt> <pattern> <type_opt> <assign_opt>
 <mut_opt> -> T_Mut @ ε
 <pattern> -> T_Id @ T_LP <id_ls> T_RP

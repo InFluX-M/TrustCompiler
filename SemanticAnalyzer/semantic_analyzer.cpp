@@ -421,7 +421,7 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                    children[0]->get_data().get_name() == "T_LOp_NOT") {
             symbol.set_exp_type(TYPE_BOOL);
         } else if (children[0]->get_data().get_name() == "T_Id") {
-            auto &fac_id_opt = children[1]->get_children()[0];
+            auto fac_id_opt = children[1]->get_children()[0];
             std::string id_name = children[0]->get_data().get_content();
             if (fac_id_opt->get_data().get_name() == "T_LP") {
                 if (!symbol_table[""].count(id_name) || symbol_table[""][id_name].get_type() != FUNC) {

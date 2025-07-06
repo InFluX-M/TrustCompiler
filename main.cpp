@@ -1,11 +1,12 @@
 #include "LexicalAnalyzer/lexical_analyzer.h"
 #include "SyntaxAnalyzer/syntax_analyzer.h"
 #include "SemanticAnalyzer/semantic_analyzer.h"
+#include <filesystem>
 
 #include <iostream>
 
 int main() {
-    std::string input_file = "Test/", output_file = "Output/", file;
+    std::string input_file = "../Test/", output_file = "../Output/", file;
 
     std::cout << "Enter the file name: ";
     std::cin >> file;

@@ -1609,7 +1609,7 @@ SYNCH
 # <stmt_after_id> T_Assign
 <stmt_after_id> -> T_Assign <exp> 
 # <stmt_after_id> T_LB
-<stmt_after_id> -> T_LB T_Decimal T_RB T_Assign <exp> 
+<stmt_after_id> -> T_LB <exp> T_RB T_Assign <exp> 
 # <stmt_after_id> T_LP
 <stmt_after_id> -> T_LP <exp_ls_call> T_RP 
 # <stmt_after_id> T_Semicolon
