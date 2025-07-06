@@ -91,6 +91,62 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
     std::string head_name = symbol.get_name();
     int line_number = symbol.get_line_number();
 
+    bool is_new_scope = false;
+
+    if (head_name == "func" || head_name == "loop_stmt" || head_name == "if_stmt" || head_name == "else_alternative") {
+        is_new_scope = true;
+        def_area++;
+    }
+
+    if (head_name == "func") {
+        std::string name = children[1]->get_data().get_content();
+        current_func = name;
+        if (symbol_table[""].count(name)) {
+            std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
+                      << "Redeclaration of function '" << name << "'. Functions must have unique names globally.\n"
+                      << WHITE << std::endl;
+            std::cerr << "----------------------------------------------------------------" << std::endl;
+            num_errors++;
+        }
+        symbol_table[""][name] = SymbolTableEntry(FUNC);
+        symbol_table[name];
+        Node<Symbol> *args_node = children[3];
+        if (args_node->get_children()[0]->get_data().get_name() != "eps") {
+            Node<Symbol> *arg_node = args_node->get_children()[0];
+            std::string arg_name = arg_node->get_children()[0]->get_data().get_content();
+            SymbolTableEntry arg_entry(VAR);
+            arg_entry.set_name(arg_name);
+            arg_entry.set_def_area(def_area);
+            arg_entry.set_mut(false);
+            if (arg_node->get_children()[1]->get_children()[0]->get_data().get_name() != "eps") {
+                dfs(arg_node->get_children()[1]->get_children()[1]);
+                arg_entry.set_stype(arg_node->get_children()[1]->get_children()[1]->get_data().get_stype());
+            } else {
+                arg_entry.set_stype(UNK);
+            }
+            symbol_table[current_func][arg_name] = arg_entry;
+            symbol_table[""][current_func].add_to_parameters({arg_name, arg_entry.get_stype()});
+            Node<Symbol> *args_tail_node = args_node->get_children()[1];
+            while (args_tail_node->get_children()[0]->get_data().get_name() != "eps") {
+                arg_node = args_tail_node->get_children()[1];
+                arg_name = arg_node->get_children()[0]->get_data().get_content();
+                SymbolTableEntry next_arg_entry(VAR);
+                next_arg_entry.set_name(arg_name);
+                next_arg_entry.set_def_area(def_area);
+                next_arg_entry.set_mut(false);
+                if (arg_node->get_children()[1]->get_children()[0]->get_data().get_name() != "eps") {
+                    dfs(arg_node->get_children()[1]->get_children()[1]);
+                    next_arg_entry.set_stype(arg_node->get_children()[1]->get_children()[1]->get_data().get_stype());
+                } else {
+                    next_arg_entry.set_stype(UNK);
+                }
+                symbol_table[current_func][arg_name] = next_arg_entry;
+                symbol_table[""][current_func].add_to_parameters({arg_name, next_arg_entry.get_stype()});
+                args_tail_node = args_tail_node->get_children()[2];
+            }
+        }
+    }
+
     if (head_name == "var_declaration") {
         // handle <pattern>
         int children_size = children[2]->get_children().size();
@@ -105,21 +161,39 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
         } else {
             names.push_back(children[2]->get_children()[0]->get_data().get_content());
         }
-
-        for (int i = 0; i < names.size(); i++) {
-            SymbolTableEntry x(VAR);
-            x.set_name(names[i]);
-            x.set_mut(children[1]->get_children()[0]->get_data().get_name() == "eps" ? false : true);
-            x.set_def_area(def_area);
-
-            symbol_table[current_func][names[i]] = x;
+        for (const auto &name: names) {
+            if (symbol_table[current_func].count(name) && symbol_table[current_func][name].get_def_area() == def_area) {
+                std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
+                          << "Identifier '" << name << "' is already defined in this scope.\n" << WHITE << std::endl;
+                std::cerr << "----------------------------------------------------------------" << std::endl;
+                num_errors++;
+            } else {
+                SymbolTableEntry x(VAR);
+                x.set_name(name);
+                x.set_mut(children[1]->get_children()[0]->get_data().get_name() != "eps");
+                x.set_def_area(def_area);
+                symbol_table[current_func][name] = x;
+            }
         }
+    }
 
-        for (auto child: children) {
-            dfs(child);
+    for (auto child: children) {
+        dfs(child);
+    }
+
+    if (head_name == "var_declaration") {
+        int children_size = children[2]->get_children().size();
+        std::vector<std::string> names;
+        if (children_size == 3) {
+            names.push_back(children[2]->get_children()[1]->get_children()[0]->get_data().get_content());
+            auto tmp_child = children[2]->get_children()[1]->get_children()[1];
+            while (tmp_child->get_children()[0]->get_data().get_name() != "eps") {
+                names.push_back(tmp_child->get_children()[1]->get_data().get_content());
+                tmp_child = tmp_child->get_children()[2];
+            }
+        } else {
+            names.push_back(children[2]->get_children()[0]->get_data().get_content());
         }
-
-        // handle <type_opt>
         if (children[3]->get_children()[0]->get_data().get_name() != "eps") {
             if (children_size == 3) {
                 // We have (x, y, z, ...)
@@ -144,8 +218,7 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                             symbol_table[current_func][name].set_stype(tuple_type[idx++]);
                         }
                     } else if (tuple_type.size() != names.size()) {
-                        std::cerr << RED
-                                  << "Semantic Error [Line " << line_number << "]: "
+                        std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
                                   << "Mismatch in tuple declaration for identifier '" << symbol.get_content() << "'.\n"
                                   << "  - Declared " << names.size() << " variable(s) but provided "
                                   << tuple_type.size() << " type(s).\n"
@@ -211,8 +284,7 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                     int idx = 0;
                     for (std::string name: names) {
                         if (tuple_type[idx] == UNK) {
-                            std::cerr << RED
-                                      << "Semantic Error [Line " << line_number << "]: "
+                            std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
                                       << "Unable to infer type for variable '" << name
                                       << "' from the assigned expression.\n"
                                       << "  - The expression has an unsupported or unknown type.\n"
@@ -228,20 +300,9 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                 }
             } else {
                 exp_type exp_t = children[4]->get_children()[1]->get_data().get_exp_type();
-                if (exp_t == TYPE_INT) {
-                    symbol_table[current_func][names[0]].set_stype(INT);
-                } else if (exp_t == TYPE_BOOL) {
-                    symbol_table[current_func][names[0]].set_stype(BOOL);
-                } else if (exp_t == TYPE_ARRAY) {
-                    symbol_table[current_func][names[0]].set_stype(ARRAY);
-                } else if (exp_t == TYPE_TUPLE) {
-                    symbol_table[current_func][names[0]].set_stype(TUPLE);
-                    for (semantic_type stype: children[4]->get_children()[1]->get_data().get_tuple_types()) {
-                        symbol_table[current_func][names[0]].add_to_tuple_types(stype);
-                    }
-                } else {
-                    std::cerr << RED
-                              << "Semantic Error [Line " << line_number << "]: "
+                semantic_type s_type = exp_t_to_semantic_type(exp_t);
+                if (s_type == UNK) {
+                    std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
                               << "Unable to infer type for variable '" << names[0]
                               << "' from the assigned expression.\n"
                               << "  - The expression has an unsupported or unknown type.\n"
@@ -249,81 +310,38 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                               << WHITE << std::endl;
                     std::cerr << "----------------------------------------------------------------" << std::endl;
                     num_errors++;
-                }
-            }
-        }
-
-
-    } else if (head_name == "func") {
-        SymbolTableEntry entry(FUNC);
-
-        std::string name = children[1]->get_data().get_content();
-        entry.set_name(name);
-
-        for (auto child: children) {
-            dfs(child);
-        }
-
-        // handle <func_type>
-        if (children[5]->get_data().get_name() != "eps") {
-            std::string first = children[5]->get_children()[1]->get_children()[0]->get_data().get_name();
-
-            if (first == "T_Int") {
-                entry.set_stype(INT);
-            } else if (first == "T_Bool") {
-                entry.set_stype(BOOL);
-            } else if (first == "T_LP") {
-                entry.set_stype(TUPLE);
-
-                if (children[5]->get_children()[1]->get_children()[1]->get_children()[0]->get_data().get_name() !=
-                    "eps") {
-                    std::vector<semantic_type> tuple_type;
-                    tuple_type.push_back(
-                            children[5]->get_children()[1]->get_children()[1]->get_children()[0]->get_data().get_stype());
-                    auto tmp_child = children[5]->get_children()[1]->get_children()[1]->get_children()[1];
-                    while (tmp_child->get_children()[0]->get_data().get_name() != "eps") {
-                        tuple_type.push_back(tmp_child->get_children()[1]->get_data().get_stype());
-                        tmp_child = tmp_child->get_children()[2];
+                } else {
+                    symbol_table[current_func][names[0]].set_stype(s_type);
+                    if (s_type == TUPLE) {
+                        symbol_table[current_func][names[0]].add_to_tuple_types(
+                                children[4]->get_children()[1]->get_data().get_tuple_types());
                     }
-                    entry.add_to_tuple_types(tuple_type);
-                    symbol.add_to_tuple_types(tuple_type);
-                }
-            } else if (first == "T_LB") {
-                entry.set_stype(ARRAY);
-                entry.set_arr_type(children[5]->get_children()[1]->get_children()[1]->get_data().get_stype());
-                if (children[5]->get_children()[1]->get_children()[3]->get_children()[0]->get_data().get_name() !=
-                    "eps") {
-                    entry.set_arr_len(
-                            stoi(children[5]->get_children()[1]->get_children()[3]->get_children()[0]->get_data().get_content()));
                 }
             }
         }
-
-        // handle <return_stmt>
-        if (children[8]->get_children()[0]->get_data().get_name() == "eps") {
-            if (entry.get_stype() == UNK) {
-                entry.set_stype(VOID);
-            } else {
-                if (entry.get_stype() != VOID) {
-                    // func type is VOID but return anything else
-                    std::cerr << RED
-                              << "Semantic Error [Line " << line_number << "]: "
-                              << "Function '" << name << "' declared to return type '"
-                              << semantic_type_to_string[entry.get_stype()]
-                              << "' but has no return statement.\n"
-                              << "  - Ensure the function returns a value of the declared type or change the return type to 'void'.\n"
-                              << WHITE << std::endl;
-                    std::cerr << "----------------------------------------------------------------" << std::endl;
-                    num_errors++;
-                }
+    } else if (head_name == "func") {
+        SymbolTableEntry &entry = symbol_table[""][current_func];
+        if (children[5]->get_children()[0]->get_data().get_name() != "eps") {
+            entry.set_stype(children[5]->get_children()[1]->get_data().get_stype());
+        }
+        Node<Symbol> *return_stmt_node = children[8];
+        if (return_stmt_node->get_children()[0]->get_data().get_name() == "eps") {
+            if (entry.get_stype() == UNK) entry.set_stype(VOID);
+            else if (entry.get_stype() != VOID) {
+                std::cerr << RED << "Semantic Error [Line " << line_number << "]: " << "Function '" << current_func
+                          << "' declared to return type '" << semantic_type_to_string[entry.get_stype()]
+                          << "' but has no return statement.\n"
+                          << "  - Ensure the function returns a value of the declared type or change the return type to 'void'.\n"
+                          << WHITE << std::endl;
+                std::cerr << "----------------------------------------------------------------" << std::endl;
+                num_errors++;
             }
         } else {
-            semantic_type stp = exp_t_to_semantic_type(children[8]->get_children()[1]->get_data().get_exp_type());
+            semantic_type stp = exp_t_to_semantic_type(return_stmt_node->get_children()[1]->get_data().get_exp_type());
             if (entry.get_stype() == UNK) {
                 if (stp == UNK) {
-                    std::cerr << RED
-                              << "Semantic Error [Line " << line_number << "]: "
-                              << "Unable to infer return type for function '" << name
+                    std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
+                              << "Unable to infer return type for function '" << current_func
                               << "' from the return expression.\n"
                               << "  - The expression has an unsupported or unknown type.\n"
                               << "  - Ensure the expression is valid and has a type like int, bool, array, or tuple.\n"
@@ -335,48 +353,26 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                 }
             } else {
                 if (entry.get_stype() != stp) {
-                    std::cerr << RED
-                              << "Semantic Error [Line " << line_number << "]: "
-                              << "Function '" << name << "' declared to return type '"
-                              << semantic_type_to_string[entry.get_stype()]
-                              << "' but has a return statement of type '"
-                              << semantic_type_to_string[stp]
-                              << "'.\n"
-                              << "  - Ensure the function returns a value of the declared type.\n"
-                              << WHITE << std::endl;
+                    std::cerr << RED << "Semantic Error [Line " << line_number << "]: " << "Function '" << current_func
+                              << "' declared to return type '" << semantic_type_to_string[entry.get_stype()]
+                              << "' but has a return statement of type '" << semantic_type_to_string[stp] << "'.\n"
+                              << "  - Ensure the function returns a value of the declared type.\n" << WHITE
+                              << std::endl;
                     std::cerr << "----------------------------------------------------------------" << std::endl;
                     num_errors++;
                 }
-
-                if (entry.get_tuple_types().empty()) {
-                    entry.add_to_tuple_types(children[8]->get_children()[1]->get_data().get_tuple_types());
-                    symbol.add_to_tuple_types(children[8]->get_children()[1]->get_data().get_tuple_types());
-                } else if (entry.get_tuple_types().size() !=
-                           children[8]->get_children()[1]->get_data().get_tuple_types().size()) {
-                    std::cerr << RED
-                              << "Semantic Error [Line " << line_number << "]: "
-                              << "Function '" << name << "' declared to return a tuple of type '"
-                              << semantic_type_to_string[entry.get_stype()]
+                if (entry.get_stype() == TUPLE && entry.get_tuple_types().size() !=
+                                                  return_stmt_node->get_children()[1]->get_data().get_tuple_types().size()) {
+                    std::cerr << RED << "Semantic Error [Line " << line_number << "]: " << "Function '" << current_func
+                              << "' declared to return a tuple of type '" << semantic_type_to_string[entry.get_stype()]
                               << "' but the return statement has a different number of elements.\n"
                               << "  - Ensure the number of elements in the returned tuple matches the declared type.\n"
                               << WHITE << std::endl;
                     std::cerr << "----------------------------------------------------------------" << std::endl;
                     num_errors++;
                 }
-
             }
         }
-
-    } else {
-        for (auto child: children) {
-            dfs(child);
-        }
-    }
-
-    if (head_name == "program") {
-    } else if (head_name == "func_ls") {
-    } else if (head_name == "stmt_ls") {
-    } else if (head_name == "stmt") {
     } else if (head_name == "T_Int") {
         symbol.set_stype(INT);
     } else if (head_name == "T_Bool") {
@@ -385,48 +381,35 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
         symbol.set_stype(BOOL);
     } else if (head_name == "T_Id" and node->get_parent()->get_data().get_name() != "pattern" and
                node->get_parent()->get_data().get_name() != "func" and
-               node->get_parent()->get_data().get_name() != "id_ls"
-               and node->get_parent()->get_data().get_name() != "id_ls_tail") {
-        bool find = false;
-        for (const auto &entry: symbol_table[current_func]) {
-            if (entry.first == symbol.get_content()) {
-                find = true;
+               node->get_parent()->get_data().get_name() != "id_ls" and
+               node->get_parent()->get_data().get_name() != "id_ls_tail" and
+               node->get_parent()->get_data().get_name() != "arg") {
+        if (!current_func.empty() && !symbol_table[current_func].count(symbol.get_content())) {
+            if (!symbol_table[""].count(symbol.get_content())) {
+                std::cerr << RED << "Semantic Error [Line " << line_number << "]: " << "Use of undeclared identifier '"
+                          << symbol.get_content() << "'.\n"
+                          << "  - The identifier must be declared before it is used.\n"
+                          << "  - Check for missing declarations or typos in the name.\n" << WHITE << std::endl;
+                std::cerr << "----------------------------------------------------------------" << std::endl;
+                num_errors++;
             }
-        }
-
-        if (!find) {
-            std::cerr << RED
-                      << "Semantic Error [Line " << line_number << "]: "
-                      << "Use of undeclared identifier '" << symbol.get_content() << "'.\n"
-                      << "  - The identifier must be declared before it is used.\n"
-                      << "  - Check for missing declarations or typos in the name.\n"
-                      << WHITE << std::endl;
-            std::cerr << "----------------------------------------------------------------" << std::endl;
-            num_errors++;
         }
     } else if (head_name == "exp") {
         symbol.set_exp_type(children[0]->get_data().get_exp_type());
-        for (semantic_type stype: children[0]->get_data().get_tuple_types()) {
-            symbol.add_to_tuple_types(stype);
-        }
-
+        symbol.add_to_tuple_types(children[0]->get_data().get_tuple_types());
     } else if (head_name == "log_exp" or head_name == "rel_exp" or head_name == "eq_exp" or head_name == "cmp_exp") {
         if (children[1]->get_children()[0]->get_data().get_name() != "eps") {
             symbol.set_exp_type(TYPE_BOOL);
         } else {
             symbol.set_exp_type(children[0]->get_data().get_exp_type());
-            for (semantic_type stype: children[0]->get_data().get_tuple_types()) {
-                symbol.add_to_tuple_types(stype);
-            }
+            symbol.add_to_tuple_types(children[0]->get_data().get_tuple_types());
         }
     } else if (head_name == "arith_exp" or head_name == "arith_term") {
         if (children[1]->get_children()[0]->get_data().get_name() != "eps") {
             symbol.set_exp_type(TYPE_INT);
         } else {
             symbol.set_exp_type(children[0]->get_data().get_exp_type());
-            for (semantic_type stype: children[0]->get_data().get_tuple_types()) {
-                symbol.add_to_tuple_types(stype);
-            }
+            symbol.add_to_tuple_types(children[0]->get_data().get_tuple_types());
         }
     } else if (head_name == "arith_factor") {
         if (children[0]->get_data().get_name() == "T_Hexadecimal" or
@@ -438,70 +421,109 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                    children[0]->get_data().get_name() == "T_LOp_NOT") {
             symbol.set_exp_type(TYPE_BOOL);
         } else if (children[0]->get_data().get_name() == "T_Id") {
-            if (children[1]->get_children()[0]->get_data().get_name() == "T_LP") {
-                // function calling
-
-            } else if (children[1]->get_children()[0]->get_data().get_name() == "T_LB") {
-                // array indexing
-                semantic_type arr_type = symbol_table[current_func][children[0]->get_data().get_content()].get_arr_type();
-                if (arr_type == INT) {
-                    symbol.set_exp_type(TYPE_INT);
-                } else if (arr_type == BOOL) {
-                    symbol.set_exp_type(TYPE_BOOL);
-                } else if (arr_type == TUPLE) {
-                    symbol.set_exp_type(TYPE_TUPLE);
-                } else if (arr_type == ARRAY) {
-                    symbol.set_exp_type(TYPE_ARRAY);
+            auto &fac_id_opt = children[1]->get_children()[0];
+            std::string id_name = children[0]->get_data().get_content();
+            if (fac_id_opt->get_data().get_name() == "T_LP") {
+                if (!symbol_table[""].count(id_name) || symbol_table[""][id_name].get_type() != FUNC) {
+                    std::cerr << RED << "Semantic Error [Line " << line_number << "]: '" << id_name
+                              << "' is not a function.\n" << WHITE << std::endl;
+                    std::cerr << "----------------------------------------------------------------" << std::endl;
+                    num_errors++;
+                    symbol.set_exp_type(TYPE_UNKNOWN);
                 } else {
-                    std::cerr << RED
-                              << "Semantic Error [Line " << line_number << "]: "
-                              << "Array type for identifier '" << children[0]->get_data().get_content()
-                              << "' is not defined.\n"
-                              << "  - Ensure the array is declared with a valid type.\n"
-                              << WHITE << std::endl;
-                    std::cerr << "----------------------------------------------------------------" << std::endl;
-                    num_errors++;
+                    semantic_type func_return_type = symbol_table[""][id_name].get_stype();
+                    exp_type call_exp_type;
+                    switch (func_return_type) {
+                        case INT:
+                            call_exp_type = TYPE_INT;
+                            break;
+                        case BOOL:
+                            call_exp_type = TYPE_BOOL;
+                            break;
+                        case ARRAY:
+                            call_exp_type = TYPE_ARRAY;
+                            break;
+                        case TUPLE:
+                            call_exp_type = TYPE_TUPLE;
+                            break;
+                        case VOID:
+                            call_exp_type = TYPE_VOID;
+                            break;
+                        default:
+                            call_exp_type = TYPE_UNKNOWN;
+                            break;
+                    }
+                    symbol.set_exp_type(call_exp_type);
                 }
-
-            } else {
-                // plain variable
-                semantic_type arr_type = symbol_table[current_func][children[0]->get_data().get_content()].get_stype();
-                if (arr_type == INT) {
-                    symbol.set_exp_type(TYPE_INT);
-                } else if (arr_type == BOOL) {
-                    symbol.set_exp_type(TYPE_BOOL);
-                } else if (arr_type == TUPLE) {
-                    symbol.set_exp_type(TYPE_TUPLE);
-                    symbol.add_to_tuple_types(
-                            symbol_table[current_func][children[0]->get_data().get_content()].get_tuple_types());
-                } else if (arr_type == ARRAY) {
-                    symbol.set_exp_type(TYPE_ARRAY);
-                } else if (arr_type == UNK) {
-                    std::cerr << RED
-                              << "Semantic Error [Line " << line_number << "]: "
-                              << "Variable '" << children[0]->get_data().get_content() << "' is not initialized.\n"
-                              << "  - Ensure the variable is assigned a value before use.\n"
-                              << WHITE << std::endl;
+            } else if (fac_id_opt->get_data().get_name() == "T_LB") {
+                if (!symbol_table[current_func].count(id_name) ||
+                    symbol_table[current_func][id_name].get_stype() != ARRAY) {
+                    std::cerr << RED << "Semantic Error [Line " << line_number << "]: Identifier '" << id_name
+                              << "' is not an array.\n" << WHITE << std::endl;
                     std::cerr << "----------------------------------------------------------------" << std::endl;
                     num_errors++;
+                    symbol.set_exp_type(TYPE_UNKNOWN);
+                } else {
+                    semantic_type arr_elem_type = symbol_table[current_func][id_name].get_arr_type();
+                    exp_type call_exp_type;
+                    switch (arr_elem_type) {
+                        case INT:
+                            call_exp_type = TYPE_INT;
+                            break;
+                        case BOOL:
+                            call_exp_type = TYPE_BOOL;
+                            break;
+                        default:
+                            call_exp_type = TYPE_UNKNOWN;
+                            break;
+                    }
+                    symbol.set_exp_type(call_exp_type);
+                }
+            } else {
+                if (symbol_table[current_func].count(id_name)) {
+                    semantic_type var_stype = symbol_table[current_func][id_name].get_stype();
+                    exp_type call_exp_type;
+                    switch (var_stype) {
+                        case INT:
+                            call_exp_type = TYPE_INT;
+                            break;
+                        case BOOL:
+                            call_exp_type = TYPE_BOOL;
+                            break;
+                        case ARRAY:
+                            call_exp_type = TYPE_ARRAY;
+                            break;
+                        case TUPLE:
+                            call_exp_type = TYPE_TUPLE;
+                            break;
+                        case VOID:
+                            call_exp_type = TYPE_VOID;
+                            break;
+                        default:
+                            call_exp_type = TYPE_UNKNOWN;
+                            break;
+                    }
+                    symbol.set_exp_type(call_exp_type);
+                    if (var_stype == TUPLE) {
+                        symbol.add_to_tuple_types(symbol_table[current_func][id_name].get_tuple_types());
+                    }
+                } else {
+                    symbol.set_exp_type(TYPE_UNKNOWN);
                 }
             }
         } else if (children[0]->get_data().get_name() == "T_LP") {
             if (children[1]->get_children()[1]->get_children()[0]->get_data().get_name() == "T_RP") {
                 // parentheses
-                exp_type tmp = children[1]->get_children()[0]->get_data().get_exp_type();
-                symbol.set_exp_type(tmp);
+                symbol.set_exp_type(children[1]->get_children()[0]->get_data().get_exp_type());
             } else if (children[1]->get_children()[1]->get_children()[0]->get_data().get_name() == "T_Comma") {
                 // tuple
                 symbol.set_exp_type(TYPE_TUPLE);
                 std::vector<semantic_type> tuple_type;
                 tuple_type.push_back(exp_t_to_semantic_type(children[1]->get_children()[0]->get_data().get_exp_type()));
                 auto tmp_node = children[1]->get_children()[1]->get_children()[1];
-
                 if (tmp_node->get_data().get_name() != "eps") {
                     tuple_type.push_back(
                             exp_t_to_semantic_type(tmp_node->get_children()[0]->get_data().get_exp_type()));
-
                     tmp_node = tmp_node->get_children()[1];
                     while (tmp_node->get_children()[0]->get_data().get_name() != "eps") {
                         tuple_type.push_back(
@@ -509,96 +531,35 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                         tmp_node = tmp_node->get_children()[2];
                     }
                 }
-
-                for (semantic_type stype: tuple_type) {
-                    symbol.add_to_tuple_types(stype);
-                }
+                symbol.add_to_tuple_types(tuple_type);
             }
         } else if (children[0]->get_data().get_name() == "T_LB") {
             // array literal
             symbol.set_exp_type(TYPE_ARRAY);
         }
     } else if (head_name == "stmt_after_id") {
-        if (children.size() != 3) {
-            // assign new value to a var or array member
-            std::string name = node->get_parent()->get_children()[0]->get_data().get_content();
-
-            if (symbol_table[current_func][name].get_stype() == UNK) {
-                semantic_type stp;
-                if (children.size() == 2) {
-                    stp = exp_t_to_semantic_type(children[1]->get_data().get_exp_type());
-                } else {
-                    stp = exp_t_to_semantic_type(children[4]->get_data().get_exp_type());
-                }
-
-                if (stp == UNK) {
-                    std::cerr << RED
-                              << "Semantic Error [Line " << line_number << "]: "
-                              << "Unable to infer type for variable '" << name << "' from the assigned expression.\n"
-                              << "  - The expression has an unsupported or unknown type.\n"
-                              << "  - Ensure the expression is valid and has a type like int, bool, array, or tuple.\n"
-                              << WHITE << std::endl;
+        std::string name = node->get_parent()->get_children()[0]->get_data().get_content();
+        if (children[0]->get_data().get_name() == "T_Assign") {
+            if (symbol_table[current_func].count(name)) {
+                if (!symbol_table[current_func][name].get_mut()) {
+                    std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
+                              << "Cannot assign to immutable variable '" << name << "'.\n"
+                              << "  - This variable was not declared as mutable (e.g., 'let mut " << name << "').\n"
+                              << "  - To allow mutation, declare the variable with the 'mut' keyword.\n" << WHITE
+                              << std::endl;
                     std::cerr << "----------------------------------------------------------------" << std::endl;
                     num_errors++;
-                } else {
-                    symbol_table[current_func][name].set_stype(stp);
                 }
-            } else if (!symbol_table[current_func][name].get_mut()) {
-                std::cerr << RED
-                          << "Semantic Error [Line " << line_number << "]: "
-                          << "Cannot assign to immutable variable '" << name << "'.\n"
-                          << "  - This variable was not declared as mutable (e.g., 'let mut " << name << "').\n"
-                          << "  - To allow mutation, declare the variable with the 'mut' keyword.\n"
-                          << WHITE << std::endl;
-                std::cerr << "----------------------------------------------------------------" << std::endl;
-                num_errors++;
-            }
-
-            if (children.size() == 2) {
                 semantic_type stp = exp_t_to_semantic_type(children[1]->get_data().get_exp_type());
-
-                if (stp == UNK) {
-                    std::cerr << RED
-                              << "Semantic Error [Line " << line_number << "]: "
-                              << "Unable to infer type for variable '" << name << "' from the assigned expression.\n"
-                              << "  - The expression has an unsupported or unknown type.\n"
-                              << "  - Ensure the expression is valid and has a type like int, bool, array, or tuple.\n"
-                              << WHITE << std::endl;
-                    std::cerr << "----------------------------------------------------------------" << std::endl;
-                    num_errors++;
-                } else if (stp != symbol_table[current_func][name].get_stype()) {
-                    std::cerr << RED
-                              << "Semantic Error [Line " << line_number << "]: "
-                              << "Type mismatch for variable '" << name << "'.\n"
-                              << "  - Expected type '"
+                if (symbol_table[current_func][name].get_stype() == UNK) {
+                    symbol_table[current_func][name].set_stype(stp);
+                } else if (stp != UNK && stp != symbol_table[current_func][name].get_stype()) {
+                    std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
+                              << "Type mismatch for variable '" << name << "'.\n" << "  - Expected type '"
                               << semantic_type_to_string[symbol_table[current_func][name].get_stype()]
                               << "' but got type '" << semantic_type_to_string[stp] << "'.\n"
-                              << "  - Ensure the assigned value matches the variable's declared type.\n"
-                              << WHITE << std::endl;
-                    std::cerr << "----------------------------------------------------------------" << std::endl;
-                    num_errors++;
-                }
-            } else {
-                semantic_type stp = exp_t_to_semantic_type(children[4]->get_data().get_exp_type());
-
-                if (stp == UNK) {
-                    std::cerr << RED
-                              << "Semantic Error [Line " << line_number << "]: "
-                              << "Unable to infer type for variable '" << name << "' from the assigned expression.\n"
-                              << "  - The expression has an unsupported or unknown type.\n"
-                              << "  - Ensure the expression is valid and has a type like int, bool, array, or tuple.\n"
-                              << WHITE << std::endl;
-                    std::cerr << "----------------------------------------------------------------" << std::endl;
-                    num_errors++;
-                } else if (stp != symbol_table[current_func][name].get_stype()) {
-                    std::cerr << RED
-                              << "Semantic Error [Line " << line_number << "]: "
-                              << "Type mismatch for variable '" << name << "'.\n"
-                              << "  - Expected type '"
-                              << semantic_type_to_string[symbol_table[current_func][name].get_arr_type()]
-                              << "' but got type '" << semantic_type_to_string[stp] << "'.\n"
-                              << "  - Ensure the assigned value matches the variable's declared type.\n"
-                              << WHITE << std::endl;
+                              << "  - Ensure the assigned value matches the variable's declared type.\n" << WHITE
+                              << std::endl;
                     std::cerr << "----------------------------------------------------------------" << std::endl;
                     num_errors++;
                 }
@@ -606,16 +567,15 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
         }
     } else if (head_name == "if_stmt") {
         if (children[1]->get_data().get_exp_type() != TYPE_BOOL) {
-            std::cerr << RED
-                      << "Semantic Error [Line " << line_number << "]: "
+            std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
                       << "Condition in 'if' statement must be of type 'bool'.\n"
                       << "  - The expression used in the condition is not a boolean expression.\n"
-                      << "  - Ensure the condition evaluates to a boolean value (true or false).\n"
-                      << WHITE << std::endl;
+                      << "  - Ensure the condition evaluates to a boolean value (true or false).\n" << WHITE
+                      << std::endl;
             std::cerr << "----------------------------------------------------------------" << std::endl;
             num_errors++;
         }
-    } else if (head_name == "log_exp_tail" or head_name == "rel_exp_tail") {
+    } else if (head_name == "log_exp_tail" || head_name == "rel_exp_tail") {
         if (children[0]->get_data().get_name() != "eps") {
             semantic_type stp_l = exp_t_to_semantic_type(
                     node->get_parent()->get_children()[0]->get_data().get_exp_type());
@@ -694,7 +654,7 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                 num_errors++;
             }
         }
-    } else if (head_name == "arith_exp_tail" or head_name == "arith_term_tail") {
+    } else if (head_name == "arith_exp_tail" || head_name == "arith_term_tail") {
         if (children[0]->get_data().get_name() != "eps") {
             semantic_type stp_l = exp_t_to_semantic_type(
                     node->get_parent()->get_children()[0]->get_data().get_exp_type());
@@ -725,27 +685,35 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
             }
         }
     } else if (head_name == "type") {
-        if (children[0]->get_data().get_name() == "T_Int") {
-            symbol.set_stype(INT);
-        } else if (children[0]->get_data().get_name() == "T_Bool") {
-            symbol.set_stype(BOOL);
-        } else if (children[0]->get_data().get_name() == "T_LP") {
-            symbol.set_stype(TUPLE);
-        } else if (children[0]->get_data().get_name() == "T_LB") {
-            symbol.set_stype(ARRAY);
-        }
+        if (children[0]->get_data().get_name() == "T_Int") symbol.set_stype(INT);
+        else if (children[0]->get_data().get_name() == "T_Bool") symbol.set_stype(BOOL);
+        else if (children[0]->get_data().get_name() == "T_LP") symbol.set_stype(TUPLE);
+        else if (children[0]->get_data().get_name() == "T_LB") symbol.set_stype(ARRAY);
     } else if (head_name == "opt_type") {
-        if (children[0]->get_data().get_name() == "T_Int") {
-            symbol.set_stype(INT);
-        } else if (children[0]->get_data().get_name() == "T_Bool") {
-            symbol.set_stype(BOOL);
-        } else if (children[0]->get_data().get_name() == "T_LP") {
-            symbol.set_stype(TUPLE);
-        } else if (children[0]->get_data().get_name() == "T_LB") {
-            symbol.set_stype(ARRAY);
-        } else if (children[0]->get_data().get_name() == "eps") {
-            symbol.set_stype(VOID);
+        if (children[0]->get_data().get_name() == "T_Int") symbol.set_stype(INT);
+        else if (children[0]->get_data().get_name() == "T_Bool") symbol.set_stype(BOOL);
+        else if (children[0]->get_data().get_name() == "T_LP") symbol.set_stype(TUPLE);
+        else if (children[0]->get_data().get_name() == "T_LB") symbol.set_stype(ARRAY);
+        else if (children[0]->get_data().get_name() == "eps") symbol.set_stype(VOID);
+    }
+
+    if (is_new_scope) {
+        std::vector<std::string> keys_to_erase;
+        if (!current_func.empty()) {
+            for (const auto &[key, val]: symbol_table[current_func]) {
+                if (val.get_def_area() == def_area) {
+                    keys_to_erase.push_back(key);
+                }
+            }
+            for (const auto &key: keys_to_erase) {
+                symbol_table[current_func].erase(key);
+            }
         }
+
+        if (head_name == "func") {
+            current_func = "";
+        }
+        def_area--;
     }
 }
 

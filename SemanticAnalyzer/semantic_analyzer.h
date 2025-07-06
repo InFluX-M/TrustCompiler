@@ -97,7 +97,7 @@ public:
         def_area = _def_area;
     }
 
-    int get_def_area() {
+    int get_def_area() const {
         return def_area;
     }
 
