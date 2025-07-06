@@ -126,25 +126,10 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
     std::string head_name = symbol.get_name();
     int line_number = symbol.get_line_number();
 
-    if (head_name == "func") {
-        std::string func_name = children[1]->get_data().get_content();
-        std::string prev_func_local = current_func;
-        current_func = func_name;
-
-        if (global_function_table.count(func_name)) {
-            std::cerr << RED << "Semantic Error [Line " << line_number << "]: Redefinition of function '" << func_name
-                      << "'." << WHITE << std::endl;
-            std::cerr << "---------------------------------------------------------------" << std::endl;
-            num_errors++;
-        } else {
-            SymbolTableEntry func_entry_temp(FUNC);
-            func_entry_temp.set_name(func_name);
-            func_entry_temp.set_def_area(def_area);
-            global_function_table[func_name] = func_entry_temp;
-        }
+    bool scope_opened = false;
+    if (head_name == "func" || head_name == "if_stmt" || head_name == "loop_stmt" || head_name == "T_LC") {
         def_area++;
-    } else if (head_name == "if_stmt" || head_name == "loop_stmt" || head_name == "T_LC") {
-        def_area++;
+        scope_opened = true;
     }
 
     for (auto child: children) {
@@ -164,7 +149,7 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
 
                 SymbolTableEntry *existing_entry = find_variable_in_scope(symbol_table, current_func, id_name,
                                                                           def_area);
-                if (existing_entry == nullptr) {
+                if (existing_entry == nullptr || existing_entry->get_def_area() != def_area) {
                     bool is_mut = false;
                     SymbolTableEntry new_entry(VAR, id_stype, def_area, is_mut);
                     new_entry.set_name(id_name);
@@ -232,7 +217,7 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
 
                 SymbolTableEntry *existing_entry = find_variable_in_scope(symbol_table, current_func, id_name,
                                                                           def_area);
-                if (existing_entry == nullptr) {
+                if (existing_entry == nullptr || existing_entry->get_def_area() != def_area) {
                     bool is_mut = false;
                     Node<Symbol> *mut_opt_node = node->get_parent()->get_parent()->get_children()[1];
                     if (mut_opt_node && mut_opt_node->get_data().get_name() == "mut_opt" &&
@@ -315,7 +300,38 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                     symbol.set_stype(entry->get_stype());
                 }
             }
+        } else if (head_name == "stmt_after_id") {
+            if (child_name == "T_Assign") {
+                std::string id_name = node->get_parent()->get_children()[0]->get_data().get_content();
+                SymbolTableEntry *var_entry = find_variable_in_scope(symbol_table, current_func, id_name, def_area);
+                if (var_entry == nullptr) {
+                    std::cerr << RED << "Semantic Error [Line " << line_number
+                              << "]: Assignment to undeclared variable '"
+                              << id_name << "'." << WHITE << std::endl;
+                    std::cerr << "---------------------------------------------------------------" << std::endl;
+                    num_errors++;
+                } else if (!var_entry->get_mut()) {
+                    std::cerr << RED << "Semantic Error [Line " << line_number
+                              << "]: Cannot assign to immutable variable '"
+                              << id_name << "'." << WHITE << std::endl;
+                    std::cerr << "---------------------------------------------------------------" << std::endl;
+                    num_errors++;
+                } else if (var_entry->get_stype() == UNK) {
+                    var_entry->set_stype(children[1]->get_data().get_stype());
+                } else if (var_entry->get_stype() != children[1]->get_data().get_stype() &&
+                           children[1]->get_data().get_stype() != VOID) {
+                    std::string left_type = semantic_type_to_string[var_entry->get_stype()];
+                    std::string right_type = semantic_type_to_string[children[1]->get_data().get_stype()];
+                    std::cerr << RED << "Semantic Error [Line " << line_number << "]: Type mismatch in assignment for '"
+                              << id_name << "'." << WHITE << std::endl;
+                    std::cerr << RED << "Expected '" << left_type << "', but got '" << right_type << "'." << WHITE
+                              << std::endl;
+                    std::cerr << "---------------------------------------------------------------" << std::endl;
+                    num_errors++;
+                }
+            }
         }
+
 
         dfs(child);
     }
@@ -346,15 +362,16 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                 }
                 func_entry.add_to_parameters({param_name, param_type});
 
-                SymbolTableEntry *existing_param = find_variable_in_scope(symbol_table, current_func, param_name,
-                                                                          def_area);
-                if (existing_param == nullptr) {
+                SymbolTableEntry *existing_param_var = find_variable_in_scope(symbol_table, current_func, param_name,
+                                                                              def_area);
+                if (existing_param_var == nullptr || existing_param_var->get_def_area() != def_area) {
                     SymbolTableEntry new_param_var(VAR, param_type, def_area);
                     new_param_var.set_name(param_name);
                     symbol_table[current_func][param_name] = new_param_var;
                 } else {
                     std::cerr << RED << "Semantic Error [Line " << line_number << "]: Redefinition of parameter '"
-                              << param_name << "' in the same scope." << WHITE << std::endl;
+                              << param_name
+                              << "' in the same scope." << WHITE << std::endl;
                     std::cerr << "---------------------------------------------------------------" << std::endl;
                     num_errors++;
                 }
@@ -375,14 +392,9 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
             return_type = func_type_node->get_children()[1]->get_data().get_stype();
         }
         func_entry.set_stype(return_type);
-
-        // Restore previous func context after finishing current function's DFS
-        // This is correctly handled by a local variable and assigning back
-        // after the function's scope (def_area) has been exited.
-        // The local `prev_func_local` is used for this.
     }
 
-    if (head_name == "}") {
+    if (scope_opened) {
         std::map<std::string, SymbolTableEntry> temp_current_func_vars_to_remove;
         if (symbol_table.count(current_func)) {
             for (const auto &entry_pair: symbol_table[current_func]) {
@@ -403,8 +415,14 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
     } else if (head_name == "var_dec") {
         symbol.set_stype(children[0]->get_data().get_stype());
     } else if (head_name == "var_dec_init") {
-        if (children[0]->get_data().get_stype() != children[1]->get_data().get_stype() &&
-            children[1]->get_data().get_stype() != VOID) {
+        std::string var_name = children[0]->get_children()[0]->get_data().get_content();
+        SymbolTableEntry *var_entry = find_variable_in_scope(symbol_table, current_func, var_name, def_area);
+
+        if (var_entry && var_entry->get_stype() == UNK) {
+            var_entry->set_stype(children[1]->get_data().get_stype());
+            symbol.set_stype(children[1]->get_data().get_stype());
+        } else if (var_entry && var_entry->get_stype() != children[1]->get_data().get_stype() &&
+                   children[1]->get_data().get_stype() != VOID) {
             std::string id_name = children[0]->get_children()[0]->get_data().get_content();
             std::string left_type = semantic_type_to_string[children[0]->get_data().get_stype()];
             std::string right_type = semantic_type_to_string[children[1]->get_data().get_stype()];
@@ -415,8 +433,6 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
             std::cerr << "---------------------------------------------------------------" << std::endl;
             num_errors++;
         }
-        std::string var_name = children[0]->get_children()[0]->get_data().get_content();
-        SymbolTableEntry *var_entry = find_variable_in_scope(symbol_table, current_func, var_name, def_area);
         if (var_entry && !var_entry->get_mut()) {
             std::cerr << RED << "Semantic Error [Line " << line_number << "]: Cannot assign to immutable variable '"
                       << var_name << "'." << WHITE << std::endl;
@@ -586,7 +602,7 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
         }
 
         SymbolTableEntry *existing_param_var = find_variable_in_scope(symbol_table, current_func, param_id, def_area);
-        if (existing_param_var == nullptr) {
+        if (existing_param_var == nullptr || existing_param_var->get_def_area() != def_area) {
             SymbolTableEntry new_param_var(VAR, symbol.get_stype(), def_area);
             new_param_var.set_name(param_id);
             symbol_table[current_func][param_id] = new_param_var;
@@ -1123,13 +1139,13 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
             }
         }
 //        else if (children[0]->get_data().get_name() == "string") {
-//            symbol.set_stype(TYPE_STRING); // Use TYPE_STRING from exp_type enum for string literals
+//            symbol.set_stype(TYPE_STRING);
+//            symbol.set_val(children[0]->get_data().get_content());
+//        } else if (children[0]->get_data().get_name() == "character") {
+//            symbol.set_stype(UNK);
 //            symbol.set_val(children[0]->get_data().get_content());
 //        }
-        else if (children[0]->get_data().get_name() == "character") {
-            symbol.set_stype(UNK);
-            symbol.set_val(children[0]->get_data().get_content());
-        } else if (children[0]->get_data().get_name() == "false") {
+        else if (children[0]->get_data().get_name() == "false") {
             symbol.set_stype(BOOL);
             symbol.set_val("false");
         } else if (children[0]->get_data().get_name() == "true") {
@@ -1162,13 +1178,13 @@ void SemanticAnalyzer::analyse() {
         num_errors++;
     } else {
         SymbolTableEntry &main_entry = global_function_table["main"];
-//        if (main_entry.get_stype() != INT) {
-//            std::string main_type = semantic_type_to_string[main_entry.get_stype()];
-//            std::cerr << RED << "Semantic Error: The return type of 'main' function is invalid." << WHITE << std::endl;
-//            std::cerr << RED << "Expected 'int' type but found '" << main_type << "' type." << WHITE << std::endl;
-//            std::cerr << "---------------------------------------------------------------" << std::endl;
-//            num_errors++;
-//        }
+        if (main_entry.get_stype() != VOID) {
+            std::string main_type = semantic_type_to_string[main_entry.get_stype()];
+            std::cerr << RED << "Semantic Error: The return type of 'main' function is invalid." << WHITE << std::endl;
+            std::cerr << RED << "Expected 'void' type but found '" << main_type << "' type." << WHITE << std::endl;
+            std::cerr << "---------------------------------------------------------------" << std::endl;
+            num_errors++;
+        }
         if (main_entry.get_parameters().size() != 0) {
             std::cerr << RED << "Semantic Error: 'main' function accepts no arguments." << WHITE << std::endl;
             std::cerr << "---------------------------------------------------------------" << std::endl;
