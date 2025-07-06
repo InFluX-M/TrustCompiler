@@ -1162,13 +1162,13 @@ void SemanticAnalyzer::analyse() {
         num_errors++;
     } else {
         SymbolTableEntry &main_entry = global_function_table["main"];
-        if (main_entry.get_stype() != INT) {
-            std::string main_type = semantic_type_to_string[main_entry.get_stype()];
-            std::cerr << RED << "Semantic Error: The return type of 'main' function is invalid." << WHITE << std::endl;
-            std::cerr << RED << "Expected 'int' type but found '" << main_type << "' type." << WHITE << std::endl;
-            std::cerr << "---------------------------------------------------------------" << std::endl;
-            num_errors++;
-        }
+//        if (main_entry.get_stype() != INT) {
+//            std::string main_type = semantic_type_to_string[main_entry.get_stype()];
+//            std::cerr << RED << "Semantic Error: The return type of 'main' function is invalid." << WHITE << std::endl;
+//            std::cerr << RED << "Expected 'int' type but found '" << main_type << "' type." << WHITE << std::endl;
+//            std::cerr << "---------------------------------------------------------------" << std::endl;
+//            num_errors++;
+//        }
         if (main_entry.get_parameters().size() != 0) {
             std::cerr << RED << "Semantic Error: 'main' function accepts no arguments." << WHITE << std::endl;
             std::cerr << "---------------------------------------------------------------" << std::endl;

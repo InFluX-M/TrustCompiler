@@ -3,8 +3,8 @@
 
 #include "../utils.h"
 
-#define GRAMMAR_PATH "/home/influx/TrustCompiler/Test/Grammar.txt"
-#define TABLE_PATH "/home/influx/TrustCompiler/Output/table.txt"
+#define GRAMMAR_PATH "Test/Grammar.txt"
+#define TABLE_PATH "Output/table.txt"
 #define START_VAR "program"
 
 enum rule_type {

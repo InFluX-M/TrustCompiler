@@ -5,7 +5,7 @@
 #include <iostream>
 
 int main() {
-    std::string input_file = "/home/influx/TrustCompiler/Test/", output_file = "/home/influx/TrustCompiler/Output/", file;
+    std::string input_file = "Test/", output_file = "Output/", file;
 
     std::cout << "Enter the file name: ";
     std::cin >> file;
@@ -29,6 +29,8 @@ int main() {
     sem_analyzer.analyse();
 
     std::cout << "Semantic analysis completed successfully!" << std::endl;
+
+    sem_analyzer.run_code();
 
     return SUCCESS;
 }
