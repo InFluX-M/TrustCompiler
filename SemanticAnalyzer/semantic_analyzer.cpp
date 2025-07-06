@@ -268,8 +268,8 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                     }
                 }
             }
-        } else if (head_name == "func_call_or_id") {
-            if (child_name == "(") {
+        } else if (head_name == "fac_id_opt") {
+            if (child_name == "T_LP") {
                 std::string id_name = node->get_parent()->get_children()[0]->get_data().get_content();
                 if (!global_function_table.count(id_name)) {
                     std::cerr << RED << "Semantic Error [Line " << line_number << "]: Call to undefined function '"
@@ -1009,7 +1009,7 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
             symbol.set_val(children[0]->get_data().get_val());
         }
     } else if (head_name == "exp9") {
-        if (children[0]->get_data().get_name() == "(") {
+        if (children[0]->get_data().get_name() == "T_LP") {
             symbol.set_stype(children[1]->get_data().get_stype());
             symbol.set_val(children[1]->get_data().get_val());
         } else if (children[0]->get_data().get_name() == "id") {
@@ -1031,8 +1031,8 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
             symbol.set_stype(children[0]->get_data().get_stype());
             symbol.set_val(children[0]->get_data().get_val());
         }
-    } else if (head_name == "func_call_or_id") {
-        if (node->get_children()[0]->get_data().get_name() == "(") {
+    } else if (head_name == "fac_id_opt") {
+        if (node->get_children()[0]->get_data().get_name() == "T_LP") {
             std::string func_id = node->get_parent()->get_children()[0]->get_data().get_content();
             if (!global_function_table.count(func_id)) {
                 std::cerr << RED << "Semantic Error [Line " << line_number << "]: Call to undefined function '"
