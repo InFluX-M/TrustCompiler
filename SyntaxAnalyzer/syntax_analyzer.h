@@ -23,14 +23,23 @@ private:
 
 public:
     Rule();
+
     explicit Rule(rule_type _type);
+
     void set_head(Symbol _head);
+
     Symbol &get_head();
+
     void set_type(rule_type _type);
+
     rule_type get_type();
+
     void add_to_body(const Symbol &var);
+
     std::vector<Symbol> &get_body();
+
     std::string toString();
+
     friend std::ostream &operator<<(std::ostream &out, Rule &rule);
 };
 
@@ -60,11 +69,11 @@ public:
 
     void calc_firsts();
 
-    void calc_first(const Symbol& var);
+    void calc_first(const Symbol &var);
 
     void print_firsts();
 
-    void print_first(const Symbol& var);
+    void print_first(const Symbol &var);
 
     void calc_follows();
 

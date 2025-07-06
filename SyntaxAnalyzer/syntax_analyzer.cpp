@@ -549,14 +549,14 @@ void SyntaxAnalyzer::make_tree(bool update) {
                 Rule rule = it->second;
                 if (rule.get_type() == VALID) {
                     std::cerr << "[DEBUG] Applying rule for " << top_var.get_name() << " -> ";
-                    for (const auto &s : rule.get_body()) std::cerr << s.get_name() << " ";
+                    for (const auto &s: rule.get_body()) std::cerr << s.get_name() << " ";
                     std::cerr << std::endl;
 
                     top_node->get_data().set_line_number(line_number);
 
                     std::vector<Symbol> body = rule.get_body();
                     std::reverse(body.begin(), body.end());
-                    for (const auto &var : body) {
+                    for (const auto &var: body) {
                         auto *node = new Node<Symbol>(var, top_node);
                         top_node->push_front_children(node);
                         if (var != eps) {
@@ -565,8 +565,10 @@ void SyntaxAnalyzer::make_tree(bool update) {
                         }
                     }
                 } else if (rule.get_type() == SYNCH) {
-                    std::cerr << RED << "Syntax Error: Synchronization attempted, line: " << line_number << WHITE << std::endl;
-                    std::cerr << "[DEBUG] Skipping tokens until synchronization point for " << top_var.get_name() << std::endl;
+                    std::cerr << RED << "Syntax Error: Synchronization attempted, line: " << line_number << WHITE
+                              << std::endl;
+                    std::cerr << "[DEBUG] Skipping tokens until synchronization point for " << top_var.get_name()
+                              << std::endl;
                     num_errors++;
                     while (index < tokens_len && follows[top_var].find(term) == follows[top_var].end() &&
                            term != Symbol("$", TERMINAL)) {
@@ -577,7 +579,8 @@ void SyntaxAnalyzer::make_tree(bool update) {
                     }
                     stack.push(top_node);
                 } else if (rule.get_type() == EMPTY) {
-                    std::cerr << RED << "Syntax Error: Empty cell/Unexpected token, line: " << line_number << WHITE << std::endl;
+                    std::cerr << RED << "Syntax Error: Empty cell/Unexpected token, line: " << line_number << WHITE
+                              << std::endl;
                     std::cerr << "[DEBUG] Ignored token '" << term.get_name() << "' for non-terminal '"
                               << top_var.get_name() << "'" << std::endl;
                     num_errors++;
@@ -585,7 +588,8 @@ void SyntaxAnalyzer::make_tree(bool update) {
                     stack.push(top_node);
                 }
             } else {
-                std::cerr << RED << "Syntax Error: Unexpected input or missing rule, line: " << line_number << WHITE << std::endl;
+                std::cerr << RED << "Syntax Error: Unexpected input or missing rule, line: " << line_number << WHITE
+                          << std::endl;
                 std::cerr << "[DEBUG] No rule for non-terminal '" << top_var.get_name()
                           << "' with token '" << term.get_name() << "'" << std::endl;
                 num_errors++;

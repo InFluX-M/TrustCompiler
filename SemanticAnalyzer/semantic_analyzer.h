@@ -59,7 +59,7 @@ public:
         type = _type;
     }
 
-    id_type get_type() const {
+    id_type get_type() {
         return type;
     }
 
@@ -67,11 +67,11 @@ public:
         stype = _stype;
     }
 
-    semantic_type get_stype() const {
+    semantic_type get_stype() {
         return stype;
     }
 
-    void add_to_parameters(const std::pair<std::string, semantic_type> &parameter) {
+    void add_to_parameters(std::pair<std::string, semantic_type> parameter) {
         parameters.push_back(parameter);
     }
 
@@ -97,7 +97,7 @@ public:
         def_area = _def_area;
     }
 
-    int get_def_area() const {
+    int get_def_area() {
         return def_area;
     }
 
@@ -105,7 +105,7 @@ public:
         mut = _mut;
     }
 
-    bool get_mut() const {
+    bool get_mut() {
         return mut;
     }
 
@@ -113,7 +113,7 @@ public:
         arr_len = _arr_len;
     }
 
-    int get_arr_len() const {
+    int get_arr_len() {
         return arr_len;
     }
 
@@ -121,7 +121,7 @@ public:
         arr_type = _arr_type;
     }
 
-    semantic_type get_arr_type() const {
+    semantic_type get_arr_type() {
         return arr_type;
     }
 
@@ -147,11 +147,7 @@ private:
 public:
     void dfs(Node<Symbol> *node);
 
-    void analyse();
-
-    void run_code();
-
     SemanticAnalyzer(Tree<Symbol> _parse_tree, std::string output_file_name);
 };
 
-#endif // SEMANTIC_ANALYZER_H
+#endif // SYNTAX_ANALYZER_H
