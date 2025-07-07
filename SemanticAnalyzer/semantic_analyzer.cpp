@@ -428,6 +428,34 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
             symbol.set_exp_type(children[0]->get_data().get_exp_type());
             symbol.add_to_tuple_types(children[0]->get_data().get_tuple_types());
         }
+
+        // value
+        std::string current_val_str = children[0]->get_data().get_val();
+
+        Node<Symbol> *tail_node = children[1];
+        while (tail_node->get_children()[0]->get_data().get_name() != "eps") {
+            std::string op_name = tail_node->get_children()[0]->get_data().get_name();
+            std::string right_val_str = tail_node->get_children()[1]->get_data().get_val();
+
+            // Only perform calculation if both operands are constant.
+            if (!current_val_str.empty() && !right_val_str.empty()) {
+                long long left_val = std::stoll(current_val_str);
+                long long right_val = std::stoll(right_val_str);
+                long long result = 0;
+
+                if (op_name == "T_AOp_Trust") result = left_val + right_val;
+                else if (op_name == "T_AOp_MN") result = left_val - right_val;
+                else if (op_name == "T_AOp_ML") result = left_val * right_val;
+                else if (op_name == "T_AOp_DV") result = (right_val != 0) ? left_val / right_val : 0;
+                else if (op_name == "T_AOp_RM") result = (right_val != 0) ? left_val % right_val : 0;
+
+                current_val_str = std::to_string(result);
+            } else {
+                current_val_str = "";
+            }
+            tail_node = tail_node->get_children()[2];
+        }
+        symbol.set_val(current_val_str);
     } else if (head_name == "arith_factor") {
         if (children[0]->get_data().get_name() == "T_Hexadecimal" or
             children[0]->get_data().get_name() == "T_Decimal") {
@@ -505,7 +533,7 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                     num_errors++;
                     symbol.set_exp_type(TYPE_UNKNOWN);
                 } else {
-                    // It is an array, now check if the index expression is of type 'i32'
+                    // check if the index expression is of type 'i32' and not negative
                     Node<Symbol> *index_exp_node = children[1]->get_children()[1];
                     if (index_exp_node->get_data().get_exp_type() != TYPE_INT) {
                         std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
@@ -517,7 +545,20 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                         num_errors++;
                     }
 
-                    // The result of the access has the type of the array's elements
+                    std::string index_val_str = index_exp_node->get_data().get_val();
+                    if (!index_val_str.empty()) {
+                        long long index_val = std::stoll(index_val_str);
+                        if (index_val < 0) {
+                            std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
+                                      << "Array index cannot be negative. Got: " << index_val << " for array '"
+                                      << id_name << "'.\n" << WHITE << std::endl;
+                            std::cerr << "----------------------------------------------------------------"
+                                      << std::endl;
+                            num_errors++;
+                        }
+                    }
+
+                    // type of the array's elements
                     semantic_type arr_elem_type = symbol_table[current_func][id_name].get_arr_type();
                     exp_type call_exp_type;
                     switch (arr_elem_type) {
@@ -623,6 +664,10 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                     std::cerr << "----------------------------------------------------------------" << std::endl;
                     num_errors++;
                 }
+
+                // value
+                std::string exp_val = children[1]->get_data().get_val();
+                symbol_table[current_func][name].set_val(exp_val);
             }
             // Handles array element assignment: x[y] = 2;
         } else if (children[0]->get_data().get_name() == "T_LB") {
@@ -639,7 +684,7 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                 std::cerr << "----------------------------------------------------------------" << std::endl;
                 num_errors++;
             } else {
-                // Check 2: Is the index type i32?
+                // Check 2: Is the index type i32 and not negative?
                 Node<Symbol> *index_exp_node = children[1];
                 if (index_exp_node->get_data().get_exp_type() != TYPE_INT) {
                     std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
@@ -649,6 +694,18 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                               << std::endl;
                     std::cerr << "----------------------------------------------------------------" << std::endl;
                     num_errors++;
+                }
+
+                std::string index_val_str = index_exp_node->get_data().get_val();
+                if (!index_val_str.empty()) {
+                    long long index_val = std::stoll(index_val_str);
+                    if (index_val < 0) {
+                        std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
+                                  << "Array index for assignment cannot be negative. Got: " << index_val
+                                  << " for array '" << name << "'.\n" << WHITE << std::endl;
+                        std::cerr << "----------------------------------------------------------------" << std::endl;
+                        num_errors++;
+                    }
                 }
 
                 // Check 3: Does the assigned value's type match the array's element type?
@@ -706,6 +763,26 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                 std::cerr << "----------------------------------------------------------------" << std::endl;
                 num_errors++;
             }
+
+            // value
+            std::string left_val_str = node->get_parent()->get_children()[0]->get_data().get_val();
+            std::string right_val_str = children[1]->get_data().get_val();
+
+            if ((left_val_str == "true" || left_val_str == "false") &&
+                (right_val_str == "true" || right_val_str == "false")) {
+
+                bool left_bool = (left_val_str == "true");
+                bool right_bool = (right_val_str == "true");
+                bool result = false;
+
+                if (head_name == "log_exp_tail") {
+                    result = left_bool || right_bool;
+                } else {
+                    result = left_bool && right_bool;
+                }
+
+                node->get_parent()->get_data().set_val(result ? "true" : "false");
+            }
         }
     } else if (head_name == "eq_exp_tail") {
         if (children[0]->get_data().get_name() != "eps") {
@@ -723,6 +800,22 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                           << WHITE << std::endl;
                 std::cerr << "----------------------------------------------------------------" << std::endl;
                 num_errors++;
+            }
+        }
+
+        // value
+        if (children[0]->get_data().get_name() != "eps") {
+            std::string left_val_str = node->get_parent()->get_children()[0]->get_data().get_val();
+            std::string right_val_str = children[1]->get_data().get_val();
+
+            if (!left_val_str.empty() && !right_val_str.empty()) {
+                std::string op_name = children[0]->get_data().get_name();
+                bool result = false;
+
+                if (op_name == "T_ROp_E") result = (left_val_str == right_val_str);
+                else if (op_name == "T_ROp_NE") result = (left_val_str != right_val_str);
+
+                node->get_parent()->get_data().set_val(result ? "true" : "false");
             }
         }
     } else if (head_name == "cmp_exp_suf") {
@@ -753,6 +846,23 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                           << WHITE << std::endl;
                 std::cerr << "----------------------------------------------------------------" << std::endl;
                 num_errors++;
+            }
+
+            // value
+            std::string left_val_str = node->get_parent()->get_children()[0]->get_data().get_val();
+            std::string right_val_str = children[1]->get_data().get_val();
+
+            if (!left_val_str.empty() && !right_val_str.empty()) {
+                long long left_val = std::stoll(left_val_str);
+                long long right_val = std::stoll(right_val_str);
+                std::string op_name = children[0]->get_children()[0]->get_data().get_name();
+                bool result = false;
+
+                if (op_name == "T_ROp_L") result = left_val < right_val;
+                else if (op_name == "T_ROp_LE") result = left_val <= right_val;
+                else if (op_name == "T_ROp_G") result = left_val > right_val;
+                else if (op_name == "T_ROp_GE") result = left_val >= right_val;
+                node->get_parent()->get_data().set_val(result ? "true" : "false");
             }
         }
     } else if (head_name == "arith_exp_tail" || head_name == "arith_term_tail") {
