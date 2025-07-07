@@ -11,12 +11,13 @@
 < type: T_Let, line: 2, content: let >
 < type: T_Id, line: 2, content: y >
 < type: T_Assign, line: 2, content: = >
-< type: T_Decimal, line: 2, content: 4 >
+< type: T_True, line: 2, content: true >
 < type: T_Semicolon, line: 2, content: ; >
+< type: T_Let, line: 3, content: let >
+< type: T_Id, line: 3, content: z >
+< type: T_Assign, line: 3, content: = >
 < type: T_Id, line: 3, content: x >
 < type: T_LB, line: 3, content: [ >
 < type: T_Id, line: 3, content: y >
 < type: T_RB, line: 3, content: ] >
-< type: T_Assign, line: 3, content: = >
-< type: T_Decimal, line: 3, content: 2 >
 < type: T_Semicolon, line: 3, content: ; >

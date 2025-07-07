@@ -85,6 +85,23 @@ semantic_type exp_t_to_semantic_type(exp_type t) {
     }
 }
 
+std::string exp_t_to_string(exp_type t) {
+    switch (t) {
+        case TYPE_INT:
+            return "INT";
+        case TYPE_BOOL:
+            return "BOOL";
+        case TYPE_ARRAY:
+            return "ARRAY";
+        case TYPE_TUPLE:
+            return "TUPLE";
+        case TYPE_VOID:
+            return "VOID";
+        default:
+            return "UNK";
+    }
+}
+
 void SemanticAnalyzer::dfs(Node<Symbol> *node) {
     std::deque<Node<Symbol> *> children = node->get_children();
     Symbol &symbol = node->get_data();
@@ -456,24 +473,28 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                     symbol.set_exp_type(call_exp_type);
                 }
             } else if (fac_id_opt->get_data().get_name() == "T_LB") {
+                // Check if the identifier is declared as an array
                 if (!symbol_table[current_func].count(id_name) ||
                     symbol_table[current_func][id_name].get_stype() != ARRAY) {
                     std::cerr << RED << "Semantic Error [Line " << line_number << "]: Identifier '" << id_name
-                              << "' is not an array.\n" << WHITE << std::endl;
+                              << "' is not an array and cannot be indexed.\n" << WHITE << std::endl;
                     std::cerr << "----------------------------------------------------------------" << std::endl;
                     num_errors++;
                     symbol.set_exp_type(TYPE_UNKNOWN);
                 } else {
-                    Node<Symbol> *index_exp_node = fac_id_opt->get_children()[1];
+                    // It is an array, now check if the index expression is of type 'i32'
+                    Node<Symbol> *index_exp_node = children[1]->get_children()[1];
                     if (index_exp_node->get_data().get_exp_type() != TYPE_INT) {
                         std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
-                                  << "Array index must be of type 'i32'.\n"
-                                  << "  - The provided index for array '" << id_name << "' is not an integer.\n"
-                                  << WHITE << std::endl;
+                                  << "Array index for '" << id_name << "' must be of type 'i32'.\n"
+                                  << "  - The provided index expression is not an integer, it is "
+                                  << exp_t_to_string(index_exp_node->get_data().get_exp_type()) << ".\n" << WHITE
+                                  << std::endl;
                         std::cerr << "----------------------------------------------------------------" << std::endl;
                         num_errors++;
                     }
 
+                    // The result of the access has the type of the array's elements
                     semantic_type arr_elem_type = symbol_table[current_func][id_name].get_arr_type();
                     exp_type call_exp_type;
                     switch (arr_elem_type) {
