@@ -570,6 +570,8 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
         }
     } else if (head_name == "stmt_after_id") {
         std::string name = node->get_parent()->get_children()[0]->get_data().get_content();
+
+        // Handles simple assignment: x = 2;
         if (children[0]->get_data().get_name() == "T_Assign") {
             if (symbol_table[current_func].count(name)) {
                 if (!symbol_table[current_func][name].get_mut()) {
@@ -591,6 +593,47 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                               << "' but got type '" << semantic_type_to_string[stp] << "'.\n"
                               << "  - Ensure the assigned value matches the variable's declared type.\n" << WHITE
                               << std::endl;
+                    std::cerr << "----------------------------------------------------------------" << std::endl;
+                    num_errors++;
+                }
+            }
+            // Handles array element assignment: x[y] = 2;
+        } else if (children[0]->get_data().get_name() == "T_LB") {
+            // Check 1: Is the variable an array and mutable?
+            if (!symbol_table[current_func].count(name) || symbol_table[current_func][name].get_stype() != ARRAY) {
+                std::cerr << RED << "Semantic Error [Line " << line_number << "]: Identifier '" << name
+                          << "' is not an array and cannot be indexed.\n" << WHITE << std::endl;
+                std::cerr << "----------------------------------------------------------------" << std::endl;
+                num_errors++;
+            } else if (!symbol_table[current_func][name].get_mut()) {
+                std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
+                          << "Cannot assign to an element of immutable array '" << name << "'.\n"
+                          << "  - To allow mutation, declare the array with 'mut'.\n" << WHITE << std::endl;
+                std::cerr << "----------------------------------------------------------------" << std::endl;
+                num_errors++;
+            } else {
+                // Check 2: Is the index type i32?
+                Node<Symbol> *index_exp_node = children[1];
+                if (index_exp_node->get_data().get_exp_type() != TYPE_INT) {
+                    std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
+                              << "Array index for '" << name << "' must be of type 'i32'.\n"
+                              << "  - The provided index has type "
+                              << exp_t_to_string(index_exp_node->get_data().get_exp_type()) << ".\n" << WHITE
+                              << std::endl;
+                    std::cerr << "----------------------------------------------------------------" << std::endl;
+                    num_errors++;
+                }
+
+                // Check 3: Does the assigned value's type match the array's element type?
+                semantic_type array_element_type = symbol_table[current_func][name].get_arr_type();
+                semantic_type assigned_value_type = exp_t_to_semantic_type(children[4]->get_data().get_exp_type());
+
+                if (assigned_value_type != UNK && array_element_type != assigned_value_type) {
+                    std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
+                              << "Type mismatch in assignment to array '" << name << "'.\n"
+                              << "  - Array elements have type '" << semantic_type_to_string[array_element_type]
+                              << "' but assigned value has type '" << semantic_type_to_string[assigned_value_type]
+                              << "'.\n" << WHITE << std::endl;
                     std::cerr << "----------------------------------------------------------------" << std::endl;
                     num_errors++;
                 }

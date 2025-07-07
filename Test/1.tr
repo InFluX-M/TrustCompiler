@@ -1,3 +1,6 @@
-let mut x : [i32;200];
-let y = true;
-let z = x[y];
+let mut x : [bool;200];
+let mut y = 1;
+let c = y;
+let a = c;
+let mut rr;
+x[a] = 1;

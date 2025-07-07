@@ -18,8 +18,8 @@
                   │        │        │                 ├── T_LB
                   │        │        │                 │        └── '['
                   │        │        │                 ├── <opt_type>
-                  │        │        │                 │        └── T_Int
-                  │        │        │                 │                 └── 'i32'
+                  │        │        │                 │        └── T_Bool
+                  │        │        │                 │                 └── 'bool'
                   │        │        │                 ├── T_Semicolon
                   │        │        │                 │        └── ';'
                   │        │        │                 ├── <opt_dec>
@@ -37,7 +37,8 @@
                            │        │        ├── T_Let
                            │        │        │        └── 'let'
                            │        │        ├── <mut_opt>
-                           │        │        │        └── eps
+                           │        │        │        └── T_Mut
+                           │        │        │                 └── 'mut'
                            │        │        ├── <pattern>
                            │        │        │        └── T_Id
                            │        │        │                 └── 'y'
@@ -54,8 +55,8 @@
                            │        │                                   │        │        │        ├── <arith_exp>
                            │        │                                   │        │        │        │        ├── <arith_term>
                            │        │                                   │        │        │        │        │        ├── <arith_factor>
-                           │        │                                   │        │        │        │        │        │        └── T_True
-                           │        │                                   │        │        │        │        │        │                 └── 'true'
+                           │        │                                   │        │        │        │        │        │        └── T_Decimal
+                           │        │                                   │        │        │        │        │        │                 └── '1'
                            │        │                                   │        │        │        │        │        └── <arith_term_tail>
                            │        │                                   │        │        │        │        │                 └── eps
                            │        │                                   │        │        │        │        └── <arith_exp_tail>
@@ -79,7 +80,7 @@
                                     │        │        │        └── eps
                                     │        │        ├── <pattern>
                                     │        │        │        └── T_Id
-                                    │        │        │                 └── 'z'
+                                    │        │        │                 └── 'c'
                                     │        │        ├── <type_opt>
                                     │        │        │        └── eps
                                     │        │        └── <assign_opt>
@@ -94,36 +95,9 @@
                                     │        │                                   │        │        │        │        ├── <arith_term>
                                     │        │                                   │        │        │        │        │        ├── <arith_factor>
                                     │        │                                   │        │        │        │        │        │        ├── T_Id
-                                    │        │                                   │        │        │        │        │        │        │        └── 'x'
+                                    │        │                                   │        │        │        │        │        │        │        └── 'y'
                                     │        │                                   │        │        │        │        │        │        └── <fac_id_opt>
-                                    │        │                                   │        │        │        │        │        │                 ├── T_LB
-                                    │        │                                   │        │        │        │        │        │                 │        └── '['
-                                    │        │                                   │        │        │        │        │        │                 ├── <exp>
-                                    │        │                                   │        │        │        │        │        │                 │        └── <log_exp>
-                                    │        │                                   │        │        │        │        │        │                 │                 ├── <rel_exp>
-                                    │        │                                   │        │        │        │        │        │                 │                 │        ├── <eq_exp>
-                                    │        │                                   │        │        │        │        │        │                 │                 │        │        ├── <cmp_exp>
-                                    │        │                                   │        │        │        │        │        │                 │                 │        │        │        ├── <arith_exp>
-                                    │        │                                   │        │        │        │        │        │                 │                 │        │        │        │        ├── <arith_term>
-                                    │        │                                   │        │        │        │        │        │                 │                 │        │        │        │        │     ││ ├── <arith_factor>
-                                    │        │                                   │        │        │        │        │        │                 │                 │        │        │        │        │     ││ │││││    ├── T_Id
-                                    │        │                                   │        │        │        │        │        │                 │                 │        │        │        │        │     ││ │││││    │││││   │└── 'y'
-                                    │        │                                   │        │        │        │        │        │                 │                 │        │        │        │        │     ││ │││││    └── <fac_id_opt>
-                                    │        │                                   │        │        │        │        │        │                 │                 │        │        │        │        │     ││ │││││     ││││   │└── eps
-                                    │        │                                   │        │        │        │        │        │                 │                 │        │        │        │        │     ││ └── <arith_term_tail>
-                                    │        │                                   │        │        │        │        │        │                 │                 │        │        │        │        │     ││  ││││    └── eps
-                                    │        │                                   │        │        │        │        │        │                 │                 │        │        │        │        └── <arith_exp_tail>
-                                    │        │                                   │        │        │        │        │        │                 │                 │        │        │        │              ││ └── eps
-                                    │        │                                   │        │        │        │        │        │                 │                 │        │        │        └── <cmp_exp_suf>
-                                    │        │                                   │        │        │        │        │        │                 │                 │        │        │                 └── eps
-                                    │        │                                   │        │        │        │        │        │                 │                 │        │        └── <eq_exp_tail>
-                                    │        │                                   │        │        │        │        │        │                 │                 │        │                 └── eps
-                                    │        │                                   │        │        │        │        │        │                 │                 │        └── <rel_exp_tail>
-                                    │        │                                   │        │        │        │        │        │                 │                 │                 └── eps
-                                    │        │                                   │        │        │        │        │        │                 │                 └── <log_exp_tail>
-                                    │        │                                   │        │        │        │        │        │                 │                          └── eps
-                                    │        │                                   │        │        │        │        │        │                 └── T_RB
-                                    │        │                                   │        │        │        │        │        │                          └── ']'
+                                    │        │                                   │        │        │        │        │        │                 └── eps
                                     │        │                                   │        │        │        │        │        └── <arith_term_tail>
                                     │        │                                   │        │        │        │        │                 └── eps
                                     │        │                                   │        │        │        │        └── <arith_exp_tail>
@@ -139,4 +113,121 @@
                                     │        └── T_Semicolon
                                     │                 └── ';'
                                     └── <stmt_ls>
-                                             └── eps
+                                             ├── <stmt>
+                                             │        ├── <var_declaration>
+                                             │        │        ├── T_Let
+                                             │        │        │        └── 'let'
+                                             │        │        ├── <mut_opt>
+                                             │        │        │        └── eps
+                                             │        │        ├── <pattern>
+                                             │        │        │        └── T_Id
+                                             │        │        │                 └── 'a'
+                                             │        │        ├── <type_opt>
+                                             │        │        │        └── eps
+                                             │        │        └── <assign_opt>
+                                             │        │                 ├── T_Assign
+                                             │        │                 │        └── '='
+                                             │        │                 └── <exp>
+                                             │        │                          └── <log_exp>
+                                             │        │                                   ├── <rel_exp>
+                                             │        │                                   │        ├── <eq_exp>
+                                             │        │                                   │        │        ├── <cmp_exp>
+                                             │        │                                   │        │        │        ├── <arith_exp>
+                                             │        │                                   │        │        │        │        ├── <arith_term>
+                                             │        │                                   │        │        │        │        │        ├── <arith_factor>
+                                             │        │                                   │        │        │        │        │        │        ├── T_Id
+                                             │        │                                   │        │        │        │        │        │        │        └── 'c'
+                                             │        │                                   │        │        │        │        │        │        └── <fac_id_opt>
+                                             │        │                                   │        │        │        │        │        │                 └── eps
+                                             │        │                                   │        │        │        │        │        └── <arith_term_tail>
+                                             │        │                                   │        │        │        │        │                 └── eps
+                                             │        │                                   │        │        │        │        └── <arith_exp_tail>
+                                             │        │                                   │        │        │        │                 └── eps
+                                             │        │                                   │        │        │        └── <cmp_exp_suf>
+                                             │        │                                   │        │        │                 └── eps
+                                             │        │                                   │        │        └── <eq_exp_tail>
+                                             │        │                                   │        │                 └── eps
+                                             │        │                                   │        └── <rel_exp_tail>
+                                             │        │                                   │                 └── eps
+                                             │        │                                   └── <log_exp_tail>
+                                             │        │                                            └── eps
+                                             │        └── T_Semicolon
+                                             │                 └── ';'
+                                             └── <stmt_ls>
+                                                      ├── <stmt>
+                                                      │        ├── <var_declaration>
+                                                      │        │        ├── T_Let
+                                                      │        │        │        └── 'let'
+                                                      │        │        ├── <mut_opt>
+                                                      │        │        │        └── T_Mut
+                                                      │        │        │                 └── 'mut'
+                                                      │        │        ├── <pattern>
+                                                      │        │        │        └── T_Id
+                                                      │        │        │                 └── 'rr'
+                                                      │        │        ├── <type_opt>
+                                                      │        │        │        └── eps
+                                                      │        │        └── <assign_opt>
+                                                      │        │                 └── eps
+                                                      │        └── T_Semicolon
+                                                      │                 └── ';'
+                                                      └── <stmt_ls>
+                                                               ├── <stmt>
+                                                               │        ├── T_Id
+                                                               │        │        └── 'x'
+                                                               │        ├── <stmt_after_id>
+                                                               │        │        ├── T_LB
+                                                               │        │        │        └── '['
+                                                               │        │        ├── <exp>
+                                                               │        │        │        └── <log_exp>
+                                                               │        │        │                 ├── <rel_exp>
+                                                               │        │        │                 │        ├── <eq_exp>
+                                                               │        │        │                 │        │        ├── <cmp_exp>
+                                                               │        │        │                 │        │        │        ├── <arith_exp>
+                                                               │        │        │                 │        │        │        │        ├── <arith_term>
+                                                               │        │        │                 │        │        │        │        │        ├── <arith_factor>
+                                                               │        │        │                 │        │        │        │        │        │        ├── T_Id
+                                                               │        │        │                 │        │        │        │        │        │        │        └── 'a'
+                                                               │        │        │                 │        │        │        │        │        │        └── <fac_id_opt>
+                                                               │        │        │                 │        │        │        │        │        │                 └── eps
+                                                               │        │        │                 │        │        │        │        │        └── <arith_term_tail>
+                                                               │        │        │                 │        │        │        │        │                 └── eps
+                                                               │        │        │                 │        │        │        │        └── <arith_exp_tail>
+                                                               │        │        │                 │        │        │        │                 └── eps
+                                                               │        │        │                 │        │        │        └── <cmp_exp_suf>
+                                                               │        │        │                 │        │        │                 └── eps
+                                                               │        │        │                 │        │        └── <eq_exp_tail>
+                                                               │        │        │                 │        │                 └── eps
+                                                               │        │        │                 │        └── <rel_exp_tail>
+                                                               │        │        │                 │                 └── eps
+                                                               │        │        │                 └── <log_exp_tail>
+                                                               │        │        │                          └── eps
+                                                               │        │        ├── T_RB
+                                                               │        │        │        └── ']'
+                                                               │        │        ├── T_Assign
+                                                               │        │        │        └── '='
+                                                               │        │        └── <exp>
+                                                               │        │                 └── <log_exp>
+                                                               │        │                          ├── <rel_exp>
+                                                               │        │                          │        ├── <eq_exp>
+                                                               │        │                          │        │        ├── <cmp_exp>
+                                                               │        │                          │        │        │        ├── <arith_exp>
+                                                               │        │                          │        │        │        │        ├── <arith_term>
+                                                               │        │                          │        │        │        │        │        ├── <arith_factor>
+                                                               │        │                          │        │        │        │        │        │        └── T_Decimal
+                                                               │        │                          │        │        │        │        │        │                 └── '1'
+                                                               │        │                          │        │        │        │        │        └── <arith_term_tail>
+                                                               │        │                          │        │        │        │        │                 └── eps
+                                                               │        │                          │        │        │        │        └── <arith_exp_tail>
+                                                               │        │                          │        │        │        │                 └── eps
+                                                               │        │                          │        │        │        └── <cmp_exp_suf>
+                                                               │        │                          │        │        │                 └── eps
+                                                               │        │                          │        │        └── <eq_exp_tail>
+                                                               │        │                          │        │                 └── eps
+                                                               │        │                          │        └── <rel_exp_tail>
+                                                               │        │                          │                 └── eps
+                                                               │        │                          └── <log_exp_tail>
+                                                               │        │                                   └── eps
+                                                               │        └── T_Semicolon
+                                                               │                 └── ';'
+                                                               └── <stmt_ls>
+                                                                        └── eps
