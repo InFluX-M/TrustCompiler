@@ -512,37 +512,82 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
             }
 
             if (fac_id_opt->get_data().get_name() == "T_LP") {
-                if (!symbol_table[""].count(id_name) || symbol_table[""][id_name].get_type() != FUNC) {
-                    std::cerr << RED << "Semantic Error [Line " << line_number << "]: '" << id_name
-                              << "' is not a function.\n" << WHITE << std::endl;
+                std::vector<std::pair<std::string, semantic_type>> &expected_params = symbol_table[""][id_name].get_parameters();
+                std::vector<semantic_type> provided_arg_types;
+
+                Node<Symbol> *exp_ls_call_node = fac_id_opt->get_parent()->get_children()[1];
+
+                if (exp_ls_call_node->get_children().empty() ||
+                    exp_ls_call_node->get_children()[0]->get_data().get_name() == "eps") {
+                    // Function called with no arguments
+                } else {
+                    Node<Symbol> *exp_ls_node = exp_ls_call_node->get_children()[0];
+                    if (!exp_ls_node->get_children().empty() &&
+                        exp_ls_node->get_children()[0]->get_data().get_name() != "eps") {
+                        Node<Symbol> *current_arg_item = exp_ls_node->get_children()[0];
+                        Node<Symbol> *current_exp = current_arg_item->get_children()[0];
+                        provided_arg_types.push_back(exp_t_to_semantic_type(current_exp->get_data().get_exp_type()));
+
+                        Node<Symbol> *exp_ls_tail_node = exp_ls_node->get_children()[1];
+                        while (!exp_ls_tail_node->get_children().empty() &&
+                               exp_ls_tail_node->get_children()[0]->get_data().get_name() != "eps") {
+                            current_arg_item = exp_ls_tail_node->get_children()[1];
+                            current_exp = current_arg_item->get_children()[0];
+                            provided_arg_types.push_back(
+                                    exp_t_to_semantic_type(current_exp->get_data().get_exp_type()));
+                            exp_ls_tail_node = exp_ls_tail_node->get_children()[2];
+                        }
+                    }
+                }
+
+                if (expected_params.size() != provided_arg_types.size()) {
+                    std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
+                              << "Incorrect number of arguments in call to function '" << id_name << "'.\n"
+                              << "  - Expected " << expected_params.size() << " argument(s), but got "
+                              << provided_arg_types.size() << ".\n"
+                              << WHITE << std::endl;
                     std::cerr << "----------------------------------------------------------------" << std::endl;
                     num_errors++;
-                    symbol.set_exp_type(TYPE_UNKNOWN);
                 } else {
-                    semantic_type func_return_type = symbol_table[""][id_name].get_stype();
-                    exp_type call_exp_type;
-                    switch (func_return_type) {
-                        case INT:
-                            call_exp_type = TYPE_INT;
-                            break;
-                        case BOOL:
-                            call_exp_type = TYPE_BOOL;
-                            break;
-                        case ARRAY:
-                            call_exp_type = TYPE_ARRAY;
-                            break;
-                        case TUPLE:
-                            call_exp_type = TYPE_TUPLE;
-                            break;
-                        case VOID:
-                            call_exp_type = TYPE_VOID;
-                            break;
-                        default:
-                            call_exp_type = TYPE_UNKNOWN;
-                            break;
+                    for (size_t i = 0; i < expected_params.size(); ++i) {
+                        if (expected_params[i].second != UNK && provided_arg_types[i] != UNK &&
+                            expected_params[i].second != provided_arg_types[i]) {
+                            std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
+                                      << "Type mismatch in argument " << i + 1 << " of call to function '" << id_name
+                                      << "'.\n"
+                                      << "  - Expected type '" << semantic_type_to_string[expected_params[i].second]
+                                      << "' but got type '" << semantic_type_to_string[provided_arg_types[i]] << "'.\n"
+                                      << WHITE << std::endl;
+                            std::cerr << "----------------------------------------------------------------"
+                                      << std::endl;
+                            num_errors++;
+                        }
                     }
-                    symbol.set_exp_type(call_exp_type);
                 }
+
+                semantic_type func_return_type = symbol_table[""][id_name].get_stype();
+                exp_type call_exp_type;
+                switch (func_return_type) {
+                    case INT:
+                        call_exp_type = TYPE_INT;
+                        break;
+                    case BOOL:
+                        call_exp_type = TYPE_BOOL;
+                        break;
+                    case ARRAY:
+                        call_exp_type = TYPE_ARRAY;
+                        break;
+                    case TUPLE:
+                        call_exp_type = TYPE_TUPLE;
+                        break;
+                    case VOID:
+                        call_exp_type = TYPE_VOID;
+                        break;
+                    default:
+                        call_exp_type = TYPE_UNKNOWN;
+                        break;
+                }
+                symbol.set_exp_type(call_exp_type);
             } else if (fac_id_opt->get_data().get_name() == "T_LB") {
                 // Check if the identifier is declared as an array
                 if (!symbol_table[current_func].count(id_name) ||

@@ -28,9 +28,9 @@
 < type: T_Assign, line: 6, content: = >
 < type: T_Id, line: 6, content: add >
 < type: T_LP, line: 6, content: ( >
-< type: T_Decimal, line: 6, content: 5 >
+< type: T_False, line: 6, content: false >
 < type: T_Comma, line: 6, content: , >
-< type: T_Decimal, line: 6, content: 10 >
+< type: T_True, line: 6, content: true >
 < type: T_RP, line: 6, content: ) >
 < type: T_Semicolon, line: 6, content: ; >
 < type: T_Print, line: 7, content: println! >
