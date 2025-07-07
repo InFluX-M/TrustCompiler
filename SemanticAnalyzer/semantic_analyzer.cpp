@@ -4,23 +4,23 @@ std::vector<std::string> split(std::string s, std::vector<char> chs) {
     int n = s.size();
     std::vector<std::string> sp;
 
-    std::string tmp = "";
+    std::string tmp;
     for (int i = 0; i < n; i++) {
-        bool f = 0;
+        bool f = false;
         for (char ch: chs) {
             if (s[i] == ch) {
-                f = 1;
+                f = true;
                 break;
             }
         }
         if (!f) {
             tmp += s[i];
-        } else if (tmp != "") {
+        } else if (!tmp.empty()) {
             sp.push_back(tmp);
             tmp = "";
         }
     }
-    if (tmp != "") {
+    if (!tmp.empty()) {
         sp.push_back(tmp);
     }
     return sp;
@@ -482,35 +482,33 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
             symbol.set_val(children[0]->get_data().get_content());
         } else if (children[0]->get_data().get_name() == "T_String") {
             symbol.set_exp_type(TYPE_STRING);
-        }
-    } else if (children[0]->get_data().get_name() == "T_True" ||
-               children[0]->get_data().get_name() == "T_False") {
-        symbol.set_exp_type(TYPE_BOOL);
-
-        // value
-        if (children[0]->get_data().get_name() == "T_True") symbol.set_val("true");
-        else symbol.set_val("false");
-
-    } else if (children[0]->get_data().get_name() == "T_LOp_NOT") {
-        Node<Symbol> *operand_node = children[1];
-        exp_type operand_type = operand_node->get_data().get_exp_type();
-
-        if (operand_type != TYPE_BOOL) {
-            std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
-                      << "Logical NOT operator '!' cannot be applied to a non-boolean type.\n"
-                      << "  - Expected operand of type 'bool' but got '" << exp_t_to_string(operand_type)
-                      << "'.\n"
-                      << WHITE << std::endl;
-            std::cerr << "----------------------------------------------------------------" << std::endl;
-            num_errors++;
-        }
-
-        symbol.set_exp_type(TYPE_BOOL);
-        std::string operand_val = operand_node->get_data().get_val();
-        if (operand_val == "true") {
-            symbol.set_val("false");
-        } else if (operand_val == "false") {
-            symbol.set_val("true");
+        } else if (children[0]->get_data().get_name() == "T_True" ||
+                   children[0]->get_data().get_name() == "T_False") {
+            symbol.set_exp_type(TYPE_BOOL);
+            if (children[0]->get_data().get_name() == "T_True") {
+                symbol.set_val("true");
+            } else {
+                symbol.set_val("false");
+            }
+        } else if (children[0]->get_data().get_name() == "T_LOp_NOT") {
+            Node<Symbol> *operand_node = children[1];
+            exp_type operand_type = operand_node->get_data().get_exp_type();
+            if (operand_type != TYPE_BOOL) {
+                std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
+                          << "Logical NOT operator '!' cannot be applied to a non-boolean type.\n"
+                          << "  - Expected operand of type 'bool' but got '" << exp_t_to_string(operand_type)
+                          << "'.\n"
+                          << WHITE << std::endl;
+                std::cerr << "----------------------------------------------------------------" << std::endl;
+                num_errors++;
+            }
+            symbol.set_exp_type(TYPE_BOOL);
+            std::string operand_val = operand_node->get_data().get_val();
+            if (operand_val == "true") {
+                symbol.set_val("false");
+            } else if (operand_val == "false") {
+                symbol.set_val("true");
+            }
         } else if (children[0]->get_data().get_name() == "T_Id") {
             auto fac_id_opt = children[1]->get_children()[0];
             std::string id_name = children[0]->get_data().get_content();
@@ -1036,8 +1034,8 @@ void SemanticAnalyzer::analyze() {
 
         out.open(out_address);
         if (!out.is_open()) {
-            std::cerr << RED << "File Error: Couldn't open semantic output file '"
-                      << out_address << "'" << WHITE << std::endl;
+            std::cerr << RED << "File Error: Couldn't open semantic output file '" << out_address << "'" << WHITE
+                      << std::endl;
         } else {
             std::fill(has_par, has_par + 200, false);
             write_annotated_tree(parse_tree.get_root());
@@ -1052,12 +1050,13 @@ void SemanticAnalyzer::analyze() {
 
 void SemanticAnalyzer::write_annotated_tree(Node<Symbol> *node, int num, bool last) {
     if (!node) return;
-
     Symbol &var = node->get_data();
 
     for (int i = 0; i < num * TAB - TAB; i++) {
-        if (has_par[i]) out << "│";
-        else out << " ";
+        if (has_par[i])
+            out << "│";
+        else
+            out << " ";
     }
 
     if (num > 0)
@@ -1102,7 +1101,7 @@ SemanticAnalyzer::SemanticAnalyzer(Tree<Symbol>
                                    _parse_tree, std::string
                                    output_file_name) {
     parse_tree = _parse_tree;
-    out_address = output_file_name;
+    out_address = std::move(output_file_name);
     def_area = 0;
     current_func = "";
     num_errors = 0;
