@@ -553,9 +553,9 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                         if (expected_params[i].second != UNK && provided_arg_types[i] != UNK &&
                             expected_params[i].second != provided_arg_types[i]) {
                             std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
-                                      << "Type mismatch in argument " << i + 1 << " of call to function '" << id_name
-                                      << "'.\n"
-                                      << "  - Expected type '" << semantic_type_to_string[expected_params[i].second]
+                                      << "Type mismatch in arguments of call to function '" << id_name
+                                      << "'.\n  - Expected argument " << i + 1 << " to be of type '"
+                                      << semantic_type_to_string[expected_params[i].second]
                                       << "' but got type '" << semantic_type_to_string[provided_arg_types[i]] << "'.\n"
                                       << WHITE << std::endl;
                             std::cerr << "----------------------------------------------------------------"
