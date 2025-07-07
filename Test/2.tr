@@ -4,6 +4,6 @@ fn add(a: i32, b) -> i32 {
 
 fn main() {
     let result = add(5,true);
-    result = add(true,5);
+    //result = add(true,5);
     println!(result);
 }

@@ -29,15 +29,6 @@
 < type: T_True, line: 6, content: true >
 < type: T_RP, line: 6, content: ) >
 < type: T_Semicolon, line: 6, content: ; >
-< type: T_Id, line: 7, content: result >
-< type: T_Assign, line: 7, content: = >
-< type: T_Id, line: 7, content: add >
-< type: T_LP, line: 7, content: ( >
-< type: T_True, line: 7, content: true >
-< type: T_Comma, line: 7, content: , >
-< type: T_Decimal, line: 7, content: 5 >
-< type: T_RP, line: 7, content: ) >
-< type: T_Semicolon, line: 7, content: ; >
 < type: T_Print, line: 8, content: println! >
 < type: T_LP, line: 8, content: ( >
 < type: T_Id, line: 8, content: result >

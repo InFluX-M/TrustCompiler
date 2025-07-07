@@ -148,6 +148,8 @@ class SemanticAnalyzer {
 private:
     std::string out_address;
     Tree<Symbol> parse_tree;
+    std::ofstream out;
+    bool has_par[200]{};
 
     std::map<std::string, std::map<std::string, SymbolTableEntry>> symbol_table;
 
@@ -156,7 +158,7 @@ private:
     std::string code;
     int num_errors;
 
-    void make_syntax_tree(Node<Symbol> *node);
+    void write_annotated_tree(Node<Symbol> *node, int num = 0, bool last = false);
 
 public:
     void dfs(Node<Symbol> *node);

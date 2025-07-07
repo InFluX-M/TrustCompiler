@@ -1033,8 +1033,68 @@ void SemanticAnalyzer::analyze() {
 
     if (num_errors == 0) {
         std::cout << GREEN << "Semantic analysis completed with no errors." << WHITE << std::endl;
+
+        out.open(out_address);
+        if (!out.is_open()) {
+            std::cerr << RED << "File Error: Couldn't open semantic output file '"
+                      << out_address << "'" << WHITE << std::endl;
+        } else {
+            std::fill(has_par, has_par + 200, false);
+            write_annotated_tree(parse_tree.get_root());
+            out.close();
+            std::cout << "Annotated syntax tree written to " << out_address << std::endl;
+        }
     } else {
-        std::cout << YELLOW << "Semantic analysis completed with " << num_errors << " error(s)." << WHITE << std::endl;
+        std::cout << RED << "Semantic analysis completed with " << num_errors
+                  << " error(s). Output file will not be generated." << WHITE << std::endl;
+    }
+}
+
+void SemanticAnalyzer::write_annotated_tree(Node<Symbol> *node, int num, bool last) {
+    if (!node) return;
+
+    Symbol &var = node->get_data();
+
+    for (int i = 0; i < num * TAB - TAB; i++) {
+        if (has_par[i]) out << "│";
+        else out << " ";
+    }
+
+    if (num > 0)
+        out << (last ? "└── " : "├── ");
+
+    out << var;
+
+    std::vector<std::string> annotations;
+    exp_type et = var.get_exp_type();
+
+    if (et != TYPE_UNKNOWN && et != TYPE_VOID)
+        annotations.push_back("type: " + exp_t_to_string(et));
+
+    std::string val = var.get_val();
+    if (!val.empty())
+        annotations.push_back("val: '" + val + "'");
+
+    std::string content = var.get_content();
+    if (var.get_type() == TERMINAL && !content.empty() && val != content)
+        annotations.push_back("content: '" + content + "'");
+
+    if (!annotations.empty()) {
+        out << "  [ ";
+        for (size_t i = 0; i < annotations.size(); ++i)
+            out << annotations[i] << (i == annotations.size() - 1 ? "" : ", ");
+        out << " ]";
+    }
+
+    out << std::endl;
+
+    has_par[num * TAB] = true;
+    std::deque<Node<Symbol> *> children = node->get_children();
+    for (auto it = children.begin(); it != children.end(); ++it) {
+        bool is_last_child = (std::next(it) == children.end());
+        if (is_last_child)
+            has_par[num * TAB] = false;
+        write_annotated_tree(*it, num + 1, is_last_child);
     }
 }
 
