@@ -951,6 +951,22 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
     }
 }
 
+
+void SemanticAnalyzer::check_for_main_function() {
+
+    if (symbol_table[""].count("main") == 0) {
+        std::cerr << RED
+                  << "Semantic Error: No 'main' function found.\n"
+                  << "  - Every program must have a 'main' function as the entry point.\n"
+                  << WHITE << std::endl;
+        std::cerr << "----------------------------------------------------------------" << std::endl;
+        num_errors++;
+    }
+}
+
+void SemanticAnalyzer::analyze() {
+}
+
 SemanticAnalyzer::SemanticAnalyzer(Tree<Symbol>
                                    _parse_tree, std::string
                                    output_file_name) {

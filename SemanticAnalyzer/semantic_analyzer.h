@@ -160,6 +160,8 @@ private:
 
 public:
     void dfs(Node<Symbol> *node);
+    void check_for_main_function();
+    void analyze();
 
     SemanticAnalyzer(Tree<Symbol> _parse_tree, std::string output_file_name);
 };

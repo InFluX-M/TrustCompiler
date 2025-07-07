@@ -22,9 +22,9 @@
 < type: T_Let, line: 4, content: let >
 < type: T_Id, line: 4, content: a >
 < type: T_Assign, line: 4, content: = >
-< type: T_Decimal, line: 4, content: 1 >
-< type: T_AOp_MN, line: 4, content: - >
-< type: T_Decimal, line: 4, content: 4 >
+< type: T_Id, line: 4, content: y >
+< type: T_AOp_Trust, line: 4, content: + >
+< type: T_Decimal, line: 4, content: 42 >
 < type: T_Semicolon, line: 4, content: ; >
 < type: T_Let, line: 5, content: let >
 < type: T_Mut, line: 5, content: mut >

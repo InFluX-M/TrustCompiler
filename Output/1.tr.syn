@@ -135,17 +135,19 @@
                                              │        │                                   │        │        │        ├── <arith_exp>
                                              │        │                                   │        │        │        │        ├── <arith_term>
                                              │        │                                   │        │        │        │        │        ├── <arith_factor>
-                                             │        │                                   │        │        │        │        │        │        └── T_Decimal
-                                             │        │                                   │        │        │        │        │        │                 └── '1'
+                                             │        │                                   │        │        │        │        │        │        ├── T_Id
+                                             │        │                                   │        │        │        │        │        │        │        └── 'y'
+                                             │        │                                   │        │        │        │        │        │        └── <fac_id_opt>
+                                             │        │                                   │        │        │        │        │        │                 └── eps
                                              │        │                                   │        │        │        │        │        └── <arith_term_tail>
                                              │        │                                   │        │        │        │        │                 └── eps
                                              │        │                                   │        │        │        │        └── <arith_exp_tail>
-                                             │        │                                   │        │        │        │                 ├── T_AOp_MN
-                                             │        │                                   │        │        │        │                 │        └── '-'
+                                             │        │                                   │        │        │        │                 ├── T_AOp_Trust
+                                             │        │                                   │        │        │        │                 │        └── '+'
                                              │        │                                   │        │        │        │                 ├── <arith_term>
                                              │        │                                   │        │        │        │                 │        ├── <arith_factor>
                                              │        │                                   │        │        │        │                 │        │        └── T_Decimal
-                                             │        │                                   │        │        │        │                 │        │                 └── '4'
+                                             │        │                                   │        │        │        │                 │        │                 └── '42'
                                              │        │                                   │        │        │        │                 │        └── <arith_term_tail>
                                              │        │                                   │        │        │        │                 │                 └── eps
                                              │        │                                   │        │        │        │                 └── <arith_exp_tail>
