@@ -6,16 +6,12 @@
 < type: T_Int, line: 1, content: i32 >
 < type: T_Comma, line: 1, content: , >
 < type: T_Id, line: 1, content: b >
-< type: T_Colon, line: 1, content: : >
-< type: T_Int, line: 1, content: i32 >
 < type: T_RP, line: 1, content: ) >
 < type: T_Arrow, line: 1, content: -> >
 < type: T_Int, line: 1, content: i32 >
 < type: T_LC, line: 1, content: { >
 < type: T_Return, line: 2, content: return >
 < type: T_Id, line: 2, content: a >
-< type: T_AOp_Trust, line: 2, content: + >
-< type: T_Id, line: 2, content: b >
 < type: T_Semicolon, line: 2, content: ; >
 < type: T_RC, line: 3, content: } >
 < type: T_Fn, line: 5, content: fn >
@@ -28,7 +24,7 @@
 < type: T_Assign, line: 6, content: = >
 < type: T_Id, line: 6, content: add >
 < type: T_LP, line: 6, content: ( >
-< type: T_False, line: 6, content: false >
+< type: T_Decimal, line: 6, content: 5 >
 < type: T_Comma, line: 6, content: , >
 < type: T_True, line: 6, content: true >
 < type: T_RP, line: 6, content: ) >

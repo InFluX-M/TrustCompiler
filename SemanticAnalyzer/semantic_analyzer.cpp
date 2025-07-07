@@ -550,8 +550,12 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                     num_errors++;
                 } else {
                     for (size_t i = 0; i < expected_params.size(); ++i) {
-                        if (expected_params[i].second != UNK && provided_arg_types[i] != UNK &&
-                            expected_params[i].second != provided_arg_types[i]) {
+                        if (expected_params[i].second == UNK) {
+                            if (provided_arg_types[i] != UNK) {
+                                symbol_table[""][id_name].get_parameters()[i].second = provided_arg_types[i];
+                            }
+                        } else if (provided_arg_types[i] != UNK &&
+                                   expected_params[i].second != provided_arg_types[i]) {
                             std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
                                       << "Type mismatch in arguments of call to function '" << id_name
                                       << "'.\n  - Expected argument " << i + 1 << " to be of type '"
