@@ -22,7 +22,9 @@
 < type: T_Let, line: 4, content: let >
 < type: T_Id, line: 4, content: a >
 < type: T_Assign, line: 4, content: = >
-< type: T_Id, line: 4, content: c >
+< type: T_Decimal, line: 4, content: 1 >
+< type: T_AOp_MN, line: 4, content: - >
+< type: T_Decimal, line: 4, content: 4 >
 < type: T_Semicolon, line: 4, content: ; >
 < type: T_Let, line: 5, content: let >
 < type: T_Mut, line: 5, content: mut >
@@ -33,5 +35,5 @@
 < type: T_Id, line: 6, content: a >
 < type: T_RB, line: 6, content: ] >
 < type: T_Assign, line: 6, content: = >
-< type: T_Decimal, line: 6, content: 1 >
+< type: T_True, line: 6, content: true >
 < type: T_Semicolon, line: 6, content: ; >

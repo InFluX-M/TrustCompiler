@@ -1,6 +1,6 @@
 let mut x : [bool;200];
 let mut y = 1;
 let c = y;
-let a = c;
+let a = 1 - 4;
 let mut rr;
-x[a] = 1;
+x[a] = true;

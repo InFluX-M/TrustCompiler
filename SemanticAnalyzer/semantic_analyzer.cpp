@@ -336,6 +336,16 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                 }
             }
         }
+
+        // value
+        Node<Symbol> *assign_opt_node = children[4];
+        if (assign_opt_node->get_children()[0]->get_data().get_name() != "eps") {
+            if (names.size() == 1) {
+                std::string exp_val = assign_opt_node->get_children()[1]->get_data().get_val();
+                if (!exp_val.empty()) symbol_table[current_func][names[0]].set_val(exp_val);
+
+            }
+        }
     } else if (head_name == "func") {
         SymbolTableEntry &entry = symbol_table[""][current_func];
         if (children[5]->get_children()[0]->get_data().get_name() != "eps") {
@@ -354,7 +364,8 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                 num_errors++;
             }
         } else {
-            semantic_type stp = exp_t_to_semantic_type(return_stmt_node->get_children()[1]->get_data().get_exp_type());
+            semantic_type stp = exp_t_to_semantic_type(
+                    return_stmt_node->get_children()[1]->get_data().get_exp_type());
             if (entry.get_stype() == UNK) {
                 if (stp == UNK) {
                     std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
@@ -370,7 +381,8 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                 }
             } else {
                 if (entry.get_stype() != stp) {
-                    std::cerr << RED << "Semantic Error [Line " << line_number << "]: " << "Function '" << current_func
+                    std::cerr << RED << "Semantic Error [Line " << line_number << "]: " << "Function '"
+                              << current_func
                               << "' declared to return type '" << semantic_type_to_string[entry.get_stype()]
                               << "' but has a return statement of type '" << semantic_type_to_string[stp] << "'.\n"
                               << "  - Ensure the function returns a value of the declared type.\n" << WHITE
@@ -380,8 +392,10 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                 }
                 if (entry.get_stype() == TUPLE && entry.get_tuple_types().size() !=
                                                   return_stmt_node->get_children()[1]->get_data().get_tuple_types().size()) {
-                    std::cerr << RED << "Semantic Error [Line " << line_number << "]: " << "Function '" << current_func
-                              << "' declared to return a tuple of type '" << semantic_type_to_string[entry.get_stype()]
+                    std::cerr << RED << "Semantic Error [Line " << line_number << "]: " << "Function '"
+                              << current_func
+                              << "' declared to return a tuple of type '"
+                              << semantic_type_to_string[entry.get_stype()]
                               << "' but the return statement has a different number of elements.\n"
                               << "  - Ensure the number of elements in the returned tuple matches the declared type.\n"
                               << WHITE << std::endl;
@@ -403,7 +417,8 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                node->get_parent()->get_data().get_name() != "arg") {
         if (!current_func.empty() && !symbol_table[current_func].count(symbol.get_content())) {
             if (!symbol_table[""].count(symbol.get_content())) {
-                std::cerr << RED << "Semantic Error [Line " << line_number << "]: " << "Use of undeclared identifier '"
+                std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
+                          << "Use of undeclared identifier '"
                           << symbol.get_content() << "'.\n"
                           << "  - The identifier must be declared before it is used.\n"
                           << "  - Check for missing declarations or typos in the name.\n" << WHITE << std::endl;
@@ -414,12 +429,16 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
     } else if (head_name == "exp") {
         symbol.set_exp_type(children[0]->get_data().get_exp_type());
         symbol.add_to_tuple_types(children[0]->get_data().get_tuple_types());
-    } else if (head_name == "log_exp" or head_name == "rel_exp" or head_name == "eq_exp" or head_name == "cmp_exp") {
-        if (children[1]->get_children()[0]->get_data().get_name() != "eps") {
+        symbol.set_val(children[0]->get_data().get_val());
+    } else if (head_name == "log_exp" or head_name == "rel_exp" or head_name == "eq_exp" or
+               head_name == "cmp_exp") {
+        Node<Symbol> *tail_node = children[1];
+        if (tail_node->get_children()[0]->get_data().get_name() != "eps") {
             symbol.set_exp_type(TYPE_BOOL);
         } else {
             symbol.set_exp_type(children[0]->get_data().get_exp_type());
             symbol.add_to_tuple_types(children[0]->get_data().get_tuple_types());
+            symbol.set_val(children[0]->get_data().get_val());
         }
     } else if (head_name == "arith_exp" or head_name == "arith_term") {
         if (children[1]->get_children()[0]->get_data().get_name() != "eps") {
@@ -463,7 +482,8 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
             symbol.set_val(children[0]->get_data().get_content());
         } else if (children[0]->get_data().get_name() == "T_String") {
             symbol.set_exp_type(TYPE_STRING);
-        } else if (children[0]->get_data().get_name() == "T_True" or children[0]->get_data().get_name() == "T_False" or
+        } else if (children[0]->get_data().get_name() == "T_True" or
+                   children[0]->get_data().get_name() == "T_False" or
                    children[0]->get_data().get_name() == "T_LOp_NOT") {
             symbol.set_exp_type(TYPE_BOOL);
             // value
@@ -541,7 +561,8 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                                   << "  - The provided index expression is not an integer, it is "
                                   << exp_t_to_string(index_exp_node->get_data().get_exp_type()) << ".\n" << WHITE
                                   << std::endl;
-                        std::cerr << "----------------------------------------------------------------" << std::endl;
+                        std::cerr << "----------------------------------------------------------------"
+                                  << std::endl;
                         num_errors++;
                     }
 
@@ -618,7 +639,8 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                 // tuple
                 symbol.set_exp_type(TYPE_TUPLE);
                 std::vector<semantic_type> tuple_type;
-                tuple_type.push_back(exp_t_to_semantic_type(children[1]->get_children()[0]->get_data().get_exp_type()));
+                tuple_type.push_back(
+                        exp_t_to_semantic_type(children[1]->get_children()[0]->get_data().get_exp_type()));
                 auto tmp_node = children[1]->get_children()[1]->get_children()[1];
                 if (tmp_node->get_data().get_name() != "eps") {
                     tuple_type.push_back(
@@ -703,7 +725,8 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                         std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
                                   << "Array index for assignment cannot be negative. Got: " << index_val
                                   << " for array '" << name << "'.\n" << WHITE << std::endl;
-                        std::cerr << "----------------------------------------------------------------" << std::endl;
+                        std::cerr << "----------------------------------------------------------------"
+                                  << std::endl;
                         num_errors++;
                     }
                 }
@@ -928,7 +951,9 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
     }
 }
 
-SemanticAnalyzer::SemanticAnalyzer(Tree<Symbol> _parse_tree, std::string output_file_name) {
+SemanticAnalyzer::SemanticAnalyzer(Tree<Symbol>
+                                   _parse_tree, std::string
+                                   output_file_name) {
     parse_tree = _parse_tree;
     out_address = output_file_name;
     def_area = 0;

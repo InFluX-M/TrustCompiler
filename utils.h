@@ -50,12 +50,12 @@ enum semantic_type {
 };
 
 const std::string semantic_type_to_string[] = {
-    "void",
-    "int",
-    "bool",
-    "array",
-    "tuple",
-    "unk"
+        "void",
+        "int",
+        "bool",
+        "array",
+        "tuple",
+        "unk"
 };
 
 enum token_type {
@@ -298,8 +298,9 @@ public:
     }
 
     void set_stype(semantic_type _stype) {
-        stype = _stype; 
+        stype = _stype;
     }
+
     semantic_type get_stype() const {
         return stype;
     }
@@ -307,6 +308,7 @@ public:
     void set_val(std::string _val) {
         val = _val;
     }
+
     std::string get_val() {
         return val;
     }
@@ -314,32 +316,29 @@ public:
     void add_to_params_type(semantic_type _stype) {
         params_type.push_back(_stype);
     }
+
     void add_to_params_type(std::vector<semantic_type> &_params_type) {
-        for (auto _stype : _params_type) {
+        for (auto _stype: _params_type) {
             params_type.push_back(_stype);
         }
     }
-    std::vector<semantic_type>& get_params_type() {
+
+    std::vector<semantic_type> &get_params_type() {
         return params_type;
     }
 
     void add_to_tuple_types(semantic_type _stype) {
         tuple_types.push_back(_stype);
     }
+
     void add_to_tuple_types(std::vector<semantic_type> &_tuple_types) {
-        for (auto _stype : _tuple_types) {
+        for (auto _stype: _tuple_types) {
             tuple_types.push_back(_stype);
         }
     }
-    std::vector<semantic_type>& get_tuple_types() {
-        return tuple_types;
-    }
 
-    void set_val(std::string _val) {
-        val = _val;
-    }
-    std::string get_val() {
-        return val;
+    std::vector<semantic_type> &get_tuple_types() {
+        return tuple_types;
     }
 
     void set_exp_type(exp_type _exp_t) {
