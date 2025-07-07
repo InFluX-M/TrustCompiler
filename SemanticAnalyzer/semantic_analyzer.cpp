@@ -27,7 +27,7 @@ std::vector<std::string> split(std::string s, std::vector<char> chs) {
 }
 
 std::string eval(std::string exp, std::vector<char> chs) {
-    if (exp == "") {
+    if (exp.empty()) {
         return exp;
     }
 
@@ -432,14 +432,37 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
         if (children[0]->get_data().get_name() == "T_Hexadecimal" or
             children[0]->get_data().get_name() == "T_Decimal") {
             symbol.set_exp_type(TYPE_INT);
+            symbol.set_val(children[0]->get_data().get_content());
         } else if (children[0]->get_data().get_name() == "T_String") {
             symbol.set_exp_type(TYPE_STRING);
         } else if (children[0]->get_data().get_name() == "T_True" or children[0]->get_data().get_name() == "T_False" or
                    children[0]->get_data().get_name() == "T_LOp_NOT") {
             symbol.set_exp_type(TYPE_BOOL);
+            // value
+            if (children[0]->get_data().get_name() == "T_True") {
+                symbol.set_val("true");
+            } else if (children[0]->get_data().get_name() == "T_False") {
+                symbol.set_val("false");
+            } else if (children[0]->get_data().get_name() == "T_LOp_NOT") {
+                std::string operand_val = children[1]->get_data().get_val();
+                if (operand_val == "true") {
+                    symbol.set_val("false");
+                } else if (operand_val == "false") {
+                    symbol.set_val("true");
+                }
+            }
         } else if (children[0]->get_data().get_name() == "T_Id") {
             auto fac_id_opt = children[1]->get_children()[0];
             std::string id_name = children[0]->get_data().get_content();
+
+            // value
+            if (fac_id_opt->get_data().get_name() == "eps") {
+                // It's a variable
+                if (symbol_table[current_func].count(id_name)) {
+                    symbol.set_val(symbol_table[current_func][id_name].get_val());
+                }
+            }
+
             if (fac_id_opt->get_data().get_name() == "T_LP") {
                 if (!symbol_table[""].count(id_name) || symbol_table[""][id_name].get_type() != FUNC) {
                     std::cerr << RED << "Semantic Error [Line " << line_number << "]: '" << id_name
@@ -543,6 +566,10 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
                 }
             }
         } else if (children[0]->get_data().get_name() == "T_LP") {
+            // value
+            if (children[1]->get_children()[1]->get_children()[0]->get_data().get_name() == "T_RP")
+                symbol.set_val(children[1]->get_children()[0]->get_data().get_val());
+
             if (children[1]->get_children()[1]->get_children()[0]->get_data().get_name() == "T_RP") {
                 // parentheses
                 symbol.set_exp_type(children[1]->get_children()[0]->get_data().get_exp_type());

@@ -1,6 +1,8 @@
 #ifndef SEMANTIC_ANALYZER_H
 #define SEMANTIC_ANALYZER_H
 
+#include <utility>
+
 #include "../utils.h"
 
 enum id_type {
@@ -18,6 +20,7 @@ private:
     std::vector<semantic_type> tuple_types;
     int def_area;
     bool mut;
+    std::string val;
 
     int arr_len;
     semantic_type arr_type;
@@ -25,6 +28,7 @@ private:
 public:
     SymbolTableEntry() {
         type = NONE;
+        val = "";
     }
 
     SymbolTableEntry(id_type _type) {
@@ -34,6 +38,7 @@ public:
         mut = false;
         arr_len = 0;
         arr_type = UNK;
+        val = "";
     }
 
     SymbolTableEntry(id_type _type, semantic_type _stype, int _def_area, bool _mut = false,
@@ -44,6 +49,7 @@ public:
         mut = _mut;
         arr_len = _arr_len;
         arr_type = _arr_type;
+        val = "";
     }
 
 
@@ -77,6 +83,14 @@ public:
 
     std::vector<std::pair<std::string, semantic_type>> &get_parameters() {
         return parameters;
+    }
+
+    void set_val(std::string _val) {
+        val = std::move(_val);
+    }
+
+    std::string get_val() {
+        return val;
     }
 
     void add_to_tuple_types(semantic_type _stype) {

@@ -304,6 +304,13 @@ public:
         return stype;
     }
 
+    void set_val(std::string _val) {
+        val = _val;
+    }
+    std::string get_val() {
+        return val;
+    }
+
     void add_to_params_type(semantic_type _stype) {
         params_type.push_back(_stype);
     }
