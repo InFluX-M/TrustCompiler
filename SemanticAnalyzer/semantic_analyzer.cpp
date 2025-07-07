@@ -1012,7 +1012,6 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
     }
 }
 
-
 void SemanticAnalyzer::check_for_main_function() {
 
     if (symbol_table[""].count("main") == 0) {
@@ -1026,6 +1025,17 @@ void SemanticAnalyzer::check_for_main_function() {
 }
 
 void SemanticAnalyzer::analyze() {
+    if (parse_tree.get_root() != nullptr) {
+        dfs(parse_tree.get_root());
+    }
+
+    check_for_main_function();
+
+    if (num_errors == 0) {
+        std::cout << GREEN << "Semantic analysis completed with no errors." << WHITE << std::endl;
+    } else {
+        std::cout << YELLOW << "Semantic analysis completed with " << num_errors << " error(s)." << WHITE << std::endl;
+    }
 }
 
 SemanticAnalyzer::SemanticAnalyzer(Tree<Symbol>
