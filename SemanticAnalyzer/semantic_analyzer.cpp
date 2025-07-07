@@ -482,23 +482,35 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
             symbol.set_val(children[0]->get_data().get_content());
         } else if (children[0]->get_data().get_name() == "T_String") {
             symbol.set_exp_type(TYPE_STRING);
-        } else if (children[0]->get_data().get_name() == "T_True" or
-                   children[0]->get_data().get_name() == "T_False" or
-                   children[0]->get_data().get_name() == "T_LOp_NOT") {
-            symbol.set_exp_type(TYPE_BOOL);
-            // value
-            if (children[0]->get_data().get_name() == "T_True") {
-                symbol.set_val("true");
-            } else if (children[0]->get_data().get_name() == "T_False") {
-                symbol.set_val("false");
-            } else if (children[0]->get_data().get_name() == "T_LOp_NOT") {
-                std::string operand_val = children[1]->get_data().get_val();
-                if (operand_val == "true") {
-                    symbol.set_val("false");
-                } else if (operand_val == "false") {
-                    symbol.set_val("true");
-                }
-            }
+        }
+    } else if (children[0]->get_data().get_name() == "T_True" ||
+               children[0]->get_data().get_name() == "T_False") {
+        symbol.set_exp_type(TYPE_BOOL);
+
+        // value
+        if (children[0]->get_data().get_name() == "T_True") symbol.set_val("true");
+        else symbol.set_val("false");
+
+    } else if (children[0]->get_data().get_name() == "T_LOp_NOT") {
+        Node<Symbol> *operand_node = children[1];
+        exp_type operand_type = operand_node->get_data().get_exp_type();
+
+        if (operand_type != TYPE_BOOL) {
+            std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
+                      << "Logical NOT operator '!' cannot be applied to a non-boolean type.\n"
+                      << "  - Expected operand of type 'bool' but got '" << exp_t_to_string(operand_type)
+                      << "'.\n"
+                      << WHITE << std::endl;
+            std::cerr << "----------------------------------------------------------------" << std::endl;
+            num_errors++;
+        }
+
+        symbol.set_exp_type(TYPE_BOOL);
+        std::string operand_val = operand_node->get_data().get_val();
+        if (operand_val == "true") {
+            symbol.set_val("false");
+        } else if (operand_val == "false") {
+            symbol.set_val("true");
         } else if (children[0]->get_data().get_name() == "T_Id") {
             auto fac_id_opt = children[1]->get_children()[0];
             std::string id_name = children[0]->get_data().get_content();
