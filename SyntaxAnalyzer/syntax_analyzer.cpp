@@ -626,3 +626,9 @@ void SyntaxAnalyzer::write() {
 Tree<Symbol> SyntaxAnalyzer::get_tree() const {
     return tree;
 }
+
+void SyntaxAnalyzer::run() {
+    make_tree(true);
+    write();
+    std::cout << GREEN << "Syntax analysis completed successfully!" << WHITE << std::endl;
+}

@@ -12,18 +12,10 @@ int main() {
     std::cin >> file;
 
     LexicalAnalyzer lexer(input_file + file, output_file + file + ".lex");
-
-    lexer.tokenize();
-    lexer.write();
-
-    std::cout << "Lexical analysis completed successfully!" << std::endl;
+    lexer.run();
 
     SyntaxAnalyzer syn_analyzer(lexer.get_tokens(), output_file + file + ".syn");
-
-    syn_analyzer.make_tree(true);
-    syn_analyzer.write();
-
-    std::cout << "Syntax analysis completed successfully!" << std::endl;
+    syn_analyzer.run();
 
     SemanticAnalyzer sem_analyzer(syn_analyzer.get_tree().get_root(), output_file + file + ".sem");
     sem_analyzer.analyze();

@@ -677,3 +677,9 @@ void LexicalAnalyzer::write() {
 std::vector<Token> LexicalAnalyzer::get_tokens() {
     return tokens;
 }
+
+void LexicalAnalyzer::run() {
+    tokenize();
+    write();
+    std::cout << GREEN << "Lexical analysis completed successfully." << WHITE << std::endl;
+}

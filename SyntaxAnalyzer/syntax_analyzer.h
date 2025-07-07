@@ -101,6 +101,8 @@ public:
 
     void write();
 
+    void run();
+
     Tree<Symbol> get_tree() const;
 };
 

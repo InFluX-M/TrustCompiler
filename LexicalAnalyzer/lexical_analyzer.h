@@ -55,6 +55,8 @@ public:
 
     void write();
 
+    void run();
+
     std::vector<Token> get_tokens();
 };
 
