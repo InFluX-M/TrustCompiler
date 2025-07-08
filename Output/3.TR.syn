@@ -413,9 +413,9 @@
          │        │                                                                                         │                 │                 │        │        │        │        ├── <arith_term_non_string>
          │        │                                                                                         │                 │                 │        │        │        │        │        ├── <arith_factor_non_string>
          │        │                                                                                         │                 │                 │        │        │        │        │        │        ├── T_Id
-         │        │                                                                                         │                 │                 │        │        │        │        │        │        │     ││ └── 'mod_result'
+         │        │                                                                                         │                 │                 │        │        │        │        │        │        │        └── 'mod_result'
          │        │                                                                                         │                 │                 │        │        │        │        │        │        └── <fac_id_opt>
-         │        │                                                                                         │                 │                 │        │        │        │        │        │              ││ └── eps
+         │        │                                                                                         │                 │                 │        │        │        │        │        │                 └── eps
          │        │                                                                                         │                 │                 │        │        │        │        │        └── <arith_term_tail>
          │        │                                                                                         │                 │                 │        │        │        │        │                 └── eps
          │        │                                                                                         │                 │                 │        │        │        │        └── <arith_exp_tail>
