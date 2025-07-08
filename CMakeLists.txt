@@ -11,12 +11,13 @@ add_executable(TrustCompiler
         utils.h
         SyntaxAnalyzer/syntax_analyzer.cpp
         SemanticAnalyzer/semantic_analyzer.cpp
-        )
+        CodeGenerator/code_generator.cpp)
 
 include_directories(
         .
         LexicalAnalyzer
         SyntaxAnalyzer
         SemanticAnalyzer
+        CodeGenerator
 )
 

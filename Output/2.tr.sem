@@ -1,4 +1,4 @@
-<program>  [ exp_type: INT ]
+<program>  [ exp_type: UNK ]
 └── <func_ls>  [ exp_type: UNK ]
     ├── <func>  [ exp_type: UNK ]
     │   ├── T_Fn  [ exp_type: UNK, content: 'fn' ]

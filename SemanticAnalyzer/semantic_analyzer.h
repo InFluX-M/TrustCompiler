@@ -168,6 +168,10 @@ public:
     void analyze();
 
     SemanticAnalyzer(Tree<Symbol> _parse_tree, std::string output_file_name);
+
+    std::map<std::string, std::map<std::string, SymbolTableEntry>> get_symbol_table() {
+        return symbol_table;
+    }
 };
 
 #endif // SEMANTIC_ANALYZER_H
