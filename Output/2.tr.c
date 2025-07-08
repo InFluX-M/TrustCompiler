@@ -10,7 +10,7 @@ int add(int a, bool b) {
 }
 
 void main() {
-	const void result = add(5);
+	const int result = add(5, true);
 	printf("%d\n", result);
 }
 

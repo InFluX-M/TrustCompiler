@@ -4,7 +4,7 @@
 CodeGenerator::CodeGenerator(Tree<Symbol> _ast,
                              std::map<std::string, std::map<std::string, SymbolTableEntry>> _symbol_table,
                              std::string output_file_name) {
-    ast = std::move(_ast);
+    ast = _ast;
     symbol_table = std::move(_symbol_table);
     out_address = std::move(output_file_name);
     current_func = "";
@@ -162,12 +162,10 @@ std::string CodeGenerator::generate_function(Node<Symbol> *node) {
     std::string func_name = children[1]->get_data().get_content();
     current_func = func_name;
 
-    // Return type - فقط از symbol_table خوانده شود
     semantic_type return_type = symbol_table[""][func_name].get_stype();
 
     std::string code = to_c_type(return_type) + " " + func_name + "(";
 
-    // Function parameters - فقط از symbol_table خوانده شود
     const auto &params = symbol_table[""][func_name].get_parameters();
     for (size_t i = 0; i < params.size(); ++i) {
         code += to_c_type(params[i].second) + " " + params[i].first;
@@ -184,7 +182,7 @@ std::string CodeGenerator::generate_function(Node<Symbol> *node) {
     }
 
     // Return statement
-    if (children.size() > 8 && children[8]->get_children().size() > 0 &&
+    if (children.size() > 8 && !children[8]->get_children().empty() &&
         children[8]->get_children()[0]->get_data().get_name() != "eps") {
         code += generate_code(children[8]);
     } else if (return_type != VOID) {
@@ -200,32 +198,115 @@ std::string CodeGenerator::generate_variable_declaration(Node<Symbol> *node) {
     auto children = node->get_children();
     std::string code;
 
+    // Check if variable is mutable
     bool is_mutable = (children[1]->get_children().size() > 0 &&
                        children[1]->get_children()[0]->get_data().get_name() == "T_Mut");
 
+    // Handle single variable declaration
     if (children[2]->get_children().size() == 1 &&
         children[2]->get_children()[0]->get_data().get_name() == "T_Id") {
         std::string var_name = children[2]->get_children()[0]->get_data().get_content();
+        semantic_type var_type = UNK;
 
-        // نوع فقط از symbol_table خوانده شود
-        semantic_type var_type = symbol_table[current_func][var_name].get_stype();
-        if (var_type == UNK) {
-            var_type = INT; // مقدار پیش‌فرض اگر نوع مشخص نبود
+        // Get type from type annotation if exists
+        if (children[3]->get_children().size() > 0 &&
+            children[3]->get_children()[0]->get_data().get_name() != "eps") {
+            var_type = children[3]->get_children()[1]->get_data().get_stype();
         }
 
-        // Initialization
+        // Get type from symbol table if not specified in annotation
+        if (var_type == UNK && symbol_table[current_func].count(var_name)) {
+            var_type = symbol_table[current_func][var_name].get_stype();
+        }
+
+        // Handle initialization
         std::string init_value;
         if (children[4]->get_children().size() > 0 &&
             children[4]->get_children()[0]->get_data().get_name() != "eps") {
             init_value = generate_expression(children[4]->get_children()[1]);
+
+            // If type still unknown, try to infer from initialization
+            if (var_type == UNK) {
+                // Check if initialization is a function call
+                Node<Symbol> *init_node = children[4]->get_children()[1];
+                if (init_node->get_children().size() > 1 &&
+                    init_node->get_children()[0]->get_data().get_name() == "T_Id" &&
+                    init_node->get_children()[1]->get_children().size() > 0 &&
+                    init_node->get_children()[1]->get_children()[0]->get_data().get_name() == "T_LP") {
+
+                    std::string called_func = init_node->get_children()[0]->get_data().get_content();
+                    if (symbol_table[""].count(called_func)) {
+                        var_type = symbol_table[""][called_func].get_stype();
+                    }
+                }
+                    // Otherwise use type from the initialization expression
+                else if (init_node->get_data().get_stype() != UNK) {
+                    var_type = init_node->get_data().get_stype();
+                }
+            }
         }
 
+        // Default to int if type still unknown
+        if (var_type == UNK) {
+            var_type = INT;
+        }
+
+        // Generate the declaration code
         code = std::string("\t") + (is_mutable ? "" : "const ") + to_c_type(var_type) + " " + var_name;
         if (!init_value.empty()) {
             code += " = " + init_value;
         }
         code += ";\n";
     }
+        // Handle tuple pattern declaration
+    else if (children[2]->get_children().size() == 3 &&
+             children[2]->get_children()[0]->get_data().get_name() == "T_LP") {
+        Node<Symbol> *id_ls = children[2]->get_children()[1];
+        std::vector<std::string> var_names;
+
+        // Collect all variable names in the tuple
+        var_names.push_back(id_ls->get_children()[0]->get_data().get_content());
+        Node<Symbol> *id_ls_tail = id_ls->get_children()[1];
+        while (id_ls_tail->get_children().size() > 0 &&
+               id_ls_tail->get_children()[0]->get_data().get_name() != "eps") {
+            var_names.push_back(id_ls_tail->get_children()[1]->get_data().get_content());
+            id_ls_tail = id_ls_tail->get_children()[2];
+        }
+
+        // Handle initialization
+        if (children[4]->get_children().size() > 0 &&
+            children[4]->get_children()[0]->get_data().get_name() != "eps") {
+            std::string tuple_init = generate_expression(children[4]->get_children()[1]);
+
+            // Generate individual variable assignments
+            for (size_t i = 0; i < var_names.size(); ++i) {
+                semantic_type var_type = UNK;
+                if (symbol_table[current_func].count(var_names[i])) {
+                    var_type = symbol_table[current_func][var_names[i]].get_stype();
+                }
+                if (var_type == UNK) {
+                    var_type = INT; // Default type
+                }
+
+                code += std::string("\t") + (is_mutable ? "" : "const ") + to_c_type(var_type) + " " + var_names[i] +
+                        " = ((" + tuple_init + ").item" + std::to_string(i) + ");\n";
+            }
+        } else {
+            // No initialization, just declare variables
+            for (const auto &name: var_names) {
+                semantic_type var_type = UNK;
+                if (symbol_table[current_func].count(name)) {
+                    var_type = symbol_table[current_func][name].get_stype();
+                }
+                if (var_type == UNK) {
+                    var_type = INT; // Default type
+                }
+
+                code += std::string("\t") + (is_mutable ? "" : "const ") + to_c_type(var_type) + " " + name + ";\n";
+            }
+        }
+    }
+
     return code;
 }
 
@@ -273,19 +354,19 @@ std::string CodeGenerator::generate_expression(Node<Symbol> *node) {
         }
     } else if (head_name == "log_exp") {
         code = generate_code(children[0]);
-        if (children.size() > 1 && children[1]->get_children().size() > 0 &&
+        if (children.size() > 1 && !children[1]->get_children().empty() &&
             children[1]->get_children()[0]->get_data().get_name() != "eps") {
             code += " || " + generate_code(children[1]->get_children()[1]);
         }
     } else if (head_name == "rel_exp") {
         code = generate_code(children[0]);
-        if (children.size() > 1 && children[1]->get_children().size() > 0 &&
+        if (children.size() > 1 && !children[1]->get_children().empty() &&
             children[1]->get_children()[0]->get_data().get_name() != "eps") {
             code += " && " + generate_code(children[1]->get_children()[1]);
         }
     } else if (head_name == "eq_exp") {
         code = generate_code(children[0]);
-        if (children.size() > 1 && children[1]->get_children().size() > 0 &&
+        if (children.size() > 1 && !children[1]->get_children().empty() &&
             children[1]->get_children()[0]->get_data().get_name() != "eps") {
             std::string op = children[1]->get_children()[0]->get_data().get_content();
             if (op == "T_ROp_E") op = " == ";
@@ -294,7 +375,7 @@ std::string CodeGenerator::generate_expression(Node<Symbol> *node) {
         }
     } else if (head_name == "cmp_exp") {
         code = generate_code(children[0]);
-        if (children.size() > 1 && children[1]->get_children().size() > 0 &&
+        if (children.size() > 1 && !children[1]->get_children().empty() &&
             children[1]->get_children()[0]->get_data().get_name() != "eps") {
             std::string op = children[1]->get_children()[0]->get_data().get_content();
             if (op == "T_ROp_L") op = " < ";
@@ -305,7 +386,7 @@ std::string CodeGenerator::generate_expression(Node<Symbol> *node) {
         }
     } else if (head_name == "arith_exp" || head_name == "arith_term") {
         code = generate_code(children[0]);
-        if (children.size() > 1 && children[1]->get_children().size() > 0 &&
+        if (children.size() > 1 && !children[1]->get_children().empty() &&
             children[1]->get_children()[0]->get_data().get_name() != "eps") {
             std::string op = children[1]->get_children()[0]->get_data().get_content();
             if (op == "T_AOp_Trust") op = " + ";
@@ -336,20 +417,64 @@ std::string CodeGenerator::generate_function_call(Node<Symbol> *node) {
     auto children = node->get_children();
     std::string func_name = children[0]->get_data().get_content();
 
-    std::string code = func_name + "(";
-    if (children.size() > 1 && children[1]->get_children().size() > 0 &&
-        children[1]->get_children()[0]->get_data().get_name() != "eps") {
-        Node<Symbol> *exp_ls = children[1]->get_children()[1];
-        code += generate_code(exp_ls);
+    // Get function info from symbol table
+    const auto &func_entry = symbol_table[""][func_name];
+    const auto &params = func_entry.get_parameters();
 
-        // Process remaining arguments
-        Node<Symbol> *exp_ls_tail = exp_ls->get_children()[1];
-        while (exp_ls_tail->get_children().size() > 0 &&
-               exp_ls_tail->get_children()[0]->get_data().get_name() != "eps") {
-            code += ", " + generate_code(exp_ls_tail->get_children()[1]);
-            exp_ls_tail = exp_ls_tail->get_children()[2];
+    std::string code = func_name + "(";
+
+    // Process arguments
+    if (children.size() > 1 && !children[1]->get_children().empty() &&
+        children[1]->get_children()[0]->get_data().get_name() != "eps") {
+        Node<Symbol> *exp_ls = children[1]->get_children()[1]->get_children()[0];
+        std::vector<std::string> args;
+
+        // Collect all arguments
+        if (!exp_ls->get_children().empty() &&
+            exp_ls->get_children()[0]->get_data().get_name() != "eps") {
+            args.push_back(generate_code(exp_ls->get_children()[0]));
+
+            Node<Symbol> *exp_ls_tail = exp_ls->get_children()[1];
+            while (!exp_ls_tail->get_children().empty() &&
+                   exp_ls_tail->get_children()[0]->get_data().get_name() != "eps") {
+                args.push_back(generate_code(exp_ls_tail->get_children()[1]));
+                exp_ls_tail = exp_ls_tail->get_children()[2];
+            }
+        }
+
+        // Check argument count
+        if (args.size() != params.size()) {
+            std::cerr << RED << "CodeGen Error: Function '" << func_name
+                      << "' expects " << params.size() << " arguments but "
+                      << args.size() << " were provided\n" << WHITE;
+            // Continue generation but with default values for missing args
+            for (size_t i = 0; i < params.size(); i++) {
+                if (i < args.size()) {
+                    code += args[i];
+                } else {
+                    // Add default value based on parameter type
+                    code += (params[i].second == BOOL) ? "false" : "0";
+                }
+                if (i != params.size() - 1) code += ", ";
+            }
+        } else {
+            // All arguments provided correctly
+            for (size_t i = 0; i < args.size(); i++) {
+                code += args[i];
+                if (i != args.size() - 1) code += ", ";
+            }
+        }
+    } else if (!params.empty()) {
+        // No arguments provided but function expects some
+        std::cerr << RED << "CodeGen Error: Function '" << func_name
+                  << "' expects " << params.size() << " arguments but none were provided\n" << WHITE;
+        // Add default values
+        for (size_t i = 0; i < params.size(); i++) {
+            code += (params[i].second == BOOL) ? "false" : "0";
+            if (i != params.size() - 1) code += ", ";
         }
     }
+
     code += ")";
     return code;
 }
@@ -369,7 +494,7 @@ std::string CodeGenerator::generate_tuple_access(Node<Symbol> *node) {
 
     // Generate tuple value
     std::string tuple_value;
-    if (children[1]->get_children().size() > 0 &&
+    if (!children[1]->get_children().empty() &&
         children[1]->get_children()[0]->get_data().get_name() != "eps") {
         tuple_value = generate_code(children[1]->get_children()[0]);
 
@@ -390,7 +515,7 @@ std::string CodeGenerator::generate_println(Node<Symbol> *node) {
     Node<Symbol> *args_node = children[2];
     std::string code;
 
-    if (args_node->get_children().size() > 0) {
+    if (!args_node->get_children().empty()) {
         if (args_node->get_children()[0]->get_data().get_name() == "T_String") {
             std::string format_str = args_node->get_children()[0]->get_data().get_content();
 
@@ -405,9 +530,9 @@ std::string CodeGenerator::generate_println(Node<Symbol> *node) {
 
             // Add format arguments
             if (args_node->get_children().size() > 1 &&
-                args_node->get_children()[1]->get_children().size() > 0) {
+                !args_node->get_children()[1]->get_children().empty()) {
                 Node<Symbol> *format_args = args_node->get_children()[1];
-                while (format_args->get_children().size() > 0 &&
+                while (!format_args->get_children().empty() &&
                        format_args->get_children()[0]->get_data().get_name() != "eps") {
                     code += ", " + generate_expression(format_args->get_children()[1]);
                     format_args = format_args->get_children()[2];
@@ -434,7 +559,7 @@ std::string CodeGenerator::generate_control_structures(Node<Symbol> *node) {
         code += generate_code(children[3]); // then block
 
         // else part
-        if (children.size() > 4 && children[4]->get_children().size() > 0) {
+        if (children.size() > 4 && !children[4]->get_children().empty()) {
             Node<Symbol> *else_node = children[4]->get_children()[1];
             if (else_node->get_data().get_name() == "if_stmt") {
                 code += "\t} else " + generate_control_structures(else_node);
