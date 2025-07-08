@@ -5,7 +5,7 @@
 
 int add(int a, bool b);
 
-int add(int a, int b) {
+int add(int a, bool b) {
 	return a;
 }
 
