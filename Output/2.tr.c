@@ -1,13 +1,16 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+
+int add(int a, bool b);
 
 int add(int a, int b) {
 	return a;
 }
 
 void main() {
-	void result = ;
+	const void result = add(5);
 	printf("%d\n", result);
-	return 0;
 }
 

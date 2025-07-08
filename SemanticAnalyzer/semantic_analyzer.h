@@ -142,6 +142,18 @@ public:
     void clear_parameters() {
         parameters.clear();
     }
+
+    semantic_type get_stype() const {
+        return stype;
+    }
+
+    const std::vector<std::pair<std::string, semantic_type>>& get_parameters() const {
+        return parameters;
+    }
+
+    const std::vector<semantic_type>& get_tuple_types() const {
+        return tuple_types;
+    }
 };
 
 class SemanticAnalyzer {
@@ -172,6 +184,7 @@ public:
     std::map<std::string, std::map<std::string, SymbolTableEntry>> get_symbol_table() {
         return symbol_table;
     }
+
 };
 
 #endif // SEMANTIC_ANALYZER_H
