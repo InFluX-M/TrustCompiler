@@ -1053,7 +1053,7 @@ void SemanticAnalyzer::write_annotated_tree(Node<Symbol> *node, int num, bool la
 
     Symbol &var = node->get_data();
 
-    for (int i = 0; i < num * TAB - TAB; i++) {
+    for (int i = 0; i < num * 4 - 4; i++) {
         if (has_par[i]) {
             out << "│";
         } else {
@@ -1106,12 +1106,12 @@ void SemanticAnalyzer::write_annotated_tree(Node<Symbol> *node, int num, bool la
 
     out << std::endl;
 
-    has_par[num * TAB] = true;
+    has_par[num * 4] = true;
     std::deque<Node<Symbol> *> children = node->get_children();
     for (auto it = children.begin(); it != children.end(); ++it) {
         bool is_last_child = (std::next(it) == children.end());
         if (is_last_child) {
-            has_par[num * TAB] = false;
+            has_par[num * 4] = false;
         }
         write_annotated_tree(*it, num + 1, is_last_child);
     }

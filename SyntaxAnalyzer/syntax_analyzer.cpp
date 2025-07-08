@@ -428,7 +428,7 @@ void SyntaxAnalyzer::read_table() {
 void SyntaxAnalyzer::write_tree(Node<Symbol> *node, int num, bool last) {
     Symbol var = node->get_data();
 
-    for (int i = 0; i < num * TAB - TAB; i++) {
+    for (int i = 0; i < num * 4 - 4; i++) {
         if (has_par[i]) {
             out << "│";
         } else {
@@ -444,7 +444,7 @@ void SyntaxAnalyzer::write_tree(Node<Symbol> *node, int num, bool last) {
     }
     out << var << "\n";
     if (!node->get_data().get_content().empty()) {
-        for (int i = 0; i < num * TAB; i++) {
+        for (int i = 0; i < num * 4; i++) {
             if (has_par[i]) {
                 out << "│";
             } else {
@@ -454,12 +454,12 @@ void SyntaxAnalyzer::write_tree(Node<Symbol> *node, int num, bool last) {
         out << "└── '" << node->get_data().get_content() << "'" << "\n";
     }
 
-    has_par[num * TAB] = true;
+    has_par[num * 4] = true;
     std::deque<Node<Symbol> *> children = node->get_children();
     for (auto child: children) {
         bool end = false;
         if (child == children.back()) {
-            has_par[num * TAB] = false;
+            has_par[num * 4] = false;
             end = true;
         }
         write_tree(child, num + 1, end);
