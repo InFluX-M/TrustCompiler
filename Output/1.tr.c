@@ -5,10 +5,11 @@
 
 
 void main() {
-	int* x;
-	void y = 1;
-	const void c = y;
-	const void a = y+42;
+	bool x[200];
+	int y = 1;
+	const int c = y;
+	const int a = y + 42;
 	int rr;
-x}
+	x[a] = true;
+}
 

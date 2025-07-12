@@ -49,6 +49,8 @@ private:
 
     std::string generate_tuple_access(Node<Symbol> *node);
 
+    std::string generate_assignment_or_call_statement(Node<Symbol> *stmt_node);
+
 public:
     CodeGenerator(Tree<Symbol> _ast,
                   std::map<std::string, std::map<std::string, SymbolTableEntry>> _symbol_table,

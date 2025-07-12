@@ -992,7 +992,7 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
 
     if (is_new_scope) {
         std::vector<std::string> keys_to_erase;
-        if (!current_func.empty()) {
+        if (!current_func.empty() && !(current_func == "main")) {
             for (const auto &[key, val]: symbol_table[current_func]) {
                 if (val.get_def_area() == def_area) {
                     keys_to_erase.push_back(key);
