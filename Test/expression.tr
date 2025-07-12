@@ -9,7 +9,7 @@ fn main() {
 
     let result_arith = a + b * c - d / c % d; // Arithmetic operators [cite: 26]
     let result_relational = (a < b) && (b >= c) || (a != d); // Relational and logical operators [cite: 27, 29]
-    let result_unary = -a + +b; // Unary operators [cite: 26]
+    let result_unary = -a + b; // Unary operators [cite: 26]
 
     if (x || !y) && (a > b || c <= d) {
         a = (b + c) * d;

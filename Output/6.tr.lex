@@ -1,0 +1,16 @@
+< type: T_Fn, line: 1, content: fn >
+< type: T_Id, line: 1, content: main >
+< type: T_LP, line: 1, content: ( >
+< type: T_RP, line: 1, content: ) >
+< type: T_LC, line: 1, content: { >
+< type: T_Let, line: 3, content: let >
+< type: T_Id, line: 3, content: x >
+< type: T_Assign, line: 3, content: = >
+< type: T_Decimal, line: 3, content: 10 >
+< type: T_Semicolon, line: 3, content: ; >
+< type: T_Print, line: 4, content: println! >
+< type: T_LP, line: 4, content: ( >
+< type: T_Id, line: 4, content: x >
+< type: T_RP, line: 4, content: ) >
+< type: T_Semicolon, line: 4, content: ; >
+< type: T_RC, line: 5, content: } >
