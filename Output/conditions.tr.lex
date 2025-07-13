@@ -4,6 +4,7 @@
 < type: T_RP, line: 2, content: ) >
 < type: T_LC, line: 2, content: { >
 < type: T_Let, line: 3, content: let >
+< type: T_Mut, line: 3, content: mut >
 < type: T_Id, line: 3, content: x >
 < type: T_Colon, line: 3, content: : >
 < type: T_Int, line: 3, content: i32 >
@@ -11,6 +12,7 @@
 < type: T_Decimal, line: 3, content: 10 >
 < type: T_Semicolon, line: 3, content: ; >
 < type: T_Let, line: 4, content: let >
+< type: T_Mut, line: 4, content: mut >
 < type: T_Id, line: 4, content: y >
 < type: T_Colon, line: 4, content: : >
 < type: T_Int, line: 4, content: i32 >

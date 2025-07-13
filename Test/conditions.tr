@@ -1,7 +1,7 @@
 // This program tests if and else if conditional statements.
 fn main() {
-    let x: i32 = 10;
-    let y: i32 = 5;
+    let mut x: i32 = 10;
+    let mut y: i32 = 5;
     let b: bool = false;
 
     if x == 10 {
