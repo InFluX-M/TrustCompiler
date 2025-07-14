@@ -509,6 +509,32 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
             } else if (operand_val == "false") {
                 symbol.set_val("true");
             }
+        } else if (children[0]->get_data().get_name() == "T_AOp_MN") { // Handle unary minus
+            Node<Symbol> *operand_node = children[1];
+            exp_type operand_type = operand_node->get_data().get_exp_type();
+
+            if (operand_type != TYPE_INT) {
+                std::cerr << RED << "Semantic Error [Line " << line_number << "]: "
+                          << "Unary minus operator '-' cannot be applied to a non-integer type.\n"
+                          << "  - Expected operand of type 'int' but got '" << exp_t_to_string(operand_type)
+                          << "'.\n"
+                          << WHITE << std::endl;
+                std::cerr << "----------------------------------------------------------------" << std::endl;
+                num_errors++;
+            }
+
+            symbol.set_exp_type(TYPE_INT);
+
+            // Handle constant folding
+            std::string operand_val = operand_node->get_data().get_val();
+            if (!operand_val.empty()) {
+                try {
+                    long long val = std::stoll(operand_val);
+                    symbol.set_val(std::to_string(-val));
+                } catch (const std::invalid_argument &ia) {
+                    // Not a number, can't fold. Do nothing.
+                }
+            }
         } else if (children[0]->get_data().get_name() == "T_Id") {
             auto fac_id_opt = children[1]->get_children()[0];
             std::string id_name = children[0]->get_data().get_content();

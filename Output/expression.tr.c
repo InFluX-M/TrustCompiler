@@ -13,11 +13,11 @@ void main() {
 	const bool y = false;
 	const int result_arith = a + b * c - d / c % d;
 	const bool result_relational = (a < b) && (b >= c) || (a != d);
-	const int result_unary = a + b;
-	if ((x || !(y)) && (a > b || c <= d)) {
-	a = (b + c) * d;
+	const int result_unary = -a + b;
+	if ((x || !y) && (a > b || c <= d)) {
+		a = (b + c) * d;
 	}
 	const int complex_expr = (a + b) * (c - d) / (a % c);
-	const bool bool_expr = !(((x && y) || (a == b)));
+	const bool bool_expr = !((x && y) || (a == b));
 }
 

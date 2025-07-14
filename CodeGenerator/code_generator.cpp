@@ -318,7 +318,9 @@ std::string CodeGenerator::generate_expression(Node<Symbol> *node) {
                 code = "(" + generate_code(children[1]) + ")";
             }
         } else if (factor_type == "T_LOp_NOT") {
-            code = "!(" + generate_code(children[1]) + ")";
+            code = "!" + generate_code(children[1]);
+        } else if (factor_type == "T_AOp_MN") {
+            code = "-" + generate_expression(children[1]);
         } else {
             code = generate_code(children[0]);
         }
