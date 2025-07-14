@@ -14,14 +14,14 @@ void main() {
 	}
 	if (y <= 2 && x > 7 || b != false) {
 	x = 4 + y;
- else {
+	} else {
 	x = 3 * y;
 	}
 	if (x >= 5 && y < 7 && !(b)) {
 	b = true;
- else 	if (x == 3) {
+	} else if (x == 3) {
 	x = 100;
- else {
+	} else {
 	b = false;
 	}
 }

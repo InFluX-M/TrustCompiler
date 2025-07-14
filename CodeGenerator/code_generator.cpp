@@ -55,8 +55,8 @@ std::string CodeGenerator::generate_assignment_or_call_statement(Node<Symbol> *s
     // Structure: <stmt> -> T_Id <stmt_after_id> T_Semicolon
 
     std::string identifier = children[0]->get_data().get_content();
-    Node<Symbol>* after_id_node = children[1];
-    Node<Symbol>* first_child_of_after = after_id_node->get_children()[0];
+    Node<Symbol> *after_id_node = children[1];
+    Node<Symbol> *first_child_of_after = after_id_node->get_children()[0];
     std::string rule_type = first_child_of_after->get_data().get_name();
 
     std::string code = "\t";
@@ -76,8 +76,9 @@ std::string CodeGenerator::generate_assignment_or_call_statement(Node<Symbol> *s
         // We just need to build a fake <arith_factor> node for it.
         // Or more simply, build the string manually.
         std::string func_call_str = identifier + "(";
-        Node<Symbol>* exp_ls_call_node = after_id_node->get_children()[1];
-        if (!exp_ls_call_node->get_children().empty() && exp_ls_call_node->get_children()[0]->get_data().get_name() != "eps") {
+        Node<Symbol> *exp_ls_call_node = after_id_node->get_children()[1];
+        if (!exp_ls_call_node->get_children().empty() &&
+            exp_ls_call_node->get_children()[0]->get_data().get_name() != "eps") {
             func_call_str += generate_expression(exp_ls_call_node->get_children()[0]);
         }
         func_call_str += ")";
@@ -103,8 +104,7 @@ std::string CodeGenerator::generate_code(Node<Symbol> *node) {
         // MODIFIED: Added this case to handle assignments and standalone calls
     else if (head_name == "stmt" && !children.empty() && children[0]->get_data().get_name() == "T_Id") {
         code = generate_assignment_or_call_statement(node);
-    }
-    else if (head_name == "func") {
+    } else if (head_name == "func") {
         code = generate_function(node);
     } else if (head_name == "var_declaration") {
         code = generate_variable_declaration(node);
@@ -136,7 +136,7 @@ std::string CodeGenerator::generate_code(Node<Symbol> *node) {
         }
         code = "\"" + content + "\"";
     } else if (!children.empty()) {
-        for(auto child : children){
+        for (auto child: children) {
             code += generate_code(child);
         }
     }
@@ -151,7 +151,7 @@ std::string CodeGenerator::generate_variable_declaration(Node<Symbol> *node) {
     bool is_mutable = !children[1]->get_children().empty() &&
                       children[1]->get_children()[0]->get_data().get_name() == "T_Mut";
 
-    Node<Symbol>* pattern_node = children[2];
+    Node<Symbol> *pattern_node = children[2];
 
     // This handles single variable declarations (`let x ...`).
     // It does not handle tuple destructuring (`let (x,y) ...`) yet.
@@ -180,8 +180,9 @@ std::string CodeGenerator::generate_variable_declaration(Node<Symbol> *node) {
         }
 
         // Handle initialization if it exists
-        Node<Symbol>* assign_opt_node = children[4];
-        if (!assign_opt_node->get_children().empty() && assign_opt_node->get_children()[0]->get_data().get_name() != "eps") {
+        Node<Symbol> *assign_opt_node = children[4];
+        if (!assign_opt_node->get_children().empty() &&
+            assign_opt_node->get_children()[0]->get_data().get_name() != "eps") {
             code += " = " + generate_expression(assign_opt_node->get_children()[1]);
         }
 
@@ -321,21 +322,21 @@ std::string CodeGenerator::generate_expression(Node<Symbol> *node) {
         }
     } else if (head_name == "log_exp") {
         code = generate_code(children[0]);
-        Node<Symbol>* tail = children[1];
+        Node<Symbol> *tail = children[1];
         while (tail && !tail->get_children().empty() && tail->get_children()[0]->get_data().get_name() != "eps") {
             code += " || " + generate_code(tail->get_children()[1]);
             tail = tail->get_children()[2];
         }
     } else if (head_name == "rel_exp") {
         code = generate_code(children[0]);
-        Node<Symbol>* tail = children[1];
+        Node<Symbol> *tail = children[1];
         while (tail && !tail->get_children().empty() && tail->get_children()[0]->get_data().get_name() != "eps") {
             code += " && " + generate_code(tail->get_children()[1]);
             tail = tail->get_children()[2];
         }
     } else if (head_name == "eq_exp") {
         code = generate_code(children[0]);
-        Node<Symbol>* tail = children[1];
+        Node<Symbol> *tail = children[1];
         while (tail && !tail->get_children().empty() && tail->get_children()[0]->get_data().get_name() != "eps") {
             std::string op = tail->get_children()[0]->get_data().get_name();
             if (op == "T_ROp_E") op = " == ";
@@ -347,7 +348,7 @@ std::string CodeGenerator::generate_expression(Node<Symbol> *node) {
         code = generate_code(children[0]);
         if (children.size() > 1 && !children[1]->get_children().empty() &&
             children[1]->get_children()[0]->get_data().get_name() != "eps") {
-            Node<Symbol>* op_node = children[1]->get_children()[0]->get_children()[0];
+            Node<Symbol> *op_node = children[1]->get_children()[0]->get_children()[0];
             std::string op = op_node->get_data().get_name();
             if (op == "T_ROp_L") op = " < ";
             else if (op == "T_ROp_LE") op = " <= ";
@@ -357,7 +358,7 @@ std::string CodeGenerator::generate_expression(Node<Symbol> *node) {
         }
     } else if (head_name == "arith_exp" || head_name == "arith_term") {
         code = generate_code(children[0]);
-        Node<Symbol>* tail = children[1];
+        Node<Symbol> *tail = children[1];
         while (tail && !tail->get_children().empty() && tail->get_children()[0]->get_data().get_name() != "eps") {
             std::string op = tail->get_children()[0]->get_data().get_name();
             if (op == "T_AOp_Trust") op = " + ";
@@ -371,14 +372,13 @@ std::string CodeGenerator::generate_expression(Node<Symbol> *node) {
     } else if (head_name == "exp_ls" || head_name == "pure_exp_ls") {
         if (!children.empty() && children[0]->get_data().get_name() != "eps") {
             code += generate_code(children[0]);
-            Node<Symbol>* tail = children[1];
-            while(tail && !tail->get_children().empty() && tail->get_children()[0]->get_data().get_name() != "eps") {
+            Node<Symbol> *tail = children[1];
+            while (tail && !tail->get_children().empty() && tail->get_children()[0]->get_data().get_name() != "eps") {
                 code += ", " + generate_code(tail->get_children()[1]);
                 tail = tail->get_children()[2];
             }
         }
-    }
-    else if (!children.empty()) {
+    } else if (!children.empty()) {
         code = generate_code(children[0]);
     }
 
@@ -392,8 +392,9 @@ std::string CodeGenerator::generate_function_call(Node<Symbol> *node) {
     std::string code = func_name + "(";
 
     // fac_id_opt -> T_LP <exp_ls_call> T_RP
-    Node<Symbol>* exp_ls_call_node = children[1]->get_children()[1];
-    if (!exp_ls_call_node->get_children().empty() && exp_ls_call_node->get_children()[0]->get_data().get_name() != "eps") {
+    Node<Symbol> *exp_ls_call_node = children[1]->get_children()[1];
+    if (!exp_ls_call_node->get_children().empty() &&
+        exp_ls_call_node->get_children()[0]->get_data().get_name() != "eps") {
         code += generate_expression(exp_ls_call_node->get_children()[0]);
     }
 
@@ -417,8 +418,9 @@ std::string CodeGenerator::generate_tuple_access(Node<Symbol> *node) {
     std::string code = "(struct tuple){";
     code += generate_expression(children[0]); // first expression
 
-    Node<Symbol>* pure_exp_ls_node = children[1]->get_children()[1]; // <pure_exp_ls>
-    if(!pure_exp_ls_node->get_children().empty() && pure_exp_ls_node->get_children()[0]->get_data().get_name() != "eps"){
+    Node<Symbol> *pure_exp_ls_node = children[1]->get_children()[1]; // <pure_exp_ls>
+    if (!pure_exp_ls_node->get_children().empty() &&
+        pure_exp_ls_node->get_children()[0]->get_data().get_name() != "eps") {
         code += ", " + generate_expression(pure_exp_ls_node);
     }
 
@@ -443,12 +445,13 @@ std::string CodeGenerator::generate_println(Node<Symbol> *node) {
 
             code = "\tprintf(\"" + format_str + "\\n\"";
 
-            if (args_node->get_children().size() > 1 && !args_node->get_children()[1]->get_children().empty() && args_node->get_children()[1]->get_children()[0]->get_data().get_name() != "eps") {
+            if (args_node->get_children().size() > 1 && !args_node->get_children()[1]->get_children().empty() &&
+                args_node->get_children()[1]->get_children()[0]->get_data().get_name() != "eps") {
                 Node<Symbol> *format_args_list = args_node->get_children()[1]->get_children()[1];
                 while (format_args_list && !format_args_list->get_children().empty()) {
                     code += ", " + generate_expression(format_args_list->get_children()[0]);
                     format_args_list = format_args_list->get_children()[1]; // tail
-                    if(format_args_list && !format_args_list->get_children().empty()){
+                    if (format_args_list && !format_args_list->get_children().empty()) {
                         format_args_list = format_args_list->get_children()[1]; // item
                     }
                 }
@@ -470,29 +473,35 @@ std::string CodeGenerator::generate_control_structures(Node<Symbol> *node) {
 
     if (head_name == "if_stmt") {
         code = "\tif (" + generate_expression(children[1]) + ") {\n";
-        code += generate_code(children[3]); // then block statements
-        code += "\t}\n";
 
-        // else part
-        if (children.size() > 5 && !children[5]->get_children().empty() && children[5]->get_children()[0]->get_data().get_name() != "eps") {
-            Node<Symbol> *else_alternative_node = children[5]->get_children()[1];
+        code += generate_code(children[3]);
+
+        Node<Symbol> *else_opt_node = (children.size() > 5) ? children[5] : nullptr;
+        if (else_opt_node && !else_opt_node->get_children().empty() &&
+            else_opt_node->get_children()[0]->get_data().get_name() != "eps") {
+            Node<Symbol> *else_alternative_node = else_opt_node->get_children()[1];
+
             if (else_alternative_node->get_children()[0]->get_data().get_name() == "if_stmt") {
-                code.pop_back(); // remove newline
-                code.pop_back(); // remove }
-                code.pop_back(); // remove \t
-                code += " else " + generate_code(else_alternative_node->get_children()[0]);
-            } else { // T_LC <stmt_ls> T_RC
-                code.pop_back();
-                code.pop_back();
-                code.pop_back();
-                code += " else {\n";
+
+                code += "\t} else ";
+
+                std::string else_if_block = generate_code(else_alternative_node->get_children()[0]);
+                if (!else_if_block.empty() && else_if_block[0] == '\t') {
+                    else_if_block.erase(0, 1);
+                }
+                code += else_if_block;
+
+            } else {
+                code += "\t} else {\n";
                 code += generate_code(else_alternative_node->get_children()[1]);
                 code += "\t}\n";
             }
+        } else {
+            code += "\t}\n";
         }
     } else if (head_name == "loop_stmt") {
         code = "\twhile (1) {\n";
-        code += generate_code(children[2]); // loop body statements
+        code += generate_code(children[2]);
         code += "\t}\n";
     } else if (head_name == "break_stmt") {
         code = "\tbreak;\n";
