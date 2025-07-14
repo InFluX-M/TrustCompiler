@@ -2,7 +2,7 @@
 fn main() {
     let mut x: i32 = 10;
     let mut y: i32 = 5;
-    let b: bool = false;
+    let mut b: bool = false;
 
     if x == 10 {
         y = 6;

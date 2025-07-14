@@ -256,9 +256,9 @@ private:
     exp_type exp_t;
 
 public:
-    Symbol() {}
+    Symbol() : exp_t(TYPE_UNKNOWN) {}
 
-    Symbol(std::string _name, symbol_type _type) {
+    Symbol(std::string _name, symbol_type _type) : exp_t(TYPE_UNKNOWN) {
         name = std::move(_name);
         type = _type;
         line_number = -1;

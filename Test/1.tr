@@ -5,4 +5,6 @@ fn main() {
     let a = y + 42;
     let mut rr;
     x[a] = true;
+    let x: i32 = 10 + 5 * 2 - 3; // 17
+    let b: bool = true && false || true; // true
 }

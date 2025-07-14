@@ -7,7 +7,7 @@
 void main() {
 	int x = 10;
 	int y = 5;
-	const bool b = false;
+	bool b = false;
 	if (x == 10) {
 	y = 6;
 	x = 7;

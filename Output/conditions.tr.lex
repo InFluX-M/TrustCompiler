@@ -20,6 +20,7 @@
 < type: T_Decimal, line: 4, content: 5 >
 < type: T_Semicolon, line: 4, content: ; >
 < type: T_Let, line: 5, content: let >
+< type: T_Mut, line: 5, content: mut >
 < type: T_Id, line: 5, content: b >
 < type: T_Colon, line: 5, content: : >
 < type: T_Bool, line: 5, content: bool >
