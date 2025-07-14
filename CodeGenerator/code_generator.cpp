@@ -50,9 +50,6 @@ std::string CodeGenerator::generate_temp_var() {
     return "tmp_" + std::to_string(temp_var_counter++);
 }
 
-// ====================================================================================
-// NEW HELPER FUNCTION FOR ASSIGNMENT AND STANDALONE FUNCTION CALLS
-// ====================================================================================
 std::string CodeGenerator::generate_assignment_or_call_statement(Node<Symbol> *stmt_node) {
     auto children = stmt_node->get_children();
     // Structure: <stmt> -> T_Id <stmt_after_id> T_Semicolon
@@ -91,10 +88,6 @@ std::string CodeGenerator::generate_assignment_or_call_statement(Node<Symbol> *s
     return code;
 }
 
-
-// ====================================================================================
-// MODIFIED MAIN CODE GENERATION DISPATCHER
-// ====================================================================================
 std::string CodeGenerator::generate_code(Node<Symbol> *node) {
     if (!node) return "";
 
@@ -151,9 +144,6 @@ std::string CodeGenerator::generate_code(Node<Symbol> *node) {
     return code;
 }
 
-// ====================================================================================
-// REWRITTEN VARIABLE DECLARATION FUNCTION
-// ====================================================================================
 std::string CodeGenerator::generate_variable_declaration(Node<Symbol> *node) {
     auto children = node->get_children();
     std::string code;
@@ -201,11 +191,6 @@ std::string CodeGenerator::generate_variable_declaration(Node<Symbol> *node) {
 
     return code;
 }
-
-
-// ====================================================================================
-// ALL OTHER FUNCTIONS (UNCHANGED)
-// ====================================================================================
 
 void CodeGenerator::run() {
     std::string final_code;
@@ -260,7 +245,6 @@ void CodeGenerator::run() {
         std::cerr << "Error: Could not open file to write C code." << std::endl;
     }
 }
-
 
 std::string CodeGenerator::generate_function(Node<Symbol> *node) {
     auto children = node->get_children();

@@ -11,5 +11,7 @@ void main() {
 	const int a = y + 42;
 	int rr;
 	x[a] = true;
+	const int xx = 10 + 5 * 2 - 3;
+	const bool bb = true && false || true;
 }
 

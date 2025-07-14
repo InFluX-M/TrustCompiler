@@ -1,48 +1,48 @@
-<program>  [ exp_type: UNK ]
-└── <func_ls>  [ exp_type: UNK ]
-    ├── <func>  [ exp_type: UNK ]
-    │   ├── T_Fn  [ exp_type: UNK, content: 'fn' ]
-    │   ├── T_Id  [ type: void, exp_type: UNK, content: 'main' ]
-    │   ├── T_LP  [ exp_type: UNK, content: '(' ]
-    │   ├── <func_args>  [ exp_type: UNK ]
-    │   │   └── eps  [ exp_type: UNK ]
-    │   ├── T_RP  [ exp_type: UNK, content: ')' ]
-    │   ├── <func_type>  [ exp_type: UNK ]
-    │   │   └── eps  [ exp_type: UNK ]
-    │   ├── T_LC  [ exp_type: UNK, content: '{' ]
-    │   ├── <stmt_ls>  [ exp_type: UNK ]
-    │   │   ├── <stmt>  [ exp_type: UNK ]
-    │   │   │   ├── <var_declaration>  [ exp_type: UNK ]
-    │   │   │   │   ├── T_Let  [ exp_type: UNK, content: 'let' ]
-    │   │   │   │   ├── <mut_opt>  [ exp_type: UNK ]
-    │   │   │   │   │   └── T_Mut  [ exp_type: UNK, content: 'mut' ]
-    │   │   │   │   ├── <pattern>  [ exp_type: UNK ]
-    │   │   │   │   │   └── T_Id  [ exp_type: UNK, content: 'x' ]
-    │   │   │   │   ├── <type_opt>  [ exp_type: UNK ]
-    │   │   │   │   │   ├── T_Colon  [ exp_type: UNK, content: ':' ]
-    │   │   │   │   │   └── <type>  [ exp_type: UNK ]
-    │   │   │   │   │       ├── T_LB  [ exp_type: UNK, content: '[' ]
-    │   │   │   │   │       ├── <opt_type>  [ exp_type: UNK ]
-    │   │   │   │   │       │   └── T_Bool  [ exp_type: UNK, content: 'bool' ]
-    │   │   │   │   │       ├── T_Semicolon  [ exp_type: UNK, content: ';' ]
-    │   │   │   │   │       ├── <opt_dec>  [ exp_type: UNK ]
-    │   │   │   │   │       │   └── T_Decimal  [ exp_type: UNK, content: '200' ]
-    │   │   │   │   │       └── T_RB  [ exp_type: UNK, content: ']' ]
-    │   │   │   │   └── <assign_opt>  [ exp_type: UNK ]
-    │   │   │   │       └── eps  [ exp_type: UNK ]
-    │   │   │   └── T_Semicolon  [ exp_type: UNK, content: ';' ]
-    │   │   └── <stmt_ls>  [ exp_type: UNK ]
-    │   │       ├── <stmt>  [ exp_type: UNK ]
-    │   │       │   ├── <var_declaration>  [ exp_type: UNK ]
-    │   │       │   │   ├── T_Let  [ exp_type: UNK, content: 'let' ]
-    │   │       │   │   ├── <mut_opt>  [ exp_type: UNK ]
-    │   │       │   │   │   └── T_Mut  [ exp_type: UNK, content: 'mut' ]
-    │   │       │   │   ├── <pattern>  [ exp_type: UNK ]
-    │   │       │   │   │   └── T_Id  [ exp_type: UNK, content: 'y' ]
-    │   │       │   │   ├── <type_opt>  [ exp_type: UNK ]
-    │   │       │   │   │   └── eps  [ exp_type: UNK ]
-    │   │       │   │   └── <assign_opt>  [ exp_type: UNK ]
-    │   │       │   │       ├── T_Assign  [ exp_type: UNK, content: '=' ]
+<program>
+└── <func_ls>
+    ├── <func>
+    │   ├── T_Fn  [ content: 'fn' ]
+    │   ├── T_Id  [ type: void, content: 'main' ]
+    │   ├── T_LP  [ content: '(' ]
+    │   ├── <func_args>
+    │   │   └── eps
+    │   ├── T_RP  [ content: ')' ]
+    │   ├── <func_type>
+    │   │   └── eps
+    │   ├── T_LC  [ content: '{' ]
+    │   ├── <stmt_ls>
+    │   │   ├── <stmt>
+    │   │   │   ├── <var_declaration>
+    │   │   │   │   ├── T_Let  [ content: 'let' ]
+    │   │   │   │   ├── <mut_opt>
+    │   │   │   │   │   └── T_Mut  [ content: 'mut' ]
+    │   │   │   │   ├── <pattern>
+    │   │   │   │   │   └── T_Id  [ content: 'x' ]
+    │   │   │   │   ├── <type_opt>
+    │   │   │   │   │   ├── T_Colon  [ content: ':' ]
+    │   │   │   │   │   └── <type>
+    │   │   │   │   │       ├── T_LB  [ content: '[' ]
+    │   │   │   │   │       ├── <opt_type>
+    │   │   │   │   │       │   └── T_Bool  [ content: 'bool' ]
+    │   │   │   │   │       ├── T_Semicolon  [ content: ';' ]
+    │   │   │   │   │       ├── <opt_dec>
+    │   │   │   │   │       │   └── T_Decimal  [ content: '200' ]
+    │   │   │   │   │       └── T_RB  [ content: ']' ]
+    │   │   │   │   └── <assign_opt>
+    │   │   │   │       └── eps
+    │   │   │   └── T_Semicolon  [ content: ';' ]
+    │   │   └── <stmt_ls>
+    │   │       ├── <stmt>
+    │   │       │   ├── <var_declaration>
+    │   │       │   │   ├── T_Let  [ content: 'let' ]
+    │   │       │   │   ├── <mut_opt>
+    │   │       │   │   │   └── T_Mut  [ content: 'mut' ]
+    │   │       │   │   ├── <pattern>
+    │   │       │   │   │   └── T_Id  [ content: 'y' ]
+    │   │       │   │   ├── <type_opt>
+    │   │       │   │   │   └── eps
+    │   │       │   │   └── <assign_opt>
+    │   │       │   │       ├── T_Assign  [ content: '=' ]
     │   │       │   │       └── <exp>  [ exp_type: INT, val: '1' ]
     │   │       │   │           └── <log_exp>  [ exp_type: INT, val: '1' ]
     │   │       │   │               ├── <rel_exp>  [ exp_type: INT, val: '1' ]
@@ -51,32 +51,32 @@
     │   │       │   │               │   │   │   ├── <arith_exp>  [ exp_type: INT, val: '1' ]
     │   │       │   │               │   │   │   │   ├── <arith_term>  [ exp_type: INT, val: '1' ]
     │   │       │   │               │   │   │   │   │   ├── <arith_factor>  [ exp_type: INT, val: '1' ]
-    │   │       │   │               │   │   │   │   │   │   └── T_Decimal  [ exp_type: UNK, content: '1' ]
-    │   │       │   │               │   │   │   │   │   └── <arith_term_tail>  [ exp_type: UNK ]
-    │   │       │   │               │   │   │   │   │       └── eps  [ exp_type: UNK ]
-    │   │       │   │               │   │   │   │   └── <arith_exp_tail>  [ exp_type: UNK ]
-    │   │       │   │               │   │   │   │       └── eps  [ exp_type: UNK ]
-    │   │       │   │               │   │   │   └── <cmp_exp_suf>  [ exp_type: UNK ]
-    │   │       │   │               │   │   │       └── eps  [ exp_type: UNK ]
-    │   │       │   │               │   │   └── <eq_exp_tail>  [ exp_type: UNK ]
-    │   │       │   │               │   │       └── eps  [ exp_type: UNK ]
-    │   │       │   │               │   └── <rel_exp_tail>  [ exp_type: UNK ]
-    │   │       │   │               │       └── eps  [ exp_type: UNK ]
-    │   │       │   │               └── <log_exp_tail>  [ exp_type: UNK ]
-    │   │       │   │                   └── eps  [ exp_type: UNK ]
-    │   │       │   └── T_Semicolon  [ exp_type: UNK, content: ';' ]
-    │   │       └── <stmt_ls>  [ exp_type: UNK ]
-    │   │           ├── <stmt>  [ exp_type: UNK ]
-    │   │           │   ├── <var_declaration>  [ exp_type: UNK ]
-    │   │           │   │   ├── T_Let  [ exp_type: UNK, content: 'let' ]
-    │   │           │   │   ├── <mut_opt>  [ exp_type: UNK ]
-    │   │           │   │   │   └── eps  [ exp_type: UNK ]
-    │   │           │   │   ├── <pattern>  [ exp_type: UNK ]
-    │   │           │   │   │   └── T_Id  [ exp_type: UNK, content: 'c' ]
-    │   │           │   │   ├── <type_opt>  [ exp_type: UNK ]
-    │   │           │   │   │   └── eps  [ exp_type: UNK ]
-    │   │           │   │   └── <assign_opt>  [ exp_type: UNK ]
-    │   │           │   │       ├── T_Assign  [ exp_type: UNK, content: '=' ]
+    │   │       │   │               │   │   │   │   │   │   └── T_Decimal  [ content: '1' ]
+    │   │       │   │               │   │   │   │   │   └── <arith_term_tail>
+    │   │       │   │               │   │   │   │   │       └── eps
+    │   │       │   │               │   │   │   │   └── <arith_exp_tail>
+    │   │       │   │               │   │   │   │       └── eps
+    │   │       │   │               │   │   │   └── <cmp_exp_suf>
+    │   │       │   │               │   │   │       └── eps
+    │   │       │   │               │   │   └── <eq_exp_tail>
+    │   │       │   │               │   │       └── eps
+    │   │       │   │               │   └── <rel_exp_tail>
+    │   │       │   │               │       └── eps
+    │   │       │   │               └── <log_exp_tail>
+    │   │       │   │                   └── eps
+    │   │       │   └── T_Semicolon  [ content: ';' ]
+    │   │       └── <stmt_ls>
+    │   │           ├── <stmt>
+    │   │           │   ├── <var_declaration>
+    │   │           │   │   ├── T_Let  [ content: 'let' ]
+    │   │           │   │   ├── <mut_opt>
+    │   │           │   │   │   └── eps
+    │   │           │   │   ├── <pattern>
+    │   │           │   │   │   └── T_Id  [ content: 'c' ]
+    │   │           │   │   ├── <type_opt>
+    │   │           │   │   │   └── eps
+    │   │           │   │   └── <assign_opt>
+    │   │           │   │       ├── T_Assign  [ content: '=' ]
     │   │           │   │       └── <exp>  [ exp_type: INT, val: '1' ]
     │   │           │   │           └── <log_exp>  [ exp_type: INT, val: '1' ]
     │   │           │   │               ├── <rel_exp>  [ exp_type: INT, val: '1' ]
@@ -85,34 +85,34 @@
     │   │           │   │               │   │   │   ├── <arith_exp>  [ exp_type: INT, val: '1' ]
     │   │           │   │               │   │   │   │   ├── <arith_term>  [ exp_type: INT, val: '1' ]
     │   │           │   │               │   │   │   │   │   ├── <arith_factor>  [ exp_type: INT, val: '1' ]
-    │   │           │   │               │   │   │   │   │   │   ├── T_Id  [ exp_type: UNK, content: 'y' ]
-    │   │           │   │               │   │   │   │   │   │   └── <fac_id_opt>  [ exp_type: UNK ]
-    │   │           │   │               │   │   │   │   │   │       └── eps  [ exp_type: UNK ]
-    │   │           │   │               │   │   │   │   │   └── <arith_term_tail>  [ exp_type: UNK ]
-    │   │           │   │               │   │   │   │   │       └── eps  [ exp_type: UNK ]
-    │   │           │   │               │   │   │   │   └── <arith_exp_tail>  [ exp_type: UNK ]
-    │   │           │   │               │   │   │   │       └── eps  [ exp_type: UNK ]
-    │   │           │   │               │   │   │   └── <cmp_exp_suf>  [ exp_type: UNK ]
-    │   │           │   │               │   │   │       └── eps  [ exp_type: UNK ]
-    │   │           │   │               │   │   └── <eq_exp_tail>  [ exp_type: UNK ]
-    │   │           │   │               │   │       └── eps  [ exp_type: UNK ]
-    │   │           │   │               │   └── <rel_exp_tail>  [ exp_type: UNK ]
-    │   │           │   │               │       └── eps  [ exp_type: UNK ]
-    │   │           │   │               └── <log_exp_tail>  [ exp_type: UNK ]
-    │   │           │   │                   └── eps  [ exp_type: UNK ]
-    │   │           │   └── T_Semicolon  [ exp_type: UNK, content: ';' ]
-    │   │           └── <stmt_ls>  [ exp_type: UNK ]
-    │   │               ├── <stmt>  [ exp_type: UNK ]
-    │   │               │   ├── <var_declaration>  [ exp_type: UNK ]
-    │   │               │   │   ├── T_Let  [ exp_type: UNK, content: 'let' ]
-    │   │               │   │   ├── <mut_opt>  [ exp_type: UNK ]
-    │   │               │   │   │   └── eps  [ exp_type: UNK ]
-    │   │               │   │   ├── <pattern>  [ exp_type: UNK ]
-    │   │               │   │   │   └── T_Id  [ exp_type: UNK, content: 'a' ]
-    │   │               │   │   ├── <type_opt>  [ exp_type: UNK ]
-    │   │               │   │   │   └── eps  [ exp_type: UNK ]
-    │   │               │   │   └── <assign_opt>  [ exp_type: UNK ]
-    │   │               │   │       ├── T_Assign  [ exp_type: UNK, content: '=' ]
+    │   │           │   │               │   │   │   │   │   │   ├── T_Id  [ content: 'y' ]
+    │   │           │   │               │   │   │   │   │   │   └── <fac_id_opt>
+    │   │           │   │               │   │   │   │   │   │       └── eps
+    │   │           │   │               │   │   │   │   │   └── <arith_term_tail>
+    │   │           │   │               │   │   │   │   │       └── eps
+    │   │           │   │               │   │   │   │   └── <arith_exp_tail>
+    │   │           │   │               │   │   │   │       └── eps
+    │   │           │   │               │   │   │   └── <cmp_exp_suf>
+    │   │           │   │               │   │   │       └── eps
+    │   │           │   │               │   │   └── <eq_exp_tail>
+    │   │           │   │               │   │       └── eps
+    │   │           │   │               │   └── <rel_exp_tail>
+    │   │           │   │               │       └── eps
+    │   │           │   │               └── <log_exp_tail>
+    │   │           │   │                   └── eps
+    │   │           │   └── T_Semicolon  [ content: ';' ]
+    │   │           └── <stmt_ls>
+    │   │               ├── <stmt>
+    │   │               │   ├── <var_declaration>
+    │   │               │   │   ├── T_Let  [ content: 'let' ]
+    │   │               │   │   ├── <mut_opt>
+    │   │               │   │   │   └── eps
+    │   │               │   │   ├── <pattern>
+    │   │               │   │   │   └── T_Id  [ content: 'a' ]
+    │   │               │   │   ├── <type_opt>
+    │   │               │   │   │   └── eps
+    │   │               │   │   └── <assign_opt>
+    │   │               │   │       ├── T_Assign  [ content: '=' ]
     │   │               │   │       └── <exp>  [ exp_type: INT, val: '43' ]
     │   │               │   │           └── <log_exp>  [ exp_type: INT, val: '43' ]
     │   │               │   │               ├── <rel_exp>  [ exp_type: INT, val: '43' ]
@@ -121,47 +121,47 @@
     │   │               │   │               │   │   │   ├── <arith_exp>  [ exp_type: INT, val: '43' ]
     │   │               │   │               │   │   │   │   ├── <arith_term>  [ exp_type: INT, val: '1' ]
     │   │               │   │               │   │   │   │   │   ├── <arith_factor>  [ exp_type: INT, val: '1' ]
-    │   │               │   │               │   │   │   │   │   │   ├── T_Id  [ exp_type: UNK, content: 'y' ]
-    │   │               │   │               │   │   │   │   │   │   └── <fac_id_opt>  [ exp_type: UNK ]
-    │   │               │   │               │   │   │   │   │   │       └── eps  [ exp_type: UNK ]
-    │   │               │   │               │   │   │   │   │   └── <arith_term_tail>  [ exp_type: UNK ]
-    │   │               │   │               │   │   │   │   │       └── eps  [ exp_type: UNK ]
-    │   │               │   │               │   │   │   │   └── <arith_exp_tail>  [ exp_type: UNK ]
-    │   │               │   │               │   │   │   │       ├── T_AOp_Trust  [ exp_type: UNK, content: '+' ]
+    │   │               │   │               │   │   │   │   │   │   ├── T_Id  [ content: 'y' ]
+    │   │               │   │               │   │   │   │   │   │   └── <fac_id_opt>
+    │   │               │   │               │   │   │   │   │   │       └── eps
+    │   │               │   │               │   │   │   │   │   └── <arith_term_tail>
+    │   │               │   │               │   │   │   │   │       └── eps
+    │   │               │   │               │   │   │   │   └── <arith_exp_tail>
+    │   │               │   │               │   │   │   │       ├── T_AOp_Trust  [ content: '+' ]
     │   │               │   │               │   │   │   │       ├── <arith_term>  [ exp_type: INT, val: '42' ]
     │   │               │   │               │   │   │   │       │   ├── <arith_factor>  [ exp_type: INT, val: '42' ]
-    │   │               │   │               │   │   │   │       │   │   └── T_Decimal  [ exp_type: UNK, content: '42' ]
-    │   │               │   │               │   │   │   │       │   └── <arith_term_tail>  [ exp_type: UNK ]
-    │   │               │   │               │   │   │   │       │       └── eps  [ exp_type: UNK ]
-    │   │               │   │               │   │   │   │       └── <arith_exp_tail>  [ exp_type: UNK ]
-    │   │               │   │               │   │   │   │           └── eps  [ exp_type: UNK ]
-    │   │               │   │               │   │   │   └── <cmp_exp_suf>  [ exp_type: UNK ]
-    │   │               │   │               │   │   │       └── eps  [ exp_type: UNK ]
-    │   │               │   │               │   │   └── <eq_exp_tail>  [ exp_type: UNK ]
-    │   │               │   │               │   │       └── eps  [ exp_type: UNK ]
-    │   │               │   │               │   └── <rel_exp_tail>  [ exp_type: UNK ]
-    │   │               │   │               │       └── eps  [ exp_type: UNK ]
-    │   │               │   │               └── <log_exp_tail>  [ exp_type: UNK ]
-    │   │               │   │                   └── eps  [ exp_type: UNK ]
-    │   │               │   └── T_Semicolon  [ exp_type: UNK, content: ';' ]
-    │   │               └── <stmt_ls>  [ exp_type: UNK ]
-    │   │                   ├── <stmt>  [ exp_type: UNK ]
-    │   │                   │   ├── <var_declaration>  [ exp_type: UNK ]
-    │   │                   │   │   ├── T_Let  [ exp_type: UNK, content: 'let' ]
-    │   │                   │   │   ├── <mut_opt>  [ exp_type: UNK ]
-    │   │                   │   │   │   └── T_Mut  [ exp_type: UNK, content: 'mut' ]
-    │   │                   │   │   ├── <pattern>  [ exp_type: UNK ]
-    │   │                   │   │   │   └── T_Id  [ exp_type: UNK, content: 'rr' ]
-    │   │                   │   │   ├── <type_opt>  [ exp_type: UNK ]
-    │   │                   │   │   │   └── eps  [ exp_type: UNK ]
-    │   │                   │   │   └── <assign_opt>  [ exp_type: UNK ]
-    │   │                   │   │       └── eps  [ exp_type: UNK ]
-    │   │                   │   └── T_Semicolon  [ exp_type: UNK, content: ';' ]
-    │   │                   └── <stmt_ls>  [ exp_type: UNK ]
-    │   │                       ├── <stmt>  [ exp_type: UNK ]
-    │   │                       │   ├── T_Id  [ exp_type: UNK, content: 'x' ]
-    │   │                       │   ├── <stmt_after_id>  [ exp_type: UNK ]
-    │   │                       │   │   ├── T_LB  [ exp_type: UNK, content: '[' ]
+    │   │               │   │               │   │   │   │       │   │   └── T_Decimal  [ content: '42' ]
+    │   │               │   │               │   │   │   │       │   └── <arith_term_tail>
+    │   │               │   │               │   │   │   │       │       └── eps
+    │   │               │   │               │   │   │   │       └── <arith_exp_tail>
+    │   │               │   │               │   │   │   │           └── eps
+    │   │               │   │               │   │   │   └── <cmp_exp_suf>
+    │   │               │   │               │   │   │       └── eps
+    │   │               │   │               │   │   └── <eq_exp_tail>
+    │   │               │   │               │   │       └── eps
+    │   │               │   │               │   └── <rel_exp_tail>
+    │   │               │   │               │       └── eps
+    │   │               │   │               └── <log_exp_tail>
+    │   │               │   │                   └── eps
+    │   │               │   └── T_Semicolon  [ content: ';' ]
+    │   │               └── <stmt_ls>
+    │   │                   ├── <stmt>
+    │   │                   │   ├── <var_declaration>
+    │   │                   │   │   ├── T_Let  [ content: 'let' ]
+    │   │                   │   │   ├── <mut_opt>
+    │   │                   │   │   │   └── T_Mut  [ content: 'mut' ]
+    │   │                   │   │   ├── <pattern>
+    │   │                   │   │   │   └── T_Id  [ content: 'rr' ]
+    │   │                   │   │   ├── <type_opt>
+    │   │                   │   │   │   └── eps
+    │   │                   │   │   └── <assign_opt>
+    │   │                   │   │       └── eps
+    │   │                   │   └── T_Semicolon  [ content: ';' ]
+    │   │                   └── <stmt_ls>
+    │   │                       ├── <stmt>
+    │   │                       │   ├── T_Id  [ content: 'x' ]
+    │   │                       │   ├── <stmt_after_id>
+    │   │                       │   │   ├── T_LB  [ content: '[' ]
     │   │                       │   │   ├── <exp>  [ exp_type: INT, val: '43' ]
     │   │                       │   │   │   └── <log_exp>  [ exp_type: INT, val: '43' ]
     │   │                       │   │   │       ├── <rel_exp>  [ exp_type: INT, val: '43' ]
@@ -170,23 +170,23 @@
     │   │                       │   │   │       │   │   │   ├── <arith_exp>  [ exp_type: INT, val: '43' ]
     │   │                       │   │   │       │   │   │   │   ├── <arith_term>  [ exp_type: INT, val: '43' ]
     │   │                       │   │   │       │   │   │   │   │   ├── <arith_factor>  [ exp_type: INT, val: '43' ]
-    │   │                       │   │   │       │   │   │   │   │   │   ├── T_Id  [ exp_type: UNK, content: 'a' ]
-    │   │                       │   │   │       │   │   │   │   │   │   └── <fac_id_opt>  [ exp_type: UNK ]
-    │   │                       │   │   │       │   │   │   │   │   │       └── eps  [ exp_type: UNK ]
-    │   │                       │   │   │       │   │   │   │   │   └── <arith_term_tail>  [ exp_type: UNK ]
-    │   │                       │   │   │       │   │   │   │   │       └── eps  [ exp_type: UNK ]
-    │   │                       │   │   │       │   │   │   │   └── <arith_exp_tail>  [ exp_type: UNK ]
-    │   │                       │   │   │       │   │   │   │       └── eps  [ exp_type: UNK ]
-    │   │                       │   │   │       │   │   │   └── <cmp_exp_suf>  [ exp_type: UNK ]
-    │   │                       │   │   │       │   │   │       └── eps  [ exp_type: UNK ]
-    │   │                       │   │   │       │   │   └── <eq_exp_tail>  [ exp_type: UNK ]
-    │   │                       │   │   │       │   │       └── eps  [ exp_type: UNK ]
-    │   │                       │   │   │       │   └── <rel_exp_tail>  [ exp_type: UNK ]
-    │   │                       │   │   │       │       └── eps  [ exp_type: UNK ]
-    │   │                       │   │   │       └── <log_exp_tail>  [ exp_type: UNK ]
-    │   │                       │   │   │           └── eps  [ exp_type: UNK ]
-    │   │                       │   │   ├── T_RB  [ exp_type: UNK, content: ']' ]
-    │   │                       │   │   ├── T_Assign  [ exp_type: UNK, content: '=' ]
+    │   │                       │   │   │       │   │   │   │   │   │   ├── T_Id  [ content: 'a' ]
+    │   │                       │   │   │       │   │   │   │   │   │   └── <fac_id_opt>
+    │   │                       │   │   │       │   │   │   │   │   │       └── eps
+    │   │                       │   │   │       │   │   │   │   │   └── <arith_term_tail>
+    │   │                       │   │   │       │   │   │   │   │       └── eps
+    │   │                       │   │   │       │   │   │   │   └── <arith_exp_tail>
+    │   │                       │   │   │       │   │   │   │       └── eps
+    │   │                       │   │   │       │   │   │   └── <cmp_exp_suf>
+    │   │                       │   │   │       │   │   │       └── eps
+    │   │                       │   │   │       │   │   └── <eq_exp_tail>
+    │   │                       │   │   │       │   │       └── eps
+    │   │                       │   │   │       │   └── <rel_exp_tail>
+    │   │                       │   │   │       │       └── eps
+    │   │                       │   │   │       └── <log_exp_tail>
+    │   │                       │   │   │           └── eps
+    │   │                       │   │   ├── T_RB  [ content: ']' ]
+    │   │                       │   │   ├── T_Assign  [ content: '=' ]
     │   │                       │   │   └── <exp>  [ exp_type: BOOL, val: 'true' ]
     │   │                       │   │       └── <log_exp>  [ exp_type: BOOL, val: 'true' ]
     │   │                       │   │           ├── <rel_exp>  [ exp_type: BOOL, val: 'true' ]
@@ -195,25 +195,150 @@
     │   │                       │   │           │   │   │   ├── <arith_exp>  [ exp_type: BOOL, val: 'true' ]
     │   │                       │   │           │   │   │   │   ├── <arith_term>  [ exp_type: BOOL, val: 'true' ]
     │   │                       │   │           │   │   │   │   │   ├── <arith_factor>  [ exp_type: BOOL, val: 'true' ]
-    │   │                       │   │           │   │   │   │   │   │   └── T_True  [ exp_type: UNK, content: 'true' ]
-    │   │                       │   │           │   │   │   │   │   └── <arith_term_tail>  [ exp_type: UNK ]
-    │   │                       │   │           │   │   │   │   │       └── eps  [ exp_type: UNK ]
-    │   │                       │   │           │   │   │   │   └── <arith_exp_tail>  [ exp_type: UNK ]
-    │   │                       │   │           │   │   │   │       └── eps  [ exp_type: UNK ]
-    │   │                       │   │           │   │   │   └── <cmp_exp_suf>  [ exp_type: UNK ]
-    │   │                       │   │           │   │   │       └── eps  [ exp_type: UNK ]
-    │   │                       │   │           │   │   └── <eq_exp_tail>  [ exp_type: UNK ]
-    │   │                       │   │           │   │       └── eps  [ exp_type: UNK ]
-    │   │                       │   │           │   └── <rel_exp_tail>  [ exp_type: UNK ]
-    │   │                       │   │           │       └── eps  [ exp_type: UNK ]
-    │   │                       │   │           └── <log_exp_tail>  [ exp_type: UNK ]
-    │   │                       │   │               └── eps  [ exp_type: UNK ]
-    │   │                       │   └── T_Semicolon  [ exp_type: UNK, content: ';' ]
-    │   │                       └── <stmt_ls>  [ exp_type: UNK ]
-    │   │                           └── eps  [ exp_type: UNK ]
-    │   ├── <return_stmt>  [ exp_type: UNK ]
-    │   │   └── eps  [ exp_type: UNK ]
-    │   └── T_RC  [ exp_type: UNK, content: '}' ]
-    └── <func_ls>  [ exp_type: UNK ]
-        └── <stmt_ls>  [ exp_type: UNK ]
-            └── eps  [ exp_type: UNK ]
+    │   │                       │   │           │   │   │   │   │   │   └── T_True  [ content: 'true' ]
+    │   │                       │   │           │   │   │   │   │   └── <arith_term_tail>
+    │   │                       │   │           │   │   │   │   │       └── eps
+    │   │                       │   │           │   │   │   │   └── <arith_exp_tail>
+    │   │                       │   │           │   │   │   │       └── eps
+    │   │                       │   │           │   │   │   └── <cmp_exp_suf>
+    │   │                       │   │           │   │   │       └── eps
+    │   │                       │   │           │   │   └── <eq_exp_tail>
+    │   │                       │   │           │   │       └── eps
+    │   │                       │   │           │   └── <rel_exp_tail>
+    │   │                       │   │           │       └── eps
+    │   │                       │   │           └── <log_exp_tail>
+    │   │                       │   │               └── eps
+    │   │                       │   └── T_Semicolon  [ content: ';' ]
+    │   │                       └── <stmt_ls>
+    │   │                           ├── <stmt>
+    │   │                           │   ├── <var_declaration>
+    │   │                           │   │   ├── T_Let  [ content: 'let' ]
+    │   │                           │   │   ├── <mut_opt>
+    │   │                           │   │   │   └── eps
+    │   │                           │   │   ├── <pattern>
+    │   │                           │   │   │   └── T_Id  [ content: 'xx' ]
+    │   │                           │   │   ├── <type_opt>
+    │   │                           │   │   │   ├── T_Colon  [ content: ':' ]
+    │   │                           │   │   │   └── <type>
+    │   │                           │   │   │       └── T_Int  [ content: 'i32' ]
+    │   │                           │   │   └── <assign_opt>
+    │   │                           │   │       ├── T_Assign  [ content: '=' ]
+    │   │                           │   │       └── <exp>  [ exp_type: INT, val: '17' ]
+    │   │                           │   │           └── <log_exp>  [ exp_type: INT, val: '17' ]
+    │   │                           │   │               ├── <rel_exp>  [ exp_type: INT, val: '17' ]
+    │   │                           │   │               │   ├── <eq_exp>  [ exp_type: INT, val: '17' ]
+    │   │                           │   │               │   │   ├── <cmp_exp>  [ exp_type: INT, val: '17' ]
+    │   │                           │   │               │   │   │   ├── <arith_exp>  [ exp_type: INT, val: '17' ]
+    │   │                           │   │               │   │   │   │   ├── <arith_term>  [ exp_type: INT, val: '10' ]
+    │   │                           │   │               │   │   │   │   │   ├── <arith_factor>  [ exp_type: INT, val: '10' ]
+    │   │                           │   │               │   │   │   │   │   │   └── T_Decimal  [ content: '10' ]
+    │   │                           │   │               │   │   │   │   │   └── <arith_term_tail>
+    │   │                           │   │               │   │   │   │   │       └── eps
+    │   │                           │   │               │   │   │   │   └── <arith_exp_tail>
+    │   │                           │   │               │   │   │   │       ├── T_AOp_Trust  [ content: '+' ]
+    │   │                           │   │               │   │   │   │       ├── <arith_term>  [ exp_type: INT, val: '10' ]
+    │   │                           │   │               │   │   │   │       │   ├── <arith_factor>  [ exp_type: INT, val: '5' ]
+    │   │                           │   │               │   │   │   │       │   │   └── T_Decimal  [ content: '5' ]
+    │   │                           │   │               │   │   │   │       │   └── <arith_term_tail>
+    │   │                           │   │               │   │   │   │       │       ├── T_AOp_ML  [ content: '*' ]
+    │   │                           │   │               │   │   │   │       │       ├── <arith_factor>  [ exp_type: INT, val: '2' ]
+    │   │                           │   │               │   │   │   │       │       │   └── T_Decimal  [ content: '2' ]
+    │   │                           │   │               │   │   │   │       │       └── <arith_term_tail>
+    │   │                           │   │               │   │   │   │       │           └── eps
+    │   │                           │   │               │   │   │   │       └── <arith_exp_tail>
+    │   │                           │   │               │   │   │   │           ├── T_AOp_MN  [ content: '-' ]
+    │   │                           │   │               │   │   │   │           ├── <arith_term>  [ exp_type: INT, val: '3' ]
+    │   │                           │   │               │   │   │   │           │   ├── <arith_factor>  [ exp_type: INT, val: '3' ]
+    │   │                           │   │               │   │   │   │           │   │   └── T_Decimal  [ content: '3' ]
+    │   │                           │   │               │   │   │   │           │   └── <arith_term_tail>
+    │   │                           │   │               │   │   │   │           │       └── eps
+    │   │                           │   │               │   │   │   │           └── <arith_exp_tail>
+    │   │                           │   │               │   │   │   │               └── eps
+    │   │                           │   │               │   │   │   └── <cmp_exp_suf>
+    │   │                           │   │               │   │   │       └── eps
+    │   │                           │   │               │   │   └── <eq_exp_tail>
+    │   │                           │   │               │   │       └── eps
+    │   │                           │   │               │   └── <rel_exp_tail>
+    │   │                           │   │               │       └── eps
+    │   │                           │   │               └── <log_exp_tail>
+    │   │                           │   │                   └── eps
+    │   │                           │   └── T_Semicolon  [ content: ';' ]
+    │   │                           └── <stmt_ls>
+    │   │                               ├── <stmt>
+    │   │                               │   ├── <var_declaration>
+    │   │                               │   │   ├── T_Let  [ content: 'let' ]
+    │   │                               │   │   ├── <mut_opt>
+    │   │                               │   │   │   └── eps
+    │   │                               │   │   ├── <pattern>
+    │   │                               │   │   │   └── T_Id  [ content: 'bb' ]
+    │   │                               │   │   ├── <type_opt>
+    │   │                               │   │   │   ├── T_Colon  [ content: ':' ]
+    │   │                               │   │   │   └── <type>
+    │   │                               │   │   │       └── T_Bool  [ content: 'bool' ]
+    │   │                               │   │   └── <assign_opt>
+    │   │                               │   │       ├── T_Assign  [ content: '=' ]
+    │   │                               │   │       └── <exp>  [ exp_type: BOOL, val: 'true' ]
+    │   │                               │   │           └── <log_exp>  [ exp_type: BOOL, val: 'true' ]
+    │   │                               │   │               ├── <rel_exp>  [ exp_type: BOOL, val: 'false' ]
+    │   │                               │   │               │   ├── <eq_exp>  [ exp_type: BOOL, val: 'true' ]
+    │   │                               │   │               │   │   ├── <cmp_exp>  [ exp_type: BOOL, val: 'true' ]
+    │   │                               │   │               │   │   │   ├── <arith_exp>  [ exp_type: BOOL, val: 'true' ]
+    │   │                               │   │               │   │   │   │   ├── <arith_term>  [ exp_type: BOOL, val: 'true' ]
+    │   │                               │   │               │   │   │   │   │   ├── <arith_factor>  [ exp_type: BOOL, val: 'true' ]
+    │   │                               │   │               │   │   │   │   │   │   └── T_True  [ content: 'true' ]
+    │   │                               │   │               │   │   │   │   │   └── <arith_term_tail>
+    │   │                               │   │               │   │   │   │   │       └── eps
+    │   │                               │   │               │   │   │   │   └── <arith_exp_tail>
+    │   │                               │   │               │   │   │   │       └── eps
+    │   │                               │   │               │   │   │   └── <cmp_exp_suf>
+    │   │                               │   │               │   │   │       └── eps
+    │   │                               │   │               │   │   └── <eq_exp_tail>
+    │   │                               │   │               │   │       └── eps
+    │   │                               │   │               │   └── <rel_exp_tail>
+    │   │                               │   │               │       ├── T_LOp_AND  [ content: '&&' ]
+    │   │                               │   │               │       ├── <eq_exp>  [ exp_type: BOOL, val: 'false' ]
+    │   │                               │   │               │       │   ├── <cmp_exp>  [ exp_type: BOOL, val: 'false' ]
+    │   │                               │   │               │       │   │   ├── <arith_exp>  [ exp_type: BOOL, val: 'false' ]
+    │   │                               │   │               │       │   │   │   ├── <arith_term>  [ exp_type: BOOL, val: 'false' ]
+    │   │                               │   │               │       │   │   │   │   ├── <arith_factor>  [ exp_type: BOOL, val: 'false' ]
+    │   │                               │   │               │       │   │   │   │   │   └── T_False  [ content: 'false' ]
+    │   │                               │   │               │       │   │   │   │   └── <arith_term_tail>
+    │   │                               │   │               │       │   │   │   │       └── eps
+    │   │                               │   │               │       │   │   │   └── <arith_exp_tail>
+    │   │                               │   │               │       │   │   │       └── eps
+    │   │                               │   │               │       │   │   └── <cmp_exp_suf>
+    │   │                               │   │               │       │   │       └── eps
+    │   │                               │   │               │       │   └── <eq_exp_tail>
+    │   │                               │   │               │       │       └── eps
+    │   │                               │   │               │       └── <rel_exp_tail>
+    │   │                               │   │               │           └── eps
+    │   │                               │   │               └── <log_exp_tail>
+    │   │                               │   │                   ├── T_LOp_OR  [ content: '||' ]
+    │   │                               │   │                   ├── <rel_exp>  [ exp_type: BOOL, val: 'true' ]
+    │   │                               │   │                   │   ├── <eq_exp>  [ exp_type: BOOL, val: 'true' ]
+    │   │                               │   │                   │   │   ├── <cmp_exp>  [ exp_type: BOOL, val: 'true' ]
+    │   │                               │   │                   │   │   │   ├── <arith_exp>  [ exp_type: BOOL, val: 'true' ]
+    │   │                               │   │                   │   │   │   │   ├── <arith_term>  [ exp_type: BOOL, val: 'true' ]
+    │   │                               │   │                   │   │   │   │   │   ├── <arith_factor>  [ exp_type: BOOL, val: 'true' ]
+    │   │                               │   │                   │   │   │   │   │   │   └── T_True  [ content: 'true' ]
+    │   │                               │   │                   │   │   │   │   │   └── <arith_term_tail>
+    │   │                               │   │                   │   │   │   │   │       └── eps
+    │   │                               │   │                   │   │   │   │   └── <arith_exp_tail>
+    │   │                               │   │                   │   │   │   │       └── eps
+    │   │                               │   │                   │   │   │   └── <cmp_exp_suf>
+    │   │                               │   │                   │   │   │       └── eps
+    │   │                               │   │                   │   │   └── <eq_exp_tail>
+    │   │                               │   │                   │   │       └── eps
+    │   │                               │   │                   │   └── <rel_exp_tail>
+    │   │                               │   │                   │       └── eps
+    │   │                               │   │                   └── <log_exp_tail>
+    │   │                               │   │                       └── eps
+    │   │                               │   └── T_Semicolon  [ content: ';' ]
+    │   │                               └── <stmt_ls>
+    │   │                                   └── eps
+    │   ├── <return_stmt>
+    │   │   └── eps
+    │   └── T_RC  [ content: '}' ]
+    └── <func_ls>
+        └── <stmt_ls>
+            └── eps

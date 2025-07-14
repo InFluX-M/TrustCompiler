@@ -960,8 +960,19 @@ void SemanticAnalyzer::dfs(Node<Symbol> *node) {
         }
     } else if (head_name == "arith_exp_tail" || head_name == "arith_term_tail") {
         if (children[0]->get_data().get_name() != "eps") {
-            semantic_type stp_l = exp_t_to_semantic_type(
-                    node->get_parent()->get_children()[0]->get_data().get_exp_type());
+
+            Node<Symbol> *parent = node->get_parent();
+            std::string parent_name = parent->get_data().get_name();
+            Node<Symbol> *left_operand_node = nullptr;
+
+            if (parent_name == "arith_exp" || parent_name == "arith_term") {
+                left_operand_node = parent->get_children()[0];
+            } else {
+                // گرامر: <Op> <exp> <tail>
+                left_operand_node = parent->get_children()[1];
+            }
+
+            semantic_type stp_l = exp_t_to_semantic_type(left_operand_node->get_data().get_exp_type());
             semantic_type stp_r = exp_t_to_semantic_type(children[1]->get_data().get_exp_type());
 
             if (stp_l != INT) {
