@@ -247,7 +247,7 @@
     │   │                   │       │   │       │   └── '('
     │   │                   │       │   │       ├── <println_args>
     │   │                   │       │   │       │   ├── T_String
-    │   │                   │       │   │       │   │   └── '"sum is greater"'
+    │   │                   │       │   │       │   │   └── 'sum is greater'
     │   │                   │       │   │       │   └── <println_format_args_opt>
     │   │                   │       │   │       │       └── eps
     │   │                   │       │   │       ├── T_RP
@@ -273,7 +273,7 @@
     │   │                   │               │   │       │   └── '('
     │   │                   │               │   │       ├── <println_args>
     │   │                   │               │   │       │   ├── T_String
-    │   │                   │               │   │       │   │   └── '"product is greater"'
+    │   │                   │               │   │       │   │   └── 'product is greater'
     │   │                   │               │   │       │   └── <println_format_args_opt>
     │   │                   │               │   │       │       └── eps
     │   │                   │               │   │       ├── T_RP

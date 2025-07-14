@@ -34,7 +34,7 @@
 < type: T_LC, line: 7, content: { >
 < type: T_Print, line: 8, content: println! >
 < type: T_LP, line: 8, content: ( >
-< type: T_String, line: 8, content: "sum is greater" >
+< type: T_String, line: 8, content: sum is greater >
 < type: T_RP, line: 8, content: ) >
 < type: T_Semicolon, line: 8, content: ; >
 < type: T_RC, line: 9, content: } >
@@ -42,7 +42,7 @@
 < type: T_LC, line: 9, content: { >
 < type: T_Print, line: 10, content: println! >
 < type: T_LP, line: 10, content: ( >
-< type: T_String, line: 10, content: "product is greater" >
+< type: T_String, line: 10, content: product is greater >
 < type: T_RP, line: 10, content: ) >
 < type: T_Semicolon, line: 10, content: ; >
 < type: T_RC, line: 11, content: } >

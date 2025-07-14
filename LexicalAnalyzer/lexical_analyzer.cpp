@@ -313,7 +313,7 @@ Token LexicalAnalyzer::is_string(int &index, const std::string &line, const int 
         if (state == 0) {
             if (line[index] == '"') {
                 state = 1;
-                content += line[index];
+//                content += line[index];
             } else {
                 state = 4;
             }
@@ -323,7 +323,7 @@ Token LexicalAnalyzer::is_string(int &index, const std::string &line, const int 
                 content += line[index];
             } else if (line[index] == '"') {
                 state = 3;
-                content += line[index];
+//                content += line[index];
             } else {
                 state = 1;
                 content += line[index];

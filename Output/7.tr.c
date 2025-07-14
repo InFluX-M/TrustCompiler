@@ -10,9 +10,9 @@ void main() {
 	const int sum = x + y;
 	const int product = x * y;
 	if (sum > product) {
-	printf(""sum is greater"\n");
- else {
-	printf(""product is greater"\n");
+		printf("sum is greater\n");
+	} else {
+		printf("product is greater\n");
 	}
 }
 
