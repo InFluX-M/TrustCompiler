@@ -9,20 +9,20 @@ void main() {
 	int y = 5;
 	bool b = false;
 	if (x == 10) {
-	y = 6;
-	x = 7;
+		y = 6;
+		x = 7;
 	}
 	if (y <= 2 && x > 7 || b != false) {
-	x = 4 + y;
+		x = 4 + y;
 	} else {
-	x = 3 * y;
+		x = 3 * y;
 	}
 	if (x >= 5 && y < 7 && !(b)) {
-	b = true;
+		b = true;
 	} else if (x == 3) {
-	x = 100;
+		x = 100;
 	} else {
-	b = false;
+		b = false;
 	}
 }
 

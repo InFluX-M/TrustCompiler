@@ -42,12 +42,16 @@ std::string CodeGenerator::to_c_type(const std::vector<semantic_type> &types) {
     return ss.str();
 }
 
-void CodeGenerator::add_header(const std::string &header) {
-    included_headers.insert(header);
-}
-
-std::string CodeGenerator::generate_temp_var() {
-    return "tmp_" + std::to_string(temp_var_counter++);
+std::string CodeGenerator::indent_block(const std::string &block_code) {
+    std::string result;
+    std::istringstream stream(block_code);
+    std::string line;
+    while (std::getline(stream, line)) {
+        if (!line.empty()) {
+            result += "\t" + line + "\n";
+        }
+    }
+    return result;
 }
 
 std::string CodeGenerator::generate_assignment_or_call_statement(Node<Symbol> *stmt_node) {
@@ -100,9 +104,7 @@ std::string CodeGenerator::generate_code(Node<Symbol> *node) {
         for (auto child: children) {
             code += generate_code(child);
         }
-    }
-        // MODIFIED: Added this case to handle assignments and standalone calls
-    else if (head_name == "stmt" && !children.empty() && children[0]->get_data().get_name() == "T_Id") {
+    } else if (head_name == "stmt" && !children.empty() && children[0]->get_data().get_name() == "T_Id") {
         code = generate_assignment_or_call_statement(node);
     } else if (head_name == "func") {
         code = generate_function(node);
@@ -474,7 +476,7 @@ std::string CodeGenerator::generate_control_structures(Node<Symbol> *node) {
     if (head_name == "if_stmt") {
         code = "\tif (" + generate_expression(children[1]) + ") {\n";
 
-        code += generate_code(children[3]);
+        code += indent_block(generate_code(children[3]));
 
         Node<Symbol> *else_opt_node = (children.size() > 5) ? children[5] : nullptr;
         if (else_opt_node && !else_opt_node->get_children().empty() &&
@@ -493,7 +495,7 @@ std::string CodeGenerator::generate_control_structures(Node<Symbol> *node) {
 
             } else {
                 code += "\t} else {\n";
-                code += generate_code(else_alternative_node->get_children()[1]);
+                code += indent_block(generate_code(else_alternative_node->get_children()[1]));
                 code += "\t}\n";
             }
         } else {

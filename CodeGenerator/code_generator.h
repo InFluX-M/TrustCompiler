@@ -22,9 +22,7 @@ private:
 
     std::string to_c_type(const std::vector<semantic_type> &types);
 
-    void add_header(const std::string &header);
-
-    std::string generate_temp_var();
+    std::string indent_block(const std::string &block_code);
 
     // Main generation functions
     std::string generate_code(Node<Symbol> *node);
@@ -38,10 +36,6 @@ private:
     std::string generate_println(Node<Symbol> *node);
 
     std::string generate_control_structures(Node<Symbol> *node);
-
-    std::string generate_array_declaration(Node<Symbol> *node);
-
-    std::string generate_tuple_declaration(Node<Symbol> *node);
 
     std::string generate_function_call(Node<Symbol> *node);
 
