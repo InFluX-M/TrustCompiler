@@ -11,8 +11,7 @@
 < type: T_Let, line: 3, content: let >
 < type: T_Id, line: 3, content: hex >
 < type: T_Assign, line: 3, content: = >
-< type: T_Decimal, line: 3, content: 0 >
-< type: T_Id, line: 3, content: x7F >
+< type: T_Hexadecimal, line: 3, content: 0x7F >
 < type: T_Semicolon, line: 3, content: ; >
 < type: T_Print, line: 5, content: println! >
 < type: T_LP, line: 5, content: ( >

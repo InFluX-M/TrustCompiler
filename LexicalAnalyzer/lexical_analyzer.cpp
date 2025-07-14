@@ -586,6 +586,12 @@ void LexicalAnalyzer::extract(std::string &line) {
             continue;
         }
 
+        token = is_hexadecimal(index, line, line_number);
+        if (token.get_type() != Invalid) {
+            tokens.push_back(token);
+            continue;
+        }
+
         token = is_decimal(index, line, line_number);
         if (token.get_type() != Invalid) {
             tokens.push_back(token);
@@ -599,12 +605,6 @@ void LexicalAnalyzer::extract(std::string &line) {
         }
 
         token = is_keyword(index, line, line_number);
-        if (token.get_type() != Invalid) {
-            tokens.push_back(token);
-            continue;
-        }
-
-        token = is_hexadecimal(index, line, line_number);
         if (token.get_type() != Invalid) {
             tokens.push_back(token);
             continue;

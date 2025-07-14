@@ -1,36 +1,45 @@
 <program>
 └── <func_ls>
     ├── <func>
-    │   ├── T_Fn  [ content: 'fn' ]
-    │   ├── T_Id  [ type: void, content: 'main' ]
-    │   ├── T_LP  [ content: '(' ]
+    │   ├── T_Fn
+    │   │   └── 'fn'
+    │   ├── T_Id
+    │   │   └── 'main'
+    │   ├── T_LP
+    │   │   └── '('
     │   ├── <func_args>
     │   │   └── eps
-    │   ├── T_RP  [ content: ')' ]
+    │   ├── T_RP
+    │   │   └── ')'
     │   ├── <func_type>
     │   │   └── eps
-    │   ├── T_LC  [ content: '{' ]
+    │   ├── T_LC
+    │   │   └── '{'
     │   ├── <stmt_ls>
     │   │   ├── <stmt>
     │   │   │   ├── <var_declaration>
-    │   │   │   │   ├── T_Let  [ content: 'let' ]
+    │   │   │   │   ├── T_Let
+    │   │   │   │   │   └── 'let'
     │   │   │   │   ├── <mut_opt>
     │   │   │   │   │   └── eps
     │   │   │   │   ├── <pattern>
-    │   │   │   │   │   └── T_Id  [ content: 'decimal' ]
+    │   │   │   │   │   └── T_Id
+    │   │   │   │   │       └── 'decimal'
     │   │   │   │   ├── <type_opt>
     │   │   │   │   │   └── eps
     │   │   │   │   └── <assign_opt>
-    │   │   │   │       ├── T_Assign  [ content: '=' ]
-    │   │   │   │       └── <exp>  [ exp_type: INT, val: '123' ]
-    │   │   │   │           └── <log_exp>  [ exp_type: INT, val: '123' ]
-    │   │   │   │               ├── <rel_exp>  [ exp_type: INT, val: '123' ]
-    │   │   │   │               │   ├── <eq_exp>  [ exp_type: INT, val: '123' ]
-    │   │   │   │               │   │   ├── <cmp_exp>  [ exp_type: INT, val: '123' ]
-    │   │   │   │               │   │   │   ├── <arith_exp>  [ exp_type: INT, val: '123' ]
-    │   │   │   │               │   │   │   │   ├── <arith_term>  [ exp_type: INT, val: '123' ]
-    │   │   │   │               │   │   │   │   │   ├── <arith_factor>  [ exp_type: INT, val: '123' ]
-    │   │   │   │               │   │   │   │   │   │   └── T_Decimal  [ content: '123' ]
+    │   │   │   │       ├── T_Assign
+    │   │   │   │       │   └── '='
+    │   │   │   │       └── <exp>
+    │   │   │   │           └── <log_exp>
+    │   │   │   │               ├── <rel_exp>
+    │   │   │   │               │   ├── <eq_exp>
+    │   │   │   │               │   │   ├── <cmp_exp>
+    │   │   │   │               │   │   │   ├── <arith_exp>
+    │   │   │   │               │   │   │   │   ├── <arith_term>
+    │   │   │   │               │   │   │   │   │   ├── <arith_factor>
+    │   │   │   │               │   │   │   │   │   │   └── T_Decimal
+    │   │   │   │               │   │   │   │   │   │       └── '123'
     │   │   │   │               │   │   │   │   │   └── <arith_term_tail>
     │   │   │   │               │   │   │   │   │       └── eps
     │   │   │   │               │   │   │   │   └── <arith_exp_tail>
@@ -43,28 +52,33 @@
     │   │   │   │               │       └── eps
     │   │   │   │               └── <log_exp_tail>
     │   │   │   │                   └── eps
-    │   │   │   └── T_Semicolon  [ content: ';' ]
+    │   │   │   └── T_Semicolon
+    │   │   │       └── ';'
     │   │   └── <stmt_ls>
     │   │       ├── <stmt>
     │   │       │   ├── <var_declaration>
-    │   │       │   │   ├── T_Let  [ content: 'let' ]
+    │   │       │   │   ├── T_Let
+    │   │       │   │   │   └── 'let'
     │   │       │   │   ├── <mut_opt>
     │   │       │   │   │   └── eps
     │   │       │   │   ├── <pattern>
-    │   │       │   │   │   └── T_Id  [ content: 'hex' ]
+    │   │       │   │   │   └── T_Id
+    │   │       │   │   │       └── 'hex'
     │   │       │   │   ├── <type_opt>
     │   │       │   │   │   └── eps
     │   │       │   │   └── <assign_opt>
-    │   │       │   │       ├── T_Assign  [ content: '=' ]
-    │   │       │   │       └── <exp>  [ exp_type: INT, val: '0x7F' ]
-    │   │       │   │           └── <log_exp>  [ exp_type: INT, val: '0x7F' ]
-    │   │       │   │               ├── <rel_exp>  [ exp_type: INT, val: '0x7F' ]
-    │   │       │   │               │   ├── <eq_exp>  [ exp_type: INT, val: '0x7F' ]
-    │   │       │   │               │   │   ├── <cmp_exp>  [ exp_type: INT, val: '0x7F' ]
-    │   │       │   │               │   │   │   ├── <arith_exp>  [ exp_type: INT, val: '0x7F' ]
-    │   │       │   │               │   │   │   │   ├── <arith_term>  [ exp_type: INT, val: '0x7F' ]
-    │   │       │   │               │   │   │   │   │   ├── <arith_factor>  [ exp_type: INT, val: '0x7F' ]
-    │   │       │   │               │   │   │   │   │   │   └── T_Hexadecimal  [ content: '0x7F' ]
+    │   │       │   │       ├── T_Assign
+    │   │       │   │       │   └── '='
+    │   │       │   │       └── <exp>
+    │   │       │   │           └── <log_exp>
+    │   │       │   │               ├── <rel_exp>
+    │   │       │   │               │   ├── <eq_exp>
+    │   │       │   │               │   │   ├── <cmp_exp>
+    │   │       │   │               │   │   │   ├── <arith_exp>
+    │   │       │   │               │   │   │   │   ├── <arith_term>
+    │   │       │   │               │   │   │   │   │   ├── <arith_factor>
+    │   │       │   │               │   │   │   │   │   │   └── T_Hexadecimal
+    │   │       │   │               │   │   │   │   │   │       └── '0x7F'
     │   │       │   │               │   │   │   │   │   └── <arith_term_tail>
     │   │       │   │               │   │   │   │   │       └── eps
     │   │       │   │               │   │   │   │   └── <arith_exp_tail>
@@ -77,12 +91,15 @@
     │   │       │   │               │       └── eps
     │   │       │   │               └── <log_exp_tail>
     │   │       │   │                   └── eps
-    │   │       │   └── T_Semicolon  [ content: ';' ]
+    │   │       │   └── T_Semicolon
+    │   │       │       └── ';'
     │   │       └── <stmt_ls>
     │   │           ├── <stmt>
     │   │           │   └── <println_stmt>
-    │   │           │       ├── T_Print  [ content: 'println!' ]
-    │   │           │       ├── T_LP  [ content: '(' ]
+    │   │           │       ├── T_Print
+    │   │           │       │   └── 'println!'
+    │   │           │       ├── T_LP
+    │   │           │       │   └── '('
     │   │           │       ├── <println_args>
     │   │           │       │   └── <exp_non_string>
     │   │           │       │       ├── <rel_exp_non_string>
@@ -91,7 +108,8 @@
     │   │           │       │       │   │   │   ├── <arith_exp_non_string>
     │   │           │       │       │   │   │   │   ├── <arith_term_non_string>
     │   │           │       │       │   │   │   │   │   ├── <arith_factor_non_string>
-    │   │           │       │       │   │   │   │   │   │   ├── T_Id  [ content: 'decimal' ]
+    │   │           │       │       │   │   │   │   │   │   ├── T_Id
+    │   │           │       │       │   │   │   │   │   │   │   └── 'decimal'
     │   │           │       │       │   │   │   │   │   │   └── <fac_id_opt>
     │   │           │       │       │   │   │   │   │   │       └── eps
     │   │           │       │       │   │   │   │   │   └── <arith_term_tail>
@@ -106,13 +124,17 @@
     │   │           │       │       │       └── eps
     │   │           │       │       └── <log_exp_tail>
     │   │           │       │           └── eps
-    │   │           │       ├── T_RP  [ content: ')' ]
-    │   │           │       └── T_Semicolon  [ content: ';' ]
+    │   │           │       ├── T_RP
+    │   │           │       │   └── ')'
+    │   │           │       └── T_Semicolon
+    │   │           │           └── ';'
     │   │           └── <stmt_ls>
     │   │               ├── <stmt>
     │   │               │   └── <println_stmt>
-    │   │               │       ├── T_Print  [ content: 'println!' ]
-    │   │               │       ├── T_LP  [ content: '(' ]
+    │   │               │       ├── T_Print
+    │   │               │       │   └── 'println!'
+    │   │               │       ├── T_LP
+    │   │               │       │   └── '('
     │   │               │       ├── <println_args>
     │   │               │       │   └── <exp_non_string>
     │   │               │       │       ├── <rel_exp_non_string>
@@ -121,7 +143,8 @@
     │   │               │       │       │   │   │   ├── <arith_exp_non_string>
     │   │               │       │       │   │   │   │   ├── <arith_term_non_string>
     │   │               │       │       │   │   │   │   │   ├── <arith_factor_non_string>
-    │   │               │       │       │   │   │   │   │   │   ├── T_Id  [ content: 'hex' ]
+    │   │               │       │       │   │   │   │   │   │   ├── T_Id
+    │   │               │       │       │   │   │   │   │   │   │   └── 'hex'
     │   │               │       │       │   │   │   │   │   │   └── <fac_id_opt>
     │   │               │       │       │   │   │   │   │   │       └── eps
     │   │               │       │       │   │   │   │   │   └── <arith_term_tail>
@@ -136,13 +159,16 @@
     │   │               │       │       │       └── eps
     │   │               │       │       └── <log_exp_tail>
     │   │               │       │           └── eps
-    │   │               │       ├── T_RP  [ content: ')' ]
-    │   │               │       └── T_Semicolon  [ content: ';' ]
+    │   │               │       ├── T_RP
+    │   │               │       │   └── ')'
+    │   │               │       └── T_Semicolon
+    │   │               │           └── ';'
     │   │               └── <stmt_ls>
     │   │                   └── eps
     │   ├── <return_stmt>
     │   │   └── eps
-    │   └── T_RC  [ content: '}' ]
+    │   └── T_RC
+    │       └── '}'
     └── <func_ls>
         └── <stmt_ls>
             └── eps
