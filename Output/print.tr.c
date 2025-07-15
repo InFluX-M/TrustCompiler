@@ -12,6 +12,7 @@ void main() {
 	printf("My name is %d and my age is %d.\n", name, age);
 	printf("I live in %d and my name is %d.\n", city, name);
 	printf("Value: %d and another: %d.\n", 10 * 5, age + 2);
-	printf("Formatted: {0} and again: {0} and {1}.\n", name, age);
+	printf("Formatted: %d and again: %d and %d.\n", name, name, age);
+	printf("Named args: {name_val} and {age_val}.\n");
 }
 

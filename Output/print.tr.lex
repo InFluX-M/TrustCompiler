@@ -69,4 +69,17 @@
 < type: T_Id, line: 11, content: age >
 < type: T_RP, line: 11, content: ) >
 < type: T_Semicolon, line: 11, content: ; >
+< type: T_Print, line: 12, content: println! >
+< type: T_LP, line: 12, content: ( >
+< type: T_String, line: 12, content: Named args: {name_val} and {age_val}. >
+< type: T_Comma, line: 12, content: , >
+< type: T_Id, line: 12, content: name_val >
+< type: T_Assign, line: 12, content: = >
+< type: T_Id, line: 12, content: name >
+< type: T_Comma, line: 12, content: , >
+< type: T_Id, line: 12, content: age_val >
+< type: T_Assign, line: 12, content: = >
+< type: T_Id, line: 12, content: age >
+< type: T_RP, line: 12, content: ) >
+< type: T_Semicolon, line: 12, content: ; >
 < type: T_RC, line: 13, content: } >

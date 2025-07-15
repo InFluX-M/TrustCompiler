@@ -9,5 +9,5 @@ fn main() {
     println!("I live in {} and my name is {}.", city, name);
     println!("Value: {} and another: {}.", 10 * 5, age + 2);
     println!("Formatted: {0} and again: {0} and {1}.", name, age);
-    //println!("Named args: {name_val} and {age_val}.", name_val = name, age_val = age);
+    println!("Named args: {name_val} and {age_val}.", name_val = name, age_val = age);
 }
