@@ -32,14 +32,12 @@ int main() {
         return FAILURE;
     }
 
-    // Step 2: Run the compiled C binary
     command = "../Output/" + file + ".out";
     int runStatus = system(command.c_str());
     if (runStatus != 0) {
         std::cerr << "Execution failed.\n";
         return FAILURE;
     }
-
 
     return SUCCESS;
 }
