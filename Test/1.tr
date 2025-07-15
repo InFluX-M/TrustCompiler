@@ -1,10 +1,6 @@
 fn main() {
-    let mut x : [bool;200];
-    let mut y = 1;
-    let c = y;
-    let a = y + 42;
-    let mut rr;
-    x[a] = true;
-    let xx: i32 = 10 + 5 * 2 - 3; // 17
-    let bb: bool = true && false || true; // true
+    let mut x : i32 = 10000;
+    let mut w = [1, 2, 3];
+    println!("x is {1} and twelve is {0}", 3*4, x);
+    println!("Trust is good");
 }

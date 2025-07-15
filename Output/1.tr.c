@@ -5,13 +5,9 @@
 
 
 void main() {
-	bool x[200];
-	int y = 1;
-	const int c = y;
-	const int a = y + 42;
-	int rr;
-	x[a] = true;
-	const int xx = 10 + 5 * 2 - 3;
-	const bool bb = true && false || true;
+	int x = 10000;
+	int w[0] = ;
+	printf("x is {1} and twelve is {0}\n", 3 * 4, x);
+	printf("Trust is good\n");
 }
 

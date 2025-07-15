@@ -2,8 +2,7 @@
 #include "SyntaxAnalyzer/syntax_analyzer.h"
 #include "SemanticAnalyzer/semantic_analyzer.h"
 #include "CodeGenerator/code_generator.h"
-#include <filesystem>
-
+#include <cstdlib>
 #include <iostream>
 
 int main() {
@@ -25,6 +24,22 @@ int main() {
                                  output_file + file + ".c");
 
     code_generator.run();
+
+    std::string command = "gcc ../Output/" + file + ".c -o " + "../Output/" + file + ".out";
+    int compileStatus = system(command.c_str());
+    if (compileStatus != 0) {
+        std::cerr << "Compilation failed.\n";
+        return FAILURE;
+    }
+
+    // Step 2: Run the compiled C binary
+    command = "../Output/" + file + ".out";
+    int runStatus = system(command.c_str());
+    if (runStatus != 0) {
+        std::cerr << "Execution failed.\n";
+        return FAILURE;
+    }
+
 
     return SUCCESS;
 }
