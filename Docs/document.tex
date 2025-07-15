@@ -836,6 +836,95 @@ During the semantic analysis traversal, these attributes are computed and propag
 
 \chapter{Code Generator}
 
+\section{Introduction}
+The code generator, as the final phase of the Trust compiler, is responsible for translating the Abstract Syntax Tree (AST), which has been previously verified and annotated by the semantic analyzer. The output of this phase is an equivalent and executable C code. This stage bridges the gap between the high-level Trust language and the low-level, widely-used C language, ultimately enabling the written programs to be compiled and run by standard compilers.
+
+The code generation process involves a systematic traversal of the AST. During this traversal, each node representing a language construct (such as a function, statement, or expression) is converted into its C language equivalent. The final output is a text file named \texttt{output.c}, which contains the complete C program, including necessary headers and a \texttt{main} function, allowing it to be directly compiled with a standard C compiler like GCC.
+
+\section{Implementation Method}
+Our approach to code generation is based on a \textbf{recursive, top-down traversal} of the AST. The \texttt{CodeGenerator} class begins its work by receiving the final AST and the symbol table from the semantic analysis phase. The information in the symbol table, including variable types, function signatures, and mutability status, is essential for generating correct code.
+
+The code generation process, managed by the \texttt{run} method in our implementation, follows these key steps:
+
+\begin{itemize}
+    \item \textbf{Header Inclusion}: Initially, standard C headers required for the execution of the generated code are added to the output file. These headers include \texttt{<stdio.h>} for input/output operations (especially for \texttt{println!}), \texttt{<stdlib.h>} for general utilities, and \texttt{<stdbool.h>} to support the \texttt{bool} type in C.
+
+    \item \textbf{Type Definitions (Tuples)}: The Trust language supports tuples, which do not have a direct equivalent in C. Our code generator maps tuples to C \texttt{struct}s. Before generating code for functions and variables, the symbol table is scanned to find all unique tuple types, and corresponding \texttt{struct} definitions are generated at the top of the output file. This ensures that these custom data types are defined before they are used.
+
+    \item \textbf{Function Forward-Declaration}: To comply with C's single-pass compilation model, which requires functions to be declared before they are called, we generate forward declarations for all functions (except \texttt{main}). This allows for functions to be defined in any order and supports mutual recursive calls.
+
+    \item \textbf{Recursive Code Generation}: The core of the code generator is the recursive \texttt{generate\_code} function, which traverses the AST. By examining the name of the current node, this function delegates the task of code generation to more specialized functions, such as \texttt{generate\_function}, \texttt{generate\_variable\_declaration}, and \texttt{generate\_expression}.
+\end{itemize}
+
+\section{Mapping Features from Trust to C}
+Each feature of the Trust language is systematically mapped to an equivalent construct in the C language. This mapping is guided by the information stored in the symbol table.
+
+\subsection{Functions}
+\begin{itemize}
+    \item A Trust function like \texttt{fn my\_func(x: i32) -> bool \{...\}} is converted into a standard C function: \texttt{bool my\_func(int x) \{...\}}.
+    \item The \texttt{main} function is considered the program's entry point and is generated as \texttt{void main() \{...\}}.
+    \item The data types of parameters and the return value are converted to their C equivalents (\texttt{int}, \texttt{bool}, \texttt{void}, etc.) using the \texttt{to\_c\_type} helper function.
+\end{itemize}
+
+\subsection{Variable Declarations and Assignment Statements}
+\begin{itemize}
+    \item Immutable variables defined with \texttt{let} are translated to \texttt{const} variables in C to preserve their immutability. For example, \texttt{let x: i32 = 10;} becomes \texttt{const int x = 10;}.
+    \item Mutable variables defined with \texttt{let mut} are translated to standard C variables. For instance, \texttt{let mut y: bool = true;} becomes \texttt{bool y = true;}.
+    \item Array definitions are also directly translated; for example, \texttt{let arr: [i32; 5];} becomes \texttt{int arr[5];}.
+    \item Simple assignment statements (\texttt{x = y;}) and assignments to array elements (\texttt{arr[i] = z;}) are directly translated to their C equivalents.
+\end{itemize}
+
+\subsection{Expressions}
+\begin{itemize}
+    \item \textbf{Arithmetic, Relational, and Logical Operators}: These operators are directly mapped to their equivalents in C (e.g., \texttt{+}, \texttt{-}, \texttt{*}, \texttt{&&}, \texttt{==}, \texttt{!=}, \texttt{<}).
+    \item \textbf{Unary Operators}: The logical NOT operator (\texttt{!}) and the unary minus (\texttt{-}) are also correctly translated to their C counterparts.
+    \item \textbf{Function Calls}: A function call in Trust, such as \texttt{my\_func(a, b)}, is generated identically in C.
+    \item \textbf{Array Access}: Accessing array elements, like \texttt{my\_array[i]}, is also directly translated to \texttt{my\_array[i]} in C.
+\end{itemize}
+
+\subsection{Control Structures}
+\begin{itemize}
+    \item The \texttt{if-else} construct is mapped to the \texttt{if-else} statement in C. Chains of \texttt{else if} are also handled correctly.
+    \item The \texttt{loop \{...\}} construct in Trust is implemented as an infinite \texttt{while (1) \{...\}} loop in C.
+    \item The \texttt{break} and \texttt{continue} statements are directly translated to their C counterparts, preserving their behavior within loops.
+\end{itemize}
+
+\subsection{Print Statement}
+\begin{itemize}
+    \item The \texttt{println!} macro is converted into a \texttt{printf} function call in C.
+    \item The format string is processed to replace placeholders (\texttt{\{\}}) with the appropriate C format specifier. Our current implementation uses \texttt{\%d} as a general-purpose specifier for variables.
+    \item A newline character (\texttt{\\n}) is automatically appended to the end of the format string to simulate the "print line" behavior.
+    \item For example, the statement \texttt{println!("Value: \{\}", x);} is translated to \texttt{printf("Value: \%d\\n", x);}.
+\end{itemize}
+
+\section{Final Output Generation}
+After the recursive traversal of the AST is complete, the entire generated C code is assembled into a single string. This string, which includes headers, type definitions, function declarations, and the main program body, is then written to the \texttt{output.c} file.
+
+As an example, a simple Trust program like this:
+\begin{verbatim}
+fn main() {
+    let x = 10;
+    if x > 5 {
+        println!("x is greater than 5");
+    }
+}
+\end{verbatim}
+Will be translated into the following C code in the \texttt{output.c} file:
+\begin{verbatim}
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+void main();
+
+void main() {
+    const int x = 10;
+    if (x > 5) {
+        printf("x is greater than 5\n");
+    }
+}
+\end{verbatim}
+
 
 \chapter{References}
 

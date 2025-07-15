@@ -26,12 +26,12 @@
 < type: T_Semicolon, line: 5, content: ; >
 < type: T_Print, line: 7, content: println! >
 < type: T_LP, line: 7, content: ( >
-< type: T_String, line: 7, content: "Trust is good" >
+< type: T_String, line: 7, content: Trust is good >
 < type: T_RP, line: 7, content: ) >
 < type: T_Semicolon, line: 7, content: ; >
 < type: T_Print, line: 8, content: println! >
 < type: T_LP, line: 8, content: ( >
-< type: T_String, line: 8, content: "My name is {} and my age is {}." >
+< type: T_String, line: 8, content: My name is {} and my age is {}. >
 < type: T_Comma, line: 8, content: , >
 < type: T_Id, line: 8, content: name >
 < type: T_Comma, line: 8, content: , >
@@ -40,7 +40,7 @@
 < type: T_Semicolon, line: 8, content: ; >
 < type: T_Print, line: 9, content: println! >
 < type: T_LP, line: 9, content: ( >
-< type: T_String, line: 9, content: "I live in {} and my name is {}." >
+< type: T_String, line: 9, content: I live in {} and my name is {}. >
 < type: T_Comma, line: 9, content: , >
 < type: T_Id, line: 9, content: city >
 < type: T_Comma, line: 9, content: , >
@@ -49,7 +49,7 @@
 < type: T_Semicolon, line: 9, content: ; >
 < type: T_Print, line: 10, content: println! >
 < type: T_LP, line: 10, content: ( >
-< type: T_String, line: 10, content: "Value: {} and another: {}." >
+< type: T_String, line: 10, content: Value: {} and another: {}. >
 < type: T_Comma, line: 10, content: , >
 < type: T_Decimal, line: 10, content: 10 >
 < type: T_AOp_ML, line: 10, content: * >
@@ -62,24 +62,11 @@
 < type: T_Semicolon, line: 10, content: ; >
 < type: T_Print, line: 11, content: println! >
 < type: T_LP, line: 11, content: ( >
-< type: T_String, line: 11, content: "Formatted: {0} and again: {0} and {1}." >
+< type: T_String, line: 11, content: Formatted: {0} and again: {0} and {1}. >
 < type: T_Comma, line: 11, content: , >
 < type: T_Id, line: 11, content: name >
 < type: T_Comma, line: 11, content: , >
 < type: T_Id, line: 11, content: age >
 < type: T_RP, line: 11, content: ) >
 < type: T_Semicolon, line: 11, content: ; >
-< type: T_Print, line: 12, content: println! >
-< type: T_LP, line: 12, content: ( >
-< type: T_String, line: 12, content: "Named args: {name_val} and {age_val}." >
-< type: T_Comma, line: 12, content: , >
-< type: T_Id, line: 12, content: name_val >
-< type: T_Assign, line: 12, content: = >
-< type: T_Id, line: 12, content: name >
-< type: T_Comma, line: 12, content: , >
-< type: T_Id, line: 12, content: age_val >
-< type: T_Assign, line: 12, content: = >
-< type: T_Id, line: 12, content: age >
-< type: T_RP, line: 12, content: ) >
-< type: T_Semicolon, line: 12, content: ; >
 < type: T_RC, line: 13, content: } >
