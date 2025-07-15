@@ -433,40 +433,41 @@ std::string CodeGenerator::generate_tuple_access(Node<Symbol> *node) {
 }
 
 std::string CodeGenerator::generate_println(Node<Symbol> *node) {
-    auto children = node->get_children(); // println_stmt -> T_Print T_LP <println_args> T_RP T_Semicolon
+    auto children = node->get_children();
     Node<Symbol> *args_node = children[2];
     std::string code;
 
     if (!args_node->get_children().empty()) {
         if (args_node->get_children()[0]->get_data().get_name() == "T_String") {
             std::string format_str = args_node->get_children()[0]->get_data().get_content();
-
             size_t pos = 0;
             while ((pos = format_str.find("{}", pos)) != std::string::npos) {
                 format_str.replace(pos, 2, "%d");
-                pos += 2;
             }
-
             code = "\tprintf(\"" + format_str + "\\n\"";
 
             if (args_node->get_children().size() > 1 && !args_node->get_children()[1]->get_children().empty() &&
                 args_node->get_children()[1]->get_children()[0]->get_data().get_name() != "eps") {
-                Node<Symbol> *format_args_list = args_node->get_children()[1]->get_children()[1];
-                while (format_args_list && !format_args_list->get_children().empty()) {
-                    code += ", " + generate_expression(format_args_list->get_children()[0]);
-                    format_args_list = format_args_list->get_children()[1]; // tail
-                    if (format_args_list && !format_args_list->get_children().empty()) {
-                        format_args_list = format_args_list->get_children()[1]; // item
+
+                Node<Symbol> *list_node = args_node->get_children()[1]->get_children()[1]; // <println_format_args_list>
+                if (list_node && !list_node->get_children().empty()) {
+                    Node<Symbol>* item_node = list_node->get_children()[0];
+                    code += ", " + generate_expression(item_node);
+
+                    Node<Symbol>* tail_node = list_node->get_children()[1]; // <println_format_args_list_tail>
+                    while(tail_node && !tail_node->get_children().empty() && tail_node->get_children()[0]->get_data().get_name() != "eps") {
+                        // tail -> T_Comma <item> <tail>
+                        item_node = tail_node->get_children()[1];
+                        code += ", " + generate_expression(item_node);
+                        tail_node = tail_node->get_children()[2];
                     }
                 }
             }
-
             code += ");\n";
         } else {
             code = "\tprintf(\"%d\\n\", " + generate_expression(args_node->get_children()[0]) + ");\n";
         }
     }
-
     return code;
 }
 
